@@ -526,6 +526,50 @@ function buildMap() {
     });
     svg.appendChild(el);
   });
+
+  // Add county name labels at polygon centroids
+  const labelFontSize = Math.max(5, Math.min(8, scale * 0.04));
+  // Pre-computed centroids (lng, lat) for each county name
+  const labels = [
+    {n:'Alachua',l:-82.293, t:29.674},{n:'Baker',l:-82.336, t:30.327},{n:'Bay',l:-85.570, t:30.251},
+    {n:'Bradford',l:-82.168, t:29.947},{n:'Brevard',l:-80.685, t:28.311},{n:'Broward',l:-80.460, t:26.245},
+    {n:'Calhoun',l:-85.205, t:30.411},{n:'Charlotte',l:-81.961, t:26.900},{n:'Citrus',l:-82.522, t:28.874},
+    {n:'Clay',l:-81.774, t:29.986},{n:'Collier',l:-81.391, t:26.119},{n:'Columbia',l:-82.709, t:30.231},
+    {n:'DeSoto',l:-81.828, t:27.165},{n:'Dixie',l:-83.177, t:29.585},{n:'Duval',l:-81.679, t:30.341},
+    {n:'Escambia',l:-87.381, t:30.618},{n:'Flagler',l:-81.281, t:29.453},{n:'Franklin',l:-84.857, t:29.832},
+    {n:'Gadsden',l:-84.633, t:30.573},{n:'Gilchrist',l:-82.799, t:29.722},{n:'Glades',l:-81.105, t:26.978},
+    {n:'Gulf',l:-85.237, t:29.903},{n:'Hamilton',l:-82.968, t:30.489},{n:'Hardee',l:-81.832, t:27.472},
+    {n:'Hendry',l:-81.300, t:26.550},{n:'Hernando',l:-82.433, t:28.556},{n:'Highlands',l:-81.317, t:27.326},
+    {n:'Hillsborough',l:-82.358, t:27.902},{n:'Holmes',l:-85.800, t:30.867},{n:'Indian River',l:-80.482, t:27.673},
+    {n:'Jackson',l:-85.204, t:30.786},{n:'Jefferson',l:-83.887, t:30.442},{n:'Lafayette',l:-83.185, t:29.993},
+    {n:'Lake',l:-81.730, t:28.770},{n:'Lee',l:-81.893, t:26.583},{n:'Leon',l:-84.281, t:30.461},
+    {n:'Levy',l:-82.815, t:29.322},{n:'Liberty',l:-84.963, t:30.232},{n:'Madison',l:-83.452, t:30.483},
+    {n:'Manatee',l:-82.498, t:27.482},{n:'Marion',l:-82.009, t:29.234},{n:'Martin',l:-80.444, t:27.079},
+    {n:'Miami-Dade',l:-80.379, t:25.617},{n:'Monroe',l:-81.081, t:25.303},{n:'Nassau',l:-81.684, t:30.581},
+    {n:'Okaloosa',l:-86.580, t:30.641},{n:'Okeechobee',l:-80.821, t:27.440},{n:'Orange',l:-81.398, t:28.577},
+    {n:'Osceola',l:-81.211, t:28.085},{n:'Palm Beach',l:-80.445, t:26.642},{n:'Pasco',l:-82.370, t:28.336},
+    {n:'Pinellas',l:-82.747, t:27.919},{n:'Polk',l:-81.690, t:27.950},{n:'Putnam',l:-81.755, t:29.602},
+    {n:'Santa Rosa',l:-86.969, t:30.595},{n:'Sarasota',l:-82.310, t:27.186},{n:'Seminole',l:-81.231, t:28.694},
+    {n:'St. Johns',l:-81.414, t:29.892},{n:'St. Lucie',l:-80.407, t:27.365},{n:'Sumter',l:-82.085, t:28.672},
+    {n:'Suwannee',l:-82.945, t:30.211},{n:'Taylor',l:-83.598, t:30.021},{n:'Union',l:-82.382, t:30.049},
+    {n:'Volusia',l:-81.186, t:29.021},{n:'Wakulla',l:-84.298, t:30.147},{n:'Walton',l:-86.148, t:30.615},
+    {n:'Washington',l:-85.676, t:30.645}
+  ];
+  labels.forEach(lb => {
+    const lx = (lb.l - minLng) * scale + padding + (SVG_W - (maxLng - minLng) * scale - padding*2) / 2;
+    const ly = SVG_H - ((lb.t - minLat) * scale + padding);
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', lx);
+    text.setAttribute('y', ly);
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('dominant-baseline', 'central');
+    text.setAttribute('font-size', `${labelFontSize}px`);
+    text.setAttribute('fill', '#333');
+    text.setAttribute('font-weight', '500');
+    text.setAttribute('pointer-events', 'none');
+    text.textContent = lb.n;
+    svg.appendChild(text);
+  });
 }
 
 function getColor(val) {
