@@ -124,7 +124,7 @@
     <h2>📈 Daily VBM Returns</h2>
     <div class="trend-wrap">
       <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px;text-align:center;">Cumulative votes cast by mail (running total)</div>
-      <svg id="trendSvg" viewBox="0 0 700 240" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;display:block;margin:0 auto;"></svg>
+      <svg id="trendSvg" viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:900px;display:block;margin:0 auto;"></svg>
       <div class="trend-legend">
         <span><span class="legend-dot" style="background:#0033A0"></span> Total</span>
         <span><span class="legend-dot" style="background:#0015BC"></span> Dem</span>
@@ -134,7 +134,7 @@
       </div>
       <div style="margin-top:18px;border-top:1px solid #eee;padding-top:14px;">
         <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px;">New ballots returned each day (daily totals)</div>
-        <svg id="dailySvg" viewBox="0 0 700 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;display:block;margin:0 auto;"></svg>
+        <svg id="dailySvg" viewBox="0 0 900 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:900px;display:block;margin:0 auto;"></svg>
       </div>
     </div>
   </div>
@@ -209,7 +209,7 @@ async function init() {
 
 function renderTrend() {
   if (!history || history.length < 1) return;
-  const W = 700, H = 240, padL = 60, padR = 20, padT = 20, padB = 35;
+  const W = 900, H = 320, padL = 60, padR = 20, padT = 20, padB = 35;
   const pts = history;
   const lastProvided = pts[pts.length-1]?.vbm_provided || 0;
   const maxVal = Math.max(...pts.map(p => p.vbm_voted||0), lastProvided, 1);
@@ -268,7 +268,7 @@ function renderTrend() {
 
 function renderDailyNew() {
   if (!history || history.length < 2) return;
-  const W = 700, H = 140, padL = 60, padR = 20, padT = 16, padB = 28;
+  const W = 900, H = 200, padL = 60, padR = 20, padT = 16, padB = 28;
 
   const parties = [
     {key:'dem', color:'#0015BC'},
