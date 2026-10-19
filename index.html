@@ -48,6 +48,18 @@
   .bar-fill { height: 100%; border-radius: 12px; transition: width 0.5s ease; min-width: 0; }
   .bar-fill.dem { background: var(--blue-dem); } .bar-fill.rep { background: var(--red); }
   .bar-fill.npa { background: var(--teal); } .bar-fill.other { background: var(--yellow); }
+  .bar-req { position: absolute; top: 0; left: 0; height: 100%; border-radius: 12px; background: #D9E2F3; opacity: 0.9; }
+  .bar-fill { position: relative; z-index: 1; }
+  .bar-mark { position: absolute; top: -3px; bottom: -3px; width: 2px; background: #333; z-index: 2; border-radius: 1px; }
+  .bar-track { position: relative; }
+  .bar-row.lead-row .bar-label { font-weight: 700; color: var(--blue); }
+  .party-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 6px; }
+  .party-title { font-weight: 600; font-size: 13px; color: var(--text); }
+  .adv-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+  .adv-dem { background: #E3EDFB; color: var(--blue-dem); border: 1px solid var(--blue-dem); }
+  .adv-rep { background: #FDE8E8; color: var(--red); border: 1px solid var(--red); }
+  .adv-arrow { font-size: 10px; }
+  .party-sub { font-size: 11px; color: var(--text-light); margin-bottom: 12px; }
   .bar-value { width: 75px; text-align: right; font-size: 13px; font-weight: 600; }
   .bar-pct { width: 45px; text-align: right; font-size: 12px; color: var(--text-light); }
 
@@ -484,12 +496,46 @@ function switchTab(tab) {
   if (geojson) styleMap();
   
   const s = data.statewide[tab]||{};
+  const req = data.statewide.vbm_provided||{};
   const total = s.total||1;
-  const maxVal = Math.max(s.dem||0, s.rep||0, s.npa||0, 1);
-  document.getElementById('partyBars').innerHTML = [
-    {l:'Democrat', v:s.dem||0, c:'dem'}, {l:'Republican', v:s.rep||0, c:'rep'},
-    {l:'NPA', v:s.npa||0, c:'npa'}, {l:'Other', v:s.other||0, c:'other'}
-  ].map(p => `<div class="bar-row"><div class="bar-label">${p.l}</div><div class="bar-track"><div class="bar-fill ${p.c}" style="width:${(p.v/maxVal*100).toFixed(1)}%"></div></div><div class="bar-value">${fmt(p.v)}</div><div class="bar-pct">${(p.v/total*100).toFixed(1)}%</div></div>`).join('');
+  const maxReq = Math.max(req.dem||0, req.rep||0, req.npa||0, req.other||0, 1);
+
+  // Return-rate advantage: Dem return rate % - Rep return rate %
+  const demRate = req.dem ? ((s.dem||0)/req.dem*100) : 0;
+  const repRate = req.rep ? ((s.rep||0)/req.rep*100) : 0;
+  const adv = demRate - repRate;
+  const advLabel = adv >= 0 ? `D +${adv.toFixed(1)}%` : `R +${Math.abs(adv).toFixed(1)}%`;
+  const advClass = adv >= 0 ? 'adv-dem' : 'adv-rep';
+
+  const rows = [
+    {l:'Democrat', v:s.dem||0, r:req.dem||0, c:'dem'},
+    {l:'Republican', v:s.rep||0, r:req.rep||0, c:'rep'},
+    {l:'NPA', v:s.npa||0, r:req.npa||0, c:'npa'},
+    {l:'Other', v:s.other||0, r:req.other||0, c:'other'}
+  ].map(p => {
+    const rate = p.r ? (p.v/p.r*100) : 0;
+    const retW = (p.v/maxReq*100).toFixed(1);
+    const reqW = (p.r/maxReq*100).toFixed(1);
+    const isLead = adv >= 0 ? p.c==='dem' : p.c==='rep';
+    return `<div class="bar-row${isLead?' lead-row':''}">
+      <div class="bar-label">${p.l}</div>
+      <div class="bar-track" style="position:relative;">
+        <div class="bar-req" style="width:${reqW}%"></div>
+        <div class="bar-fill ${p.c}" style="width:${retW}%"></div>
+        <div class="bar-mark" style="left:${reqW}%"></div>
+      </div>
+      <div class="bar-value">${fmt(p.v)}</div>
+      <div class="bar-pct">${rate.toFixed(1)}%</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('partyBars').innerHTML = `
+    <div class="party-header">
+      <div class="party-title">Returned vs Requested (${activeTab==='vbm_voted'?'Voted VBM':activeTab==='vbm_provided'?'VBM Provided':'Early Voting'})</div>
+      <div class="adv-badge ${advClass}"><span class="adv-arrow">${adv>=0?'▲':'▼'}</span> ${advLabel} return rate</div>
+    </div>
+    <div class="party-sub">Solid = returned · Light bar + tick = requested · Return rate %</div>
+    ${rows}`;
   renderTable();
 }
 
