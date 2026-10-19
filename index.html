@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Florida Early Vote Tracker | BetterFL</title>
 <style>
-  :root { --blue: #1A3A7A; --blue-dark: #0F2A5A; --yellow: #FFC107; --bg: #F5F5F5; --white: #FFFFFF; --text: #333333; --text-light: #666666; --red: #DE0100; --blue-dem: #0015BC; --green: #28A745; --gray: #A0AEC0; --shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  :root { --blue: #0033A0; --blue-dark: #002080; --yellow: #FFC107; --bg: #F5F5F5; --white: #FFFFFF; --text: #333333; --text-light: #666666; --red: #DE0100; --blue-dem: #0015BC; --green: #28A745; --gray: #A0AEC0; --shadow: 0 2px 8px rgba(0,0,0,0.08); }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
   .header { background: var(--blue); color: white; padding: 20px 24px; text-align: center; }
@@ -14,7 +14,7 @@
   .header .election-date { display: inline-block; background: var(--yellow); color: var(--blue-dark); padding: 3px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-top: 10px; }
   .container { max-width: 1200px; margin: 0 auto; padding: 20px 16px; }
 
-  .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 20px; }
+  .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
   .card { background: var(--white); border-radius: 12px; padding: 16px; box-shadow: var(--shadow); text-align: center; }
   .card .label { font-size: 11px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
   .card .value { font-size: 24px; font-weight: 700; margin-top: 4px; }
@@ -85,12 +85,9 @@
     <div><span style="font-size:11px;">Source: FL Division of Elections</span></div>
   </div>
 
+  <div class="cards-grid" id="cardsGrid"></div>
+
   <div class="section-card">
-    <div class="tabs" id="mapTabBar">
-      <div class="tab active" data-tab="vbm_voted" onclick="switchTab('vbm_voted')">✅ Voted VBM</div>
-      <div class="tab" data-tab="vbm_provided" onclick="switchTab('vbm_provided')">📨 VBM Provided</div>
-      <div class="tab" data-tab="early_voted" onclick="switchTab('early_voted')">🏛️ Early Voting</div>
-    </div>
     <div class="map-wrap">
       <svg id="countyMapSvg" viewBox="0 0 700 600" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;">
         <g id="countyGroup"></g>
@@ -102,9 +99,12 @@
         <span>Dem →</span>
       </div>
     </div>
+    <div class="tabs" id="mapTabBar">
+      <div class="tab active" data-tab="vbm_voted" onclick="switchTab('vbm_voted')">✅ Voted VBM</div>
+      <div class="tab" data-tab="vbm_provided" onclick="switchTab('vbm_provided')">📨 VBM Provided</div>
+      <div class="tab" data-tab="early_voted" onclick="switchTab('early_voted')">🏛️ Early Voting</div>
+    </div>
   </div>
-
-  <div class="cards-grid" id="cardsGrid"></div>
 
   <div class="section-card">
     <h2>📊 Returns by Party</h2>
