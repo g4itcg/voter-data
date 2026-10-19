@@ -21,19 +21,27 @@ with open(TOKEN_FILE) as f:
 # 2. Set a credential helper for this push
 os.environ["GIT_ASKPASS"] = "/opt/data/home/.git-credential-helper.sh"
 
-# 3. Check if data actually changed before pushing
-import hashlib
-old_hash = None
-if os.path.exists(os.path.join(REPO_DIR, "voter_data.json")):
-    with open(os.path.join(REPO_DIR, "voter_data.json"), "rb") as f:
-        old_hash = hashlib.md5(f.read()).hexdigest()
-new_hash = hashlib.md5(open(DATA_SRC, "rb").read()).hexdigest()
+# 3. Check if the actual vote totals changed before pushing (ignore timestamp-only changes)
+import hashlib, re
 
-if old_hash == new_hash:
-    print("Data unchanged — no push needed")
+def data_hash(fp):
+    """Hash only the vote totals, not timestamps, to skip no-change pushes."""
+    with open(fp) as f:
+        content = f.read()
+    # Remove fetched_at and any timestamp lines for comparison
+    clean = re.sub(r'"fetched_at": "[^"]+"', '', content)
+    return hashlib.md5(clean.encode()).hexdigest()
+
+old_clean = None
+if os.path.exists(os.path.join(REPO_DIR, "voter_data.json")):
+    old_clean = data_hash(os.path.join(REPO_DIR, "voter_data.json"))
+new_clean = data_hash(DATA_SRC)
+
+if old_clean == new_clean:
+    print("Vote totals unchanged — no push needed")
     sys.exit(0)
 
-print(f"Data changed: {old_hash[:8]} → {new_hash[:8]}, pushing...")
+print(f"Vote totals changed, pushing...")
 
 # 4. Copy latest data into repo
 import shutil
