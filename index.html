@@ -250,7 +250,7 @@ async function init() {
       fetch(HISTORY_URL).then(r => r.json()).catch(() => null)
     ]);
     data = dr; geojson = gr; history = hr || [];
-    document.getElementById('statusText').textContent = 'Updated: ' + fmtET(data.fetched_at);
+    document.getElementById('statusText').textContent = 'Updated: ' + fmtET(data.fetched_at) + ' (Updates every 10 min)';
     renderCards();
     buildMap();
     renderTrend();
@@ -593,7 +593,7 @@ setInterval(() => {
         renderDailyNew();
         renderDailyTable();
         switchTab(activeTab);
-        document.getElementById('statusText').textContent = 'Updated: ' + fmtET(data.fetched_at);
+        document.getElementById('statusText').textContent = 'Updated: ' + fmtET(data.fetched_at) + ' (Updates every 10 min)';
       }
     })
     .catch(() => {});
