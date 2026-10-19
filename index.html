@@ -191,8 +191,11 @@
         <svg id="dailySvg" viewBox="0 0 900 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:900px;display:block;margin:0 auto;"></svg>
       </div>
       <div style="margin-top:18px;border-top:1px solid #eee;padding-top:14px;">
-        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px;">Daily returns by party</div>
-        <div class="daily-table-wrap">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <div style="font-size:12px;font-weight:600;color:var(--text);">Daily returns by party</div>
+          <button onclick="toggleSection('dailyTableSec')" style="background:none;border:1px solid #D0D0D0;border-radius:6px;padding:4px 12px;font-size:11px;cursor:pointer;color:var(--text-light);">📊 Show data</button>
+        </div>
+        <div class="daily-table-wrap" id="dailyTableSec" style="display:none;">
           <table class="daily-table" id="dailyTable">
             <thead><tr><th>Date</th><th>Dem</th><th>Rep</th><th>NPA</th><th>Other</th><th>Total</th></tr></thead>
             <tbody></tbody>
@@ -204,10 +207,14 @@
 
   <div class="section-card">
     <h2>🏛️ County Breakdown</h2>
-    <div class="table-wrap">
-      <div class="table-controls">
-        <input type="text" id="searchInput" placeholder="Search county..." oninput="renderTable()">
-        <select id="sortSelect" onchange="renderTable()">
+      <div class="table-wrap">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:0 20px 8px;">
+          <button onclick="toggleSection('countyTableSec')" style="background:none;border:1px solid #D0D0D0;border-radius:6px;padding:4px 12px;font-size:11px;cursor:pointer;color:var(--text-light);">🏛️ Show county table</button>
+        </div>
+        <div id="countyTableSec" style="display:none;">
+          <div class="table-controls">
+            <input type="text" id="searchInput" placeholder="Search county..." oninput="renderTable()">
+            <select id="sortSelect" onchange="renderTable()">
           <option value="total-desc">Total ↓</option>
           <option value="dem-desc">Dem ↓</option>
           <option value="rep-desc">Rep ↓</option>
@@ -436,6 +443,15 @@ function renderDailyNew() {
   });
 
   document.getElementById('dailySvg').innerHTML = svg;
+}
+
+function toggleSection(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const btn = el.closest('.section-card')?.querySelector('button') || el.previousElementSibling?.previousElementSibling?.querySelector('button');
+  const isHidden = el.style.display === 'none' || el.style.display === '';
+  el.style.display = isHidden ? 'block' : 'none';
+  if (btn) btn.textContent = isHidden ? btn.textContent.replace('Show', 'Hide').replace('📊 Show', '📊 Hide').replace('🏛️ Show', '🏛️ Hide') : btn.textContent.replace('Hide', 'Show').replace('📊 Hide', '📊 Show').replace('🏛️ Hide', '🏛️ Show');
 }
 
 function renderCards() {
