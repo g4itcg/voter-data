@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Florida Early Vote Tracker | BetterFL</title>
+<style>
+  :root { --blue: #1A3A7A; --blue-dark: #0F2A5A; --yellow: #FFC107; --bg: #F5F5F5; --white: #FFFFFF; --text: #333333; --text-light: #666666; --red: #DE0100; --blue-dem: #0015BC; --green: #28A745; --gray: #A0AEC0; --shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+  .header { background: var(--blue); color: white; padding: 20px 24px; text-align: center; }
+  .header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+  .header .subtitle { font-size: 14px; opacity: 0.85; margin-top: 4px; }
+  .header .election-date { display: inline-block; background: var(--yellow); color: var(--blue-dark); padding: 3px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-top: 10px; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 20px 16px; }
+
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 20px; }
+  .card { background: var(--white); border-radius: 12px; padding: 16px; box-shadow: var(--shadow); text-align: center; }
+  .card .label { font-size: 11px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+  .card .value { font-size: 24px; font-weight: 700; margin-top: 4px; }
+  .card .value.dem { color: var(--blue-dem); } .card .value.rep { color: var(--red); }
+  .card .value.total { color: var(--blue); }
+  .card .sub { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+
+  .section-card { background: var(--white); border-radius: 12px; box-shadow: var(--shadow); margin-bottom: 20px; overflow: hidden; }
+  .section-card h2 { font-size: 16px; font-weight: 600; color: var(--blue); padding: 16px 20px 0; }
+
+  .tabs { display: flex; border-bottom: 2px solid #E8E8E8; padding: 0 20px; gap: 0; }
+  .tab { padding: 10px 18px; font-size: 13px; font-weight: 600; color: var(--text-light); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; user-select: none; }
+  .tab:hover { color: var(--blue); }
+  .tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+  .map-wrap { padding: 16px 20px; text-align: center; position: relative; }
+  .map-wrap svg { width: 100%; max-width: 700px; height: auto; display: block; margin: 0 auto; }
+  .map-wrap .tooltip { position: absolute; background: var(--blue); color: white; padding: 8px 14px; border-radius: 8px; font-size: 13px; box-shadow: var(--shadow); pointer-events: none; display: none; z-index: 100; white-space: nowrap; }
+  .map-wrap .legend { display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 11px; color: var(--text-light); margin-top: 8px; }
+  .map-wrap .legend .grad { width: 120px; height: 10px; border-radius: 5px; background: linear-gradient(to right, var(--red), #EBEBEB, var(--blue-dem)); }
+
+  .party-bars { padding: 16px 20px; }
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; }
+  .bar-label { width: 90px; font-size: 13px; font-weight: 600; }
+  .bar-track { flex: 1; height: 24px; background: #E8E8E8; border-radius: 12px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 12px; transition: width 0.5s ease; min-width: 0; }
+  .bar-fill.dem { background: var(--blue-dem); } .bar-fill.rep { background: var(--red); }
+  .bar-fill.npa { background: var(--gray); } .bar-fill.other { background: #6C757D; }
+  .bar-value { width: 75px; text-align: right; font-size: 13px; font-weight: 600; }
+  .bar-pct { width: 45px; text-align: right; font-size: 12px; color: var(--text-light); }
+
+  .table-wrap { padding: 0 20px 20px; overflow-x: auto; }
+  .table-controls { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .table-controls input, .table-controls select { padding: 6px 12px; border: 1px solid #D0D0D0; border-radius: 6px; font-size: 13px; background: white; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: #F0F2F5; padding: 8px 10px; text-align: left; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.3px; color: var(--text-light); cursor: pointer; white-space: nowrap; }
+  th:hover { background: #E4E7EB; }
+  td { padding: 6px 10px; border-bottom: 1px solid #EEE; }
+  tr:hover td { background: #F8F9FA; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; }
+  .dem-lead.pos { color: var(--blue-dem); } .dem-lead.neg { color: var(--red); }
+
+  .status-bar { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-light); margin-bottom: 16px; padding: 8px 12px; background: white; border-radius: 8px; box-shadow: var(--shadow); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .dot.live { background: var(--green); }
+
+  .brand-footer { text-align: center; padding: 16px; margin-top: 24px; font-size: 12px; color: var(--text-light); }
+  .brand-footer .logo-text { font-weight: 700; color: var(--blue); }
+
+  @media (max-width: 768px) {
+    .header h1 { font-size: 22px; }
+    .cards-grid { grid-template-columns: repeat(2, 1fr); }
+    .tab { padding: 8px 12px; font-size: 12px; }
+    .map-wrap svg { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>🗳️ Florida Early Vote Tracker</h1>
+  <div class="subtitle">2026 General Election — Live Data from FL Division of Elections</div>
+  <div class="election-date">🗓️ Election Day: November 3, 2026</div>
+</div>
+
+<div class="container">
+  <div class="status-bar">
+    <div class="last-updated"><span class="dot live"></span> <span id="statusText">Loading...</span></div>
+    <div><span style="font-size:11px;">Source: FL Division of Elections</span></div>
+  </div>
+
+  <div class="cards-grid" id="cardsGrid"></div>
+
+  <div class="section-card">
+    <div class="tabs" id="mapTabBar">
+      <div class="tab active" data-tab="vbm_voted" onclick="switchTab('vbm_voted')">✅ Voted VBM</div>
+      <div class="tab" data-tab="vbm_provided" onclick="switchTab('vbm_provided')">📨 VBM Provided</div>
+      <div class="tab" data-tab="early_voted" onclick="switchTab('early_voted')">🏛️ Early Voting</div>
+    </div>
+    <div class="map-wrap">
+      <svg id="countyMapSvg" viewBox="0 0 700 600" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;">
+        <g id="countyGroup"></g>
+      </svg>
+      <div class="tooltip" id="mapTooltip"></div>
+      <div class="legend">
+        <span>← Rep</span>
+        <div class="grad"></div>
+        <span>Dem →</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <h2>📊 Returns by Party</h2>
+    <div class="party-bars" id="partyBars"></div>
+  </div>
+
+  <div class="section-card">
+    <h2>🏛️ County Breakdown</h2>
+    <div class="table-wrap">
+      <div class="table-controls">
+        <input type="text" id="searchInput" placeholder="Search county..." oninput="renderTable()">
+        <select id="sortSelect" onchange="renderTable()">
+          <option value="total-desc">Total ↓</option>
+          <option value="dem-desc">Dem ↓</option>
+          <option value="rep-desc">Rep ↓</option>
+          <option value="lead-desc">Dem Lead ↓</option>
+          <option value="alpha">A–Z</option>
+        </select>
+      </div>
+      <table>
+        <thead><tr>
+          <th onclick="sortTable('alpha')">County ↕</th>
+          <th class="num" onclick="sortTable('total-desc')">Total ↕</th>
+          <th class="num" onclick="sortTable('dem-desc')">Dem ↕</th>
+          <th class="num" onclick="sortTable('rep-desc')">Rep ↕</th>
+          <th class="num" onclick="sortTable('lead-desc')">Dem Lead ↕</th>
+          <th class="num" onclick="sortTable('pct-desc')">Dem % ↕</th>
+        </tr></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      <div style="font-size:12px;color:var(--text-light);padding-top:8px;" id="tableCount"></div>
+    </div>
+  </div>
+
+  <div class="brand-footer">
+    Powered by <span class="logo-text">FLORIDIANS FOR A BETTER FUTURE</span> · 
+    Data from <a href="https://countyfilesvbm-ev.floridados.gov/VoteByMailEarlyVotingReports/PublicStats" target="_blank" style="color:var(--blue)">Florida Division of Elections</a>
+  </div>
+</div>
+
+<script>
+const DATA_URL = 'https://raw.githubusercontent.com/g4itcg/voter-data/main/voter_data.json';
+const GEO_URL = 'https://raw.githubusercontent.com/g4itcg/voter-data/main/fl_counties.geojson';
+
+let data = null, geojson = null, activeTab = 'vbm_voted';
+const DEM_COLOR = '#0015BC', REP_COLOR = '#DE0100';
+const SVG_W = 700, SVG_H = 600;
+
+function fmt(n) { return (n||0).toLocaleString(); }
+
+async function init() {
+  document.getElementById('statusText').textContent = 'Loading data & map...';
+  try {
+    const [dr, gr] = await Promise.all([fetch(DATA_URL), fetch(GEO_URL)]);
+    data = await dr.json(); geojson = await gr.json();
+    document.getElementById('statusText').textContent = 'Updated: ' + new Date(data.fetched_at).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+    renderCards();
+    buildMap();
+    switchTab('vbm_voted');
+  } catch(e) { document.getElementById('statusText').textContent = '⚠️ Error loading'; console.error(e); }
+}
+
+function renderCards() {
+  const sw = data.statewide;
+  document.getElementById('cardsGrid').innerHTML = [
+    {l:'VBM Provided', v:fmt(sw.vbm_provided?.total), c:'total', s:`Dem ${fmt(sw.vbm_provided?.dem)} · Rep ${fmt(sw.vbm_provided?.rep)}`},
+    {l:'VBM Returned', v:fmt(sw.vbm_voted?.total), c:'total', s:`${sw.vbm_return_rate||0}% return rate`},
+    {l:'VBM Outstanding', v:fmt(sw.vbm_outstanding), c:'total', s:'awaiting return'},
+    {l:'Early In-Person', v:fmt(sw.early_voted?.total), c:'total', s:sw.early_voted?.total?'voted':'Not yet started'},
+    {l:'Dem VBM', v:fmt(sw.vbm_voted?.dem), c:'dem'},
+    {l:'Rep VBM', v:fmt(sw.vbm_voted?.rep), c:'rep'},
+  ].map(c => `<div class="card"><div class="label">${c.l}</div><div class="value ${c.c}">${c.v}</div><div class="sub">${c.s||''}</div></div>`).join('');
+}
+
+function buildMap() {
+  // Project GeoJSON to SVG paths using simple mercator
+  const allPts = [];
+  geojson.features.forEach(f => {
+    const geo = f.geometry;
+    if (geo.type === 'Polygon') geo.coordinates[0].forEach(c => allPts.push(c));
+    else if (geo.type === 'MultiPolygon') geo.coordinates.forEach(p => p[0].forEach(c => allPts.push(c)));
+  });
+  const lngs = allPts.map(c => c[0]), lats = allPts.map(c => c[1]);
+  const minLng = Math.min(...lngs), maxLng = Math.max(...lngs), minLat = Math.min(...lats), maxLat = Math.max(...lats);
+  const padding = 15;
+  const scale = Math.min((SVG_W - padding*2) / (maxLng - minLng), (SVG_H - padding*2) / (maxLat - minLat)) * 0.95;
+
+  const paths = [];
+  geojson.features.forEach(f => {
+    const geo = f.geometry;
+    const polys = geo.type === 'Polygon' ? [geo.coordinates[0]] : geo.type === 'MultiPolygon' ? geo.coordinates.map(p => p[0]) : [];
+    polys.forEach(ring => {
+      const pts = ring.map(c => {
+        const x = (c[0] - minLng) * scale + padding + (SVG_W - (maxLng - minLng) * scale - padding*2) / 2;
+        const y = SVG_H - ((c[1] - minLat) * scale + padding);
+        return `${x},${y}`;
+      });
+      paths.push({name: f.properties.NAME, d: pts.join(' ')});
+    });
+  });
+
+  const svg = document.getElementById('countyGroup');
+  const tip = document.getElementById('mapTooltip');
+  
+  paths.forEach(p => {
+    const el = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    el.setAttribute('points', p.d);
+    el.setAttribute('data-county', p.name);
+    el.setAttribute('class', 'county');
+    el.style.stroke = '#555';
+    el.style.strokeWidth = '0.4';
+    el.style.transition = 'fill 0.3s';
+    el.addEventListener('mouseenter', e => {
+      const cd = data.by_county?.[p.name]?.[activeTab]||{};
+      const lead = (cd.dem||0) - (cd.rep||0);
+      const leadStr = lead >= 0 ? `Dem +${fmt(lead)}` : `Rep +${fmt(-lead)}`;
+      tip.style.display = 'block';
+      tip.style.left = '50%';
+      tip.style.top = '10px';
+      tip.style.transform = 'translateX(-50%)';
+      tip.innerHTML = `<b>${p.name}</b> &nbsp; Total ${fmt(cd.total)} &nbsp; Dem ${fmt(cd.dem)} &nbsp; Rep ${fmt(cd.rep)} &nbsp; <b>${leadStr}</b>`;
+      el.style.strokeWidth = '1.5'; el.style.stroke = '#222';
+    });
+    el.addEventListener('mouseleave', e => {
+      tip.style.display = 'none';
+      el.style.strokeWidth = '0.4'; el.style.stroke = '#555';
+    });
+    svg.appendChild(el);
+  });
+}
+
+function getColor(val) {
+  if (val === null || val === undefined) return '#CCC';
+  const t = Math.max(-1, Math.min(1, val));
+  if (t > 0) {
+    const s = t; return `rgb(${Math.round(255-s*255)},${Math.round(255-s*255)},255)`;
+  } else {
+    const s = -t; return `rgb(255,${Math.round(255-s*255)},${Math.round(255-s*255)})`;
+  }
+}
+
+function styleMap() {
+  const paths = document.querySelectorAll('#countyGroup polygon');
+  paths.forEach(el => {
+    const name = el.getAttribute('data-county');
+    const d = data.by_county?.[name]?.[activeTab]||{};
+    const total = d.total||0;
+    const demLead = total > 0 ? ((d.dem||0)-(d.rep||0))/total : null;
+    el.style.fill = getColor(demLead);
+  });
+}
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('#mapTabBar .tab').forEach(t => t.classList.toggle('active', t.dataset.tab===tab));
+  if (geojson) styleMap();
+  
+  const s = data.statewide[tab]||{};
+  const total = s.total||1;
+  const maxVal = Math.max(s.dem||0, s.rep||0, s.npa||0, 1);
+  document.getElementById('partyBars').innerHTML = [
+    {l:'Democrat', v:s.dem||0, c:'dem'}, {l:'Republican', v:s.rep||0, c:'rep'},
+    {l:'NPA', v:s.npa||0, c:'npa'}, {l:'Other', v:s.other||0, c:'other'}
+  ].map(p => `<div class="bar-row"><div class="bar-label">${p.l}</div><div class="bar-track"><div class="bar-fill ${p.c}" style="width:${(p.v/maxVal*100).toFixed(1)}%"></div></div><div class="bar-value">${fmt(p.v)}</div><div class="bar-pct">${(p.v/total*100).toFixed(1)}%</div></div>`).join('');
+  renderTable();
+}
+
+function renderTable() {
+  const search = (document.getElementById('searchInput').value||'').toLowerCase();
+  const sort = document.getElementById('sortSelect').value;
+  let counties = Object.entries(data.by_county||{}).map(([n,v]) => ({name:n, ...(v[activeTab]||{})}));
+  if (search) counties = counties.filter(c => c.name.toLowerCase().includes(search));
+  const sorter = {alpha:[a,b=>a.name.localeCompare(b.name)],'total-desc':(a,b)=>(b.total||0)-(a.total||0),};
+  counties.sort((a,b) => {
+    if (sort==='alpha') return a.name.localeCompare(b.name);
+    if (sort==='total-desc') return (b.total||0)-(a.total||0);
+    if (sort==='dem-desc') return (b.dem||0)-(a.dem||0);
+    if (sort==='rep-desc') return (b.rep||0)-(a.rep||0);
+    if (sort==='lead-desc') return ((b.dem||0)-(b.rep||0))-((a.dem||0)-(a.rep||0));
+    return 0;
+  });
+  document.getElementById('tableBody').innerHTML = counties.map(c => {
+    const lead = (c.dem||0)-(c.rep||0);
+    return `<tr><td>${c.name}</td><td class="num">${fmt(c.total)}</td><td class="num" style="color:var(--blue-dem)">${fmt(c.dem)}</td><td class="num" style="color:var(--red)">${fmt(c.rep)}</td><td class="num dem-lead ${lead>=0?'pos':'neg'}">${lead>=0?'+':''}${fmt(lead)}</td><td class="num">${c.total>0?((c.dem||0)/c.total*100).toFixed(1):'0.0'}%</td></tr>`;
+  }).join('');
+  document.getElementById('tableCount').textContent = `Showing ${counties.length} of ${Object.keys(data.by_county||{}).length} counties`;
+}
+
+function sortTable(f) { document.getElementById('sortSelect').value = f; renderTable(); }
+init();
+</script>
+</body>
+</html>
