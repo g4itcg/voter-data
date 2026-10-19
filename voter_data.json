@@ -3,22 +3,22 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-10-19T17:30:36+00:00",
+  "fetched_at": "2026-10-19T18:10:36+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
-      "rep": 510308,
-      "dem": 654388,
-      "other": 39070,
-      "npa": 326343,
-      "total": 1530109
+      "rep": 510140,
+      "dem": 654298,
+      "other": 39065,
+      "npa": 326308,
+      "total": 1529811
     },
     "vbm_voted": {
-      "rep": 303121,
-      "dem": 354053,
-      "other": 20435,
-      "npa": 155925,
-      "total": 833534
+      "rep": 303299,
+      "dem": 354148,
+      "other": 20440,
+      "npa": 155962,
+      "total": 833849
     },
     "early_voted": {
       "rep": 0,
@@ -27,7 +27,7 @@
       "npa": 0,
       "total": 0
     },
-    "vbm_outstanding": 696575,
+    "vbm_outstanding": 695962,
     "vbm_return_rate": 54.5
   },
   "by_county": {
@@ -861,18 +861,18 @@
     },
     "Levy": {
       "vbm_provided": {
-        "rep": 1539,
-        "dem": 937,
-        "other": 77,
-        "npa": 264,
-        "total": 2817
+        "rep": 1371,
+        "dem": 847,
+        "other": 72,
+        "npa": 229,
+        "total": 2519
       },
       "vbm_voted": {
-        "rep": 925,
-        "dem": 511,
-        "other": 43,
-        "npa": 169,
-        "total": 1648
+        "rep": 1103,
+        "dem": 606,
+        "other": 48,
+        "npa": 206,
+        "total": 1963
       },
       "early_voted": {
         "rep": 0,
