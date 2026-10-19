@@ -113,6 +113,7 @@
   <div class="section-card">
     <h2>📈 Daily VBM Returns</h2>
     <div class="trend-wrap">
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px;text-align:center;">Cumulative votes cast by mail (running total)</div>
       <svg id="trendSvg" viewBox="0 0 700 240" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;display:block;margin:0 auto;"></svg>
       <div class="trend-legend">
         <span><span class="legend-dot" style="background:#0033A0"></span> Total</span>
@@ -120,6 +121,10 @@
         <span><span class="legend-dot" style="background:#DE0100"></span> Rep</span>
         <span><span class="legend-dot" style="background:#26A69A"></span> NPA</span>
         <span><span class="legend-dot" style="background:#FFB300"></span> Other</span>
+      </div>
+      <div style="margin-top:18px;border-top:1px solid #eee;padding-top:14px;">
+        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px;">New ballots returned each day (daily totals)</div>
+        <svg id="dailySvg" viewBox="0 0 700 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;display:block;margin:0 auto;"></svg>
       </div>
     </div>
   </div>
@@ -187,6 +192,7 @@ async function init() {
     renderCards();
     buildMap();
     renderTrend();
+    renderDailyNew();
     switchTab('vbm_voted');
   } catch(e) { document.getElementById('statusText').textContent = '⚠️ Error loading'; console.error(e); }
 }
@@ -248,6 +254,49 @@ function renderTrend() {
   });
 
   document.getElementById('trendSvg').innerHTML = svg;
+}
+
+function renderDailyNew() {
+  if (!history || history.length < 2) return;
+  const W = 700, H = 140, padL = 60, padR = 20, padT = 16, padB = 28;
+
+  // Compute daily-new = today's cumulative - yesterday's cumulative
+  const bars = [];
+  for (let i = 1; i < history.length; i++) {
+    const prev = history[i-1].vbm_voted || 0;
+    const cur = history[i].vbm_voted || 0;
+    bars.push({ date: history[i].date, val: Math.max(0, cur - prev) });
+  }
+  const maxVal = Math.max(...bars.map(b => b.val), 1);
+  const gw = W - padL - padR, gh = H - padT - padB;
+  const bw = Math.min(22, gw / bars.length * 0.7);
+  const y = v => padT + gh - (v / maxVal * gh);
+
+  let svg = `<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT+gh}" stroke="#ddd"/>
+    <line x1="${padL}" y1="${padT+gh}" x2="${padL+gw}" y2="${padT+gh}" stroke="#ddd"/>`;
+
+  // Y-axis labels
+  for (let t = 0; t <= 4; t++) {
+    const v = maxVal * t / 4;
+    const yy = y(v);
+    svg += `<text x="${padL-6}" y="${yy+4}" text-anchor="end" font-size="10" fill="#666">${Math.round(v/1000)}k</text>`;
+  }
+
+  bars.forEach((b, i) => {
+    const x = padL + (i * gw / bars.length) + (gw / bars.length - bw) / 2;
+    const hh = gh - (y(b.val) - padT);
+    svg += `<rect x="${x}" y="${y(b.val)}" width="${bw}" height="${Math.max(hh, 1)}" fill="#0033A0" fill-opacity="0.75" rx="2"/>`;
+    if (bars.length <= 15) {
+      const d = new Date(b.date + 'T00:00:00');
+      svg += `<text x="${x + bw/2}" y="${padT + gh + 14}" text-anchor="middle" font-size="9" fill="#666">${d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'})}</text>`;
+    }
+    // Value on top of tall bars
+    if (b.val > maxVal * 0.25) {
+      svg += `<text x="${x + bw/2}" y="${y(b.val) - 4}" text-anchor="middle" font-size="9" fill="#333" font-weight="600">${Math.round(b.val/1000)}k</text>`;
+    }
+  });
+
+  document.getElementById('dailySvg').innerHTML = svg;
 }
 
 function renderCards() {
