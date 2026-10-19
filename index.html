@@ -561,6 +561,24 @@ function renderTable() {
 
 function sortTable(f) { document.getElementById('sortSelect').value = f; renderTable(); }
 init();
+
+// Auto-refresh every 15 minutes to keep early voting & VBM data current
+setInterval(() => {
+  fetch(DATA_URL, { cache: 'no-store' })
+    .then(r => r.json())
+    .then(d => {
+      if (d.fetched_at !== data.fetched_at) {
+        data = d;
+        renderCards();
+        renderTrend();
+        renderDailyNew();
+        renderDailyTable();
+        switchTab(activeTab);
+        document.getElementById('statusText').textContent = 'Updated: ' + new Date(data.fetched_at).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+      }
+    })
+    .catch(() => {});
+}, 15 * 60 * 1000);
 </script>
 </body>
 </html>
