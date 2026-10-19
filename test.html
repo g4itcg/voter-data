@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Florida Early Vote Tracker | BetterFL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --blue: #0033A0; --blue-dark: #002080; --yellow: #F8D858; --teal: #58E0E0; --bg: #F5F5F5; --white: #FFFFFF; --text: #333333; --text-light: #666666; --red: #DE0100; --blue-dem: #4A90D9; --green: #28A745; --gray: #A0AEC0; --shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+  .header { background: var(--blue); color: white; padding: 20px 24px 0; text-align: center; }
+  .header-top { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+  .live-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: white; font-size: 11px; font-weight: 700; letter-spacing: 1px; padding: 4px 12px; border-radius: 20px; }
+  .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #4CAF50; animation: live-pulse 1.2s ease-in-out infinite; box-shadow: 0 0 6px rgba(76,175,80,0.6); }
+  @keyframes live-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.7); } }
+  .header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+  .header .subtitle { font-size: 14px; opacity: 0.85; margin-top: 4px; }
+  .header .election-date { display: inline-block; background: var(--yellow); color: var(--blue-dark); padding: 3px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-top: 10px; }
+  .brand-strip { display: flex; height: 6px; margin-top: 16px; overflow: hidden; }
+  .brand-strip span { flex: 1; }
+  .brand-strip .s-blue { background: #0033A0; }
+  .brand-strip .s-gold { background: #F8D858; }
+  .brand-strip .s-teal { background: #58E0E0; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 20px 16px; }
+
+  .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+  .card { background: var(--white); border-radius: 12px; padding: 16px; box-shadow: var(--shadow); text-align: center; }
+  .card .label { font-size: 11px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+  .card .value { font-size: 24px; font-weight: 700; margin-top: 4px; }
+  .card .value.dem { color: var(--blue-dem); } .card .value.rep { color: var(--red); }
+  .card .value.total { color: var(--blue); }
+  .card .sub { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+
+  .section-card { background: var(--white); border-radius: 12px; box-shadow: var(--shadow); margin-bottom: 20px; overflow: hidden; }
+
+  .margin-banner { display: flex; align-items: center; justify-content: center; gap: 16px; padding: 14px 20px; border-radius: 12px; margin-bottom: 20px; font-size: 14px; }
+  .margin-banner.dem { background: linear-gradient(135deg, #E3EDFB, #D0DFF5); color: var(--blue-dem); border: 1px solid var(--blue-dem); }
+  .margin-banner.rep { background: linear-gradient(135deg, #FDE8E8, #F5D0D0); color: var(--red); border: 1px solid var(--red); }
+  .margin-label { font-weight: 600; font-size: 12px; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; }
+  .margin-value { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
+  .margin-detail { font-size: 13px; opacity: 0.8; }
+  .section-card h2 { font-size: 16px; font-weight: 600; color: var(--blue); padding: 16px 20px 0; }
+
+  .tabs { display: flex; border-bottom: 2px solid #E8E8E8; padding: 0 20px; gap: 0; }
+  .tab { padding: 10px 18px; font-size: 13px; font-weight: 600; color: var(--text-light); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; user-select: none; }
+  .tab:hover { color: var(--blue); }
+  .tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+  .map-wrap { padding: 16px 20px; text-align: center; position: relative; }
+  .map-wrap svg { width: 100%; max-width: 700px; height: auto; display: block; margin: 0 auto; }
+  .map-wrap .tooltip { position: absolute; background: var(--blue); color: white; padding: 8px 14px; border-radius: 8px; font-size: 13px; box-shadow: var(--shadow); pointer-events: none; display: none; z-index: 100; white-space: nowrap; }
+  .map-wrap .legend { display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 11px; color: var(--text-light); margin-top: 8px; }
+  .map-wrap .legend .grad { width: 120px; height: 10px; border-radius: 5px; background: linear-gradient(to right, var(--red), #EBEBEB, var(--blue-dem)); }
+
+  .party-bars { padding: 16px 20px; }
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; }
+  .bar-label { width: 90px; font-size: 13px; font-weight: 600; }
+  .bar-track { flex: 1; height: 24px; background: #E8E8E8; border-radius: 12px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 12px; transition: width 0.5s ease; min-width: 0; }
+  .bar-fill.dem { background: var(--blue-dem); } .bar-fill.rep { background: var(--red); }
+  .bar-fill.npa { background: var(--teal); } .bar-fill.other { background: var(--yellow); }
+  .bar-req { position: absolute; top: 0; left: 0; height: 100%; border-radius: 12px; background: #D9E2F3; opacity: 0.9; }
+  .bar-fill { position: relative; z-index: 1; }
+  .bar-mark { position: absolute; top: -3px; bottom: -3px; width: 2px; background: #333; z-index: 2; border-radius: 1px; }
+  .bar-track { position: relative; }
+  .bar-row.lead-row .bar-label { font-weight: 700; color: var(--blue); }
+  .party-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 6px; }
+  .party-title { font-weight: 600; font-size: 13px; color: var(--text); }
+  .adv-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+  .adv-dem { background: #E3EDFB; color: var(--blue-dem); border: 1px solid var(--blue-dem); }
+  .adv-rep { background: #FDE8E8; color: var(--red); border: 1px solid var(--red); }
+  .adv-arrow { font-size: 10px; }
+  .party-sub { font-size: 11px; color: var(--text-light); margin-bottom: 12px; }
+  .bar-value { width: 75px; text-align: right; font-size: 13px; font-weight: 600; }
+  .bar-pct { width: 45px; text-align: right; font-size: 12px; color: var(--text-light); }
+
+  .table-wrap { padding: 0 20px 20px; overflow-x: auto; }
+  .table-controls { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .table-controls input, .table-controls select { padding: 6px 12px; border: 1px solid #D0D0D0; border-radius: 6px; font-size: 13px; background: white; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { background: #F0F2F5; padding: 8px 5px; text-align: left; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.3px; color: var(--text-light); cursor: pointer; white-space: nowrap; }
+  th:hover { background: #E4E7EB; }
+  td { padding: 6px 5px; border-bottom: 1px solid #EEE; }
+  tr:hover td { background: #F8F9FA; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; }
+  .dem-lead.pos { color: var(--blue-dem); } .dem-lead.neg { color: var(--red); }
+
+  .status-bar { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-light); margin-bottom: 16px; padding: 8px 12px; background: white; border-radius: 8px; box-shadow: var(--shadow); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .dot.live { background: var(--green); }
+
+  .trend-wrap { padding: 16px 20px 20px; text-align: center; }
+  .trend-legend { display: flex; justify-content: center; gap: 20px; font-size: 12px; color: var(--text-light); margin-top: 8px; flex-wrap: wrap; }
+  .legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+  .daily-table-wrap { max-height: 320px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px; margin-top: 6px; }
+  .daily-table { width: 100%; border-collapse: collapse; font-size: 12px; font-family: inherit; }
+  .daily-table th { position: sticky; top: 0; background: var(--blue); color: white; padding: 6px 8px; text-align: right; font-weight: 600; }
+  .daily-table th:first-child { text-align: left; }
+  .daily-table td { padding: 5px 8px; text-align: right; border-bottom: 1px solid #f0f0f0; }
+  .daily-table td:first-child { text-align: left; color: var(--text-light); }
+  .daily-table tr:nth-child(even) td { background: #fafafa; }
+  .daily-table td.dem { color: #4A90D9; font-weight: 600; }
+  .daily-table td.rep { color: var(--red); font-weight: 600; }
+  .daily-table td.npa { color: #58E0E0; font-weight: 600; }
+  .daily-table td.oth { color: #F8D858; font-weight: 600; }
+  .daily-table td.total { font-weight: 700; }
+
+  .brand-footer { text-align: center; padding: 16px; margin-top: 24px; font-size: 12px; color: var(--text-light); }
+  .brand-footer .logo-text { font-weight: 700; color: var(--blue); }
+
+  @media (max-width: 768px) {
+    .header h1 { font-size: 22px; }
+    .cards-grid { grid-template-columns: repeat(2, 1fr); }
+    .tab { padding: 8px 12px; font-size: 12px; }
+    .map-wrap svg { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-top">
+    <div class="live-badge" id="liveBadge" title="Auto-refreshes every 15 minutes">
+      <span class="live-dot"></span> LIVE
+    </div>
+  </div>
+  <h1>🗳️ Florida Early Vote Tracker</h1>
+  <div class="subtitle">2026 General Election — Live Data from FL Division of Elections</div>
+  <div class="election-date">🗓️ Election Day: November 3, 2026</div>
+  <div class="brand-strip">
+    <span class="s-blue"></span>
+    <span class="s-gold"></span>
+    <span class="s-teal"></span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="status-bar">
+    <div class="last-updated"><span class="dot live"></span> <span id="statusText">Loading...</span></div>
+    <div><span style="font-size:11px;">Source: FL Division of Elections</span></div>
+  </div>
+
+  <div class="margin-banner" id="marginBanner" style="display:none;">
+    <span class="margin-label">Statewide Margin</span>
+    <span class="margin-value" id="marginValue">—</span>
+    <span class="margin-detail" id="marginDetail"></span>
+  </div>
+
+  <div class="cards-grid" id="cardsGrid"></div>
+
+  <div class="section-card">
+    <h2>📊 Returns by Party</h2>
+    <div class="party-bars" id="partyBars"></div>
+  </div>
+
+  <div class="section-card">
+    <div class="map-wrap">
+      <svg id="countyMapSvg" viewBox="0 0 700 600" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;">
+        <g id="countyGroup"></g>
+      </svg>
+      <div class="tooltip" id="mapTooltip"></div>
+      <div class="legend">
+        <span>← Rep</span>
+        <div class="grad"></div>
+        <span>Dem →</span>
+      </div>
+    </div>
+    <div class="tabs" id="mapTabBar">
+      <div class="tab active" data-tab="vbm_voted" onclick="switchTab('vbm_voted')">📬 Mail</div>
+      <div class="tab" data-tab="vbm_provided" onclick="switchTab('vbm_provided')">📨 Provided</div>
+      <div class="tab" data-tab="early_voted" onclick="switchTab('early_voted')">🏛️ Early</div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <h2>📈 Daily VBM Returns</h2>
+    <div class="trend-wrap">
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px;text-align:center;">Cumulative votes cast by mail (running total)</div>
+      <svg id="trendSvg" viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:900px;display:block;margin:0 auto;"></svg>
+      <div class="trend-legend">
+        <span><span class="legend-dot" style="background:#222222"></span> Total</span>
+        <span><span class="legend-dot" style="background:#4A90D9"></span> Dem</span>
+        <span><span class="legend-dot" style="background:#DE0100"></span> Rep</span>
+        <span><span class="legend-dot" style="background:#58E0E0"></span> NPA</span>
+        <span><span class="legend-dot" style="background:#F8D858"></span> Other</span>
+      </div>
+      <div style="margin-top:18px;border-top:1px solid #eee;padding-top:14px;">
+        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px;">New ballots returned each day (daily totals)</div>
+        <svg id="dailySvg" viewBox="0 0 900 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:900px;display:block;margin:0 auto;"></svg>
+      </div>
+      <div style="margin-top:18px;border-top:1px solid #eee;padding-top:14px;">
+        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px;">Daily returns by party</div>
+        <div class="daily-table-wrap">
+          <table class="daily-table" id="dailyTable">
+            <thead><tr><th>Date</th><th>Dem</th><th>Rep</th><th>NPA</th><th>Other</th><th>Total</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <h2>🏛️ County Breakdown</h2>
+    <div class="table-wrap">
+      <div class="table-controls">
+        <input type="text" id="searchInput" placeholder="Search county..." oninput="renderTable()">
+        <select id="sortSelect" onchange="renderTable()">
+          <option value="total-desc">Total ↓</option>
+          <option value="dem-desc">Dem ↓</option>
+          <option value="rep-desc">Rep ↓</option>
+          <option value="npa-desc">NPA ↓</option>
+          <option value="oth-desc">Oth ↓</option>
+          <option value="lead-desc">Lead ↓</option>
+          <option value="alpha">A–Z</option>
+        </select>
+      </div>
+      <table>
+        <thead><tr>
+          <th onclick="sortTable('alpha')" style="min-width:0">County ↕</th>
+          <th class="num" onclick="sortTable('total-desc')">Total ↕</th>
+          <th class="num" onclick="sortTable('dem-desc')">Dem ↕</th>
+          <th class="num" onclick="sortTable('rep-desc')">Rep ↕</th>
+          <th class="num" onclick="sortTable('npa-desc')">NPA ↕</th>
+          <th class="num" onclick="sortTable('oth-desc')">Oth ↕</th>
+          <th class="num" onclick="sortTable('lead-desc')">Lead ↕</th>
+        </tr></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      <div style="font-size:12px;color:var(--text-light);padding-top:8px;" id="tableCount"></div>
+    </div>
+  </div>
+
+  <div class="brand-footer">
+    Powered by <span class="logo-text">FLORIDIANS FOR A BETTER FUTURE</span> · 
+    Data from <a href="https://countyfilesvbm-ev.floridados.gov/VoteByMailEarlyVotingReports/PublicStats" target="_blank" style="color:var(--blue)">Florida Division of Elections</a>
+  </div>
+</div>
+
+<script>
+const DATA_URL = 'https://raw.githubusercontent.com/g4itcg/voter-data/main/voter_data.json';
+const GEO_URL = 'https://raw.githubusercontent.com/g4itcg/voter-data/main/fl_counties.geojson';
+const HISTORY_URL = 'https://raw.githubusercontent.com/g4itcg/voter-data/main/vbm_history.json';
+
+let data = null, geojson = null, history = null, activeTab = 'vbm_voted';
+const DEM_COLOR = '#4A90D9', REP_COLOR = '#DE0100';
+const SVG_W = 700, SVG_H = 600;
+
+function fmt(n) { return (n||0).toLocaleString(); }
+
+function fmtET(isoStr) {
+  // Always render in Eastern time (America/New_York) and label as ET
+  let s = isoStr || '';
+  // Legacy timestamps lack timezone marker — they're UTC, so normalize
+  if (!/Z$|[+-]\d{2}:\d{2}$/.test(s)) s += 'Z';
+  const d = new Date(s);
+  if (isNaN(d.getTime())) return isoStr;
+  return d.toLocaleString('en-US', { timeZone: 'America/New_York', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) + ' ET';
+}
+
+async function init() {
+  document.getElementById('statusText').textContent = 'Loading data & map...';
+  try {
+    const [dr, gr, hr] = await Promise.all([
+      fetch(DATA_URL).then(r => r.json()).catch(() => null),
+      fetch(GEO_URL).then(r => r.json()).catch(() => null),
+      fetch(HISTORY_URL).then(r => r.json()).catch(() => null)
+    ]);
+    data = dr; geojson = gr; history = hr || [];
+    document.getElementById('statusText').textContent = 'Updated: ' + fmtET(data.fetched_at) + ' (Updates every 10 min)';
+    renderCards();
+    buildMap();
+    renderTrend();
+    renderDailyNew();
+    renderDailyTable();
+    switchTab('vbm_voted');
+  } catch(e) { document.getElementById('statusText').textContent = '⚠️ Error loading'; console.error(e); }
+}
+
+function renderTrend() {
+  if (!history || history.length < 1) return;
+  const W = 900, H = 320, padL = 60, padR = 20, padT = 20, padB = 35;
+  const pts = history;
+  const lastProvided = pts[pts.length-1]?.vbm_provided || 0;
+  const maxVal = Math.max(...pts.map(p => p.vbm_voted||0), lastProvided, 1);
+  const gw = W - padL - padR, gh = H - padT - padB;
+  const x = i => padL + (pts.length === 1 ? gw/2 : (i * gw / (pts.length - 1)));
+  const y = v => padT + gh - (v / maxVal * gh);
+
+  let svg = `<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT+gh}" stroke="#ddd" stroke-width="1"/>
+    <line x1="${padL}" y1="${padT+gh}" x2="${padL+gw}" y2="${padT+gh}" stroke="#ddd" stroke-width="1"/>`;
+
+  // Y-axis labels
+  for (let t = 0; t <= 4; t++) {
+    const v = maxVal * t / 4;
+    const yy = y(v);
+    svg += `<text x="${padL-8}" y="${yy+4}" text-anchor="end" font-size="11" fill="#666">${Math.round(v/1000)}k</text>`;
+  }
+
+  // Reference line for today's provided total (dashed light blue)
+  if (lastProvided > 0) {
+    svg += `<line x1="${padL}" y1="${y(lastProvided)}" x2="${padL+gw}" y2="${y(lastProvided)}" stroke="#87A6D9" stroke-width="1.5" stroke-dasharray="5,4"/>
+      <text x="${padL+gw-4}" y="${y(lastProvided)-5}" text-anchor="end" font-size="10" fill="#87A6D9">Provided ${(lastProvided/1000).toFixed(0)}k</text>`;
+  }
+
+  // Voted area fill (subtle, total only)
+  const votedPts = pts.map((p,i) => `${x(i)},${y(p.vbm_voted||0)}`).join(' ');
+  const votedArea = `${votedPts} ${x(pts.length-1)},${padT+gh} ${x(0)},${padT+gh}`;
+  svg += `<polygon points="${votedArea}" fill="#222222" fill-opacity="0.06"/>`;
+  // Total voted line (black)
+  svg += `<polyline points="${votedPts}" fill="none" stroke="#222222" stroke-width="3"/>`;
+
+  // Party lines (only days with party data)
+  const parties = [
+    {key:'dem', color:'#4A90D9', label:'Dem'},
+    {key:'rep', color:'#DE0100', label:'Rep'},
+    {key:'npa', color:'#58E0E0', label:'NPA'},
+    {key:'oth', color:'#F8D858', label:'Other'}
+  ];
+  parties.forEach(p => {
+    const linePts = pts.map((pt,i) => `${x(i)},${y(pt[p.key]||0)}`).join(' ');
+    if (linePts.trim()) {
+      svg += `<polyline points="${linePts}" fill="none" stroke="${p.color}" stroke-width="2"/>`;
+    }
+  });
+
+  // X-axis dates (show ~every 5th date)
+  pts.forEach((p,i) => {
+    if (pts.length > 12 && i % 5 !== 0 && i !== pts.length-1) return;
+    const d = new Date(p.date + 'T00:00:00');
+    const label = d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'});
+    svg += `<text x="${x(i)}" y="${padT+gh+16}" text-anchor="middle" font-size="11" fill="#666">${label}</text>`;
+    svg += `<circle cx="${x(i)}" cy="${y(p.vbm_voted||0)}" r="3" fill="#222222"/>`;
+  });
+
+  document.getElementById('trendSvg').innerHTML = svg;
+}
+
+function renderDailyTable() {
+  const tbody = document.querySelector('#dailyTable tbody');
+  if (!tbody || !history || history.length < 2) return;
+  const parties = ['dem','rep','npa','oth'];
+  const rows = [];
+  for (let i = 1; i < history.length; i++) {
+    const prev = history[i-1], cur = history[i];
+    const cells = { dem:0, rep:0, npa:0, oth:0 };
+    let total = 0;
+    parties.forEach(p => {
+      const v = Math.max(0, (cur[p]||0) - (prev[p]||0));
+      cells[p] = v; total += v;
+    });
+    const d = new Date(cur.date + 'T00:00:00');
+    rows.push({
+      label: d.toLocaleDateString('en-US',{month:'short',day:'numeric'}),
+      full: cur.date, cells, total
+    });
+  }
+  // Newest first
+  rows.reverse();
+  tbody.innerHTML = rows.map(r => `
+    <tr>
+      <td>${r.label}</td>
+      <td class="dem">${fmt(r.cells.dem)}</td>
+      <td class="rep">${fmt(r.cells.rep)}</td>
+      <td class="npa">${fmt(r.cells.npa)}</td>
+      <td class="oth">${fmt(r.cells.oth)}</td>
+      <td class="total">${fmt(r.total)}</td>
+    </tr>`).join('');
+}
+
+function renderDailyNew() {
+  if (!history || history.length < 2) return;
+  const W = 900, H = 200, padL = 60, padR = 20, padT = 16, padB = 28;
+
+  const parties = [
+    {key:'dem', color:'#4A90D9'},
+    {key:'rep', color:'#DE0100'},
+    {key:'npa', color:'#58E0E0'},
+    {key:'oth', color:'#F8D858'}
+  ];
+
+  // Compute daily-new per party = today's cumulative - yesterday's cumulative
+  const bars = [];
+  for (let i = 1; i < history.length; i++) {
+    const prev = history[i-1], cur = history[i];
+    const parts = {};
+    let total = 0;
+    parties.forEach(p => {
+      const v = Math.max(0, (cur[p.key]||0) - (prev[p.key]||0));
+      parts[p.key] = v;
+      total += v;
+    });
+    bars.push({ date: cur.date, total, parts });
+  }
+  const maxVal = Math.max(...bars.map(b => b.total), 1);
+  const gw = W - padL - padR, gh = H - padT - padB;
+  const bw = Math.min(22, gw / bars.length * 0.7);
+  const y = v => padT + gh - (v / maxVal * gh);
+
+  let svg = `<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT+gh}" stroke="#ddd"/>
+    <line x1="${padL}" y1="${padT+gh}" x2="${padL+gw}" y2="${padT+gh}" stroke="#ddd"/>`;
+
+  for (let t = 0; t <= 4; t++) {
+    const v = maxVal * t / 4;
+    const yy = y(v);
+    svg += `<text x="${padL-6}" y="${yy+4}" text-anchor="end" font-size="10" fill="#666">${Math.round(v/1000)}k</text>`;
+  }
+
+  bars.forEach((b, i) => {
+    const x = padL + (i * gw / bars.length) + (gw / bars.length - bw) / 2;
+    if (b.total <= 0) return;
+    let yBottom = padT + gh;
+    parties.forEach(p => {
+      const v = b.parts[p.key] || 0;
+      if (v <= 0) return;
+      const segH = (v / maxVal * gh);
+      const ySegTop = yBottom - segH;
+      svg += `<rect x="${x}" y="${ySegTop}" width="${bw}" height="${segH}" fill="${p.color}" fill-opacity="0.85"/>`;
+      yBottom = ySegTop;
+    });
+    if (bars.length <= 15) {
+      const d = new Date(b.date + 'T00:00:00');
+      svg += `<text x="${x + bw/2}" y="${padT + gh + 14}" text-anchor="middle" font-size="9" fill="#666">${d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'})}</text>`;
+    } else {
+      // Show every ~5th date to avoid crowding
+      if (i % 5 === 0 || i === bars.length - 1) {
+        const d = new Date(b.date + 'T00:00:00');
+        svg += `<text x="${x + bw/2}" y="${padT + gh + 14}" text-anchor="middle" font-size="9" fill="#666">${d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'})}</text>`;
+      }
+    }
+    if (b.total > maxVal * 0.25) {
+      svg += `<text x="${x + bw/2}" y="${y(b.total) - 4}" text-anchor="middle" font-size="9" fill="#333" font-weight="600">${Math.round(b.total/1000)}k</text>`;
+    }
+  });
+
+  document.getElementById('dailySvg').innerHTML = svg;
+}
+
+function renderCards() {
+  const sw = data.statewide;
+  document.getElementById('cardsGrid').innerHTML = [
+    {l:'VBM Provided', v:fmt(sw.vbm_provided?.total), c:'total', s:`Dem ${fmt(sw.vbm_provided?.dem)} · Rep ${fmt(sw.vbm_provided?.rep)}`},
+    {l:'VBM Returned', v:fmt(sw.vbm_voted?.total), c:'total', s:`${sw.vbm_return_rate||0}% return rate`},
+    {l:'VBM Outstanding', v:fmt(sw.vbm_outstanding), c:'total', s:'awaiting return'},
+    {l:'Early In-Person', v:fmt(sw.early_voted?.total), c:'total', s:sw.early_voted?.total?'voted':'Not yet started'},
+    {l:'Dem VBM', v:fmt(sw.vbm_voted?.dem), c:'dem'},
+    {l:'Rep VBM', v:fmt(sw.vbm_voted?.rep), c:'rep'},
+  ].map(c => `<div class="card"><div class="label">${c.l}</div><div class="value ${c.c}">${c.v}</div><div class="sub">${c.s||''}</div></div>`).join('');
+  
+  // Margin banner
+  const banner = document.getElementById('marginBanner');
+  const tab = activeTab || 'vbm_voted';
+  const s = data.statewide[tab]||{};
+  if (s.total) {
+    const demV = s.dem||0, repV = s.rep||0;
+    const total = s.total;
+    const demPct = total > 0 ? (demV/total*100) : 0;
+    const repPct = total > 0 ? (repV/total*100) : 0;
+    const margin = demV - repV;
+    const marginPct = demPct - repPct;
+    const isDem = margin >= 0;
+    banner.className = isDem ? 'margin-banner dem' : 'margin-banner rep';
+    banner.style.display = 'flex';
+    document.getElementById('marginValue').textContent = isDem ? `D +${marginPct.toFixed(1)}%` : `R +${Math.abs(marginPct).toFixed(1)}%`;
+    document.getElementById('marginDetail').textContent = isDem ? `D+${fmt(margin)} votes` : `R+${fmt(-margin)} votes`;
+    // Also update the returns-by-party section
+    if (typeof renderPartyBars === 'function') renderPartyBars();
+    else if (typeof switchTab === 'function') switchTab(activeTab);
+  }
+}
+
+function buildMap() {
+  // Project GeoJSON to SVG paths using simple mercator
+  const allPts = [];
+  geojson.features.forEach(f => {
+    const geo = f.geometry;
+    if (geo.type === 'Polygon') geo.coordinates[0].forEach(c => allPts.push(c));
+    else if (geo.type === 'MultiPolygon') geo.coordinates.forEach(p => p[0].forEach(c => allPts.push(c)));
+  });
+  const lngs = allPts.map(c => c[0]), lats = allPts.map(c => c[1]);
+  const minLng = Math.min(...lngs), maxLng = Math.max(...lngs), minLat = Math.min(...lats), maxLat = Math.max(...lats);
+  const padding = 15;
+  const scale = Math.min((SVG_W - padding*2) / (maxLng - minLng), (SVG_H - padding*2) / (maxLat - minLat)) * 0.95;
+
+  const paths = [];
+  geojson.features.forEach(f => {
+    const geo = f.geometry;
+    const polys = geo.type === 'Polygon' ? [geo.coordinates[0]] : geo.type === 'MultiPolygon' ? geo.coordinates.map(p => p[0]) : [];
+    polys.forEach(ring => {
+      const pts = ring.map(c => {
+        const x = (c[0] - minLng) * scale + padding + (SVG_W - (maxLng - minLng) * scale - padding*2) / 2;
+        const y = SVG_H - ((c[1] - minLat) * scale + padding);
+        return `${x},${y}`;
+      });
+      paths.push({name: f.properties.NAME, d: pts.join(' ')});
+    });
+  });
+
+  const svg = document.getElementById('countyGroup');
+  const tip = document.getElementById('mapTooltip');
+  
+  paths.forEach(p => {
+    const el = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    el.setAttribute('points', p.d);
+    el.setAttribute('data-county', p.name);
+    el.setAttribute('class', 'county');
+    el.style.stroke = '#555';
+    el.style.strokeWidth = '0.4';
+    el.style.transition = 'fill 0.3s';
+    el.addEventListener('mouseenter', e => {
+      const cd = data.by_county?.[p.name]?.[activeTab]||{};
+      const lead = (cd.dem||0) - (cd.rep||0);
+      const leadStr = lead >= 0 ? `Dem +${fmt(lead)}` : `Rep +${fmt(-lead)}`;
+      tip.style.display = 'block';
+      tip.style.left = '50%';
+      tip.style.top = '10px';
+      tip.style.transform = 'translateX(-50%)';
+      tip.innerHTML = `<b>${p.name}</b> &nbsp; Total ${fmt(cd.total)} &nbsp; Dem ${fmt(cd.dem)} &nbsp; Rep ${fmt(cd.rep)} &nbsp; NPA ${fmt(cd.npa)} &nbsp; Other ${fmt(cd.other)} &nbsp; <b>${leadStr}</b>`;
+      el.style.strokeWidth = '1.5'; el.style.stroke = '#222';
+    });
+    el.addEventListener('mouseleave', e => {
+      tip.style.display = 'none';
+      el.style.strokeWidth = '0.4'; el.style.stroke = '#555';
+    });
+    svg.appendChild(el);
+  });
+
+  // Add county name labels at polygon centroids
+  const labelFontSize = Math.max(5, Math.min(8, scale * 0.04));
+  // Pre-computed centroids (lng, lat) for each county name
+  const labels = [
+    {n:'Alachua',l:-82.293, t:29.674},{n:'Baker',l:-82.336, t:30.327},{n:'Bay',l:-85.570, t:30.251},
+    {n:'Bradford',l:-82.168, t:29.947},{n:'Brevard',l:-80.685, t:28.311},{n:'Broward',l:-80.460, t:26.245},
+    {n:'Calhoun',l:-85.205, t:30.411},{n:'Charlotte',l:-81.961, t:26.900},{n:'Citrus',l:-82.522, t:28.874},
+    {n:'Clay',l:-81.774, t:29.986},{n:'Collier',l:-81.391, t:26.119},{n:'Columbia',l:-82.709, t:30.231},
+    {n:'DeSoto',l:-81.828, t:27.165},{n:'Dixie',l:-83.177, t:29.585},{n:'Duval',l:-81.679, t:30.341},
+    {n:'Escambia',l:-87.381, t:30.618},{n:'Flagler',l:-81.281, t:29.453},{n:'Franklin',l:-84.857, t:29.832},
+    {n:'Gadsden',l:-84.633, t:30.573},{n:'Gilchrist',l:-82.799, t:29.722},{n:'Glades',l:-81.105, t:26.978},
+    {n:'Gulf',l:-85.237, t:29.903},{n:'Hamilton',l:-82.968, t:30.489},{n:'Hardee',l:-81.832, t:27.472},
+    {n:'Hendry',l:-81.300, t:26.550},{n:'Hernando',l:-82.433, t:28.556},{n:'Highlands',l:-81.317, t:27.326},
+    {n:'Hillsborough',l:-82.358, t:27.902},{n:'Holmes',l:-85.800, t:30.867},{n:'Indian River',l:-80.482, t:27.673},
+    {n:'Jackson',l:-85.204, t:30.786},{n:'Jefferson',l:-83.887, t:30.442},{n:'Lafayette',l:-83.185, t:29.993},
+    {n:'Lake',l:-81.730, t:28.770},{n:'Lee',l:-81.893, t:26.583},{n:'Leon',l:-84.281, t:30.461},
+    {n:'Levy',l:-82.815, t:29.322},{n:'Liberty',l:-84.963, t:30.232},{n:'Madison',l:-83.452, t:30.483},
+    {n:'Manatee',l:-82.498, t:27.482},{n:'Marion',l:-82.009, t:29.234},{n:'Martin',l:-80.444, t:27.079},
+    {n:'Miami-Dade',l:-80.379, t:25.617},{n:'Monroe',l:-81.081, t:25.303},{n:'Nassau',l:-81.684, t:30.581},
+    {n:'Okaloosa',l:-86.580, t:30.641},{n:'Okeechobee',l:-80.821, t:27.440},{n:'Orange',l:-81.398, t:28.577},
+    {n:'Osceola',l:-81.211, t:28.085},{n:'Palm Beach',l:-80.445, t:26.642},{n:'Pasco',l:-82.370, t:28.336},
+    {n:'Pinellas',l:-82.747, t:27.919},{n:'Polk',l:-81.690, t:27.950},{n:'Putnam',l:-81.755, t:29.602},
+    {n:'Santa Rosa',l:-86.969, t:30.595},{n:'Sarasota',l:-82.310, t:27.186},{n:'Seminole',l:-81.231, t:28.694},
+    {n:'St. Johns',l:-81.414, t:29.892},{n:'St. Lucie',l:-80.407, t:27.365},{n:'Sumter',l:-82.085, t:28.672},
+    {n:'Suwannee',l:-82.945, t:30.211},{n:'Taylor',l:-83.598, t:30.021},{n:'Union',l:-82.382, t:30.049},
+    {n:'Volusia',l:-81.186, t:29.021},{n:'Wakulla',l:-84.298, t:30.147},{n:'Walton',l:-86.148, t:30.615},
+    {n:'Washington',l:-85.676, t:30.645}
+  ];
+  labels.forEach(lb => {
+    const lx = (lb.l - minLng) * scale + padding + (SVG_W - (maxLng - minLng) * scale - padding*2) / 2;
+    const ly = SVG_H - ((lb.t - minLat) * scale + padding);
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', lx);
+    text.setAttribute('y', ly);
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('dominant-baseline', 'central');
+    text.setAttribute('font-size', `${labelFontSize}px`);
+    text.setAttribute('fill', '#333');
+    text.setAttribute('font-weight', '500');
+    text.setAttribute('pointer-events', 'none');
+    text.textContent = lb.n;
+    svg.appendChild(text);
+  });
+}
+
+function getColor(val) {
+  if (val === null || val === undefined) return '#CCC';
+  const t = Math.max(-1, Math.min(1, val));
+  if (t > 0) {
+    const s = t; return `rgb(${Math.round(255-s*255)},${Math.round(255-s*255)},255)`;
+  } else {
+    const s = -t; return `rgb(255,${Math.round(255-s*255)},${Math.round(255-s*255)})`;
+  }
+}
+
+function styleMap() {
+  const paths = document.querySelectorAll('#countyGroup polygon');
+  paths.forEach(el => {
+    const name = el.getAttribute('data-county');
+    const d = data.by_county?.[name]?.[activeTab]||{};
+    const total = d.total||0;
+    const demLead = total > 0 ? ((d.dem||0)-(d.rep||0))/total : null;
+    el.style.fill = getColor(demLead);
+  });
+}
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('#mapTabBar .tab').forEach(t => t.classList.toggle('active', t.dataset.tab===tab));
+  if (geojson) styleMap();
+  
+  const s = data.statewide[tab]||{};
+  const req = data.statewide.vbm_provided||{};
+  const total = s.total||1;
+  const maxReq = Math.max(req.dem||0, req.rep||0, req.npa||0, req.other||0, 1);
+
+  // Return-rate advantage: Dem return rate % - Rep return rate %
+  const demRate = req.dem ? ((s.dem||0)/req.dem*100) : 0;
+  const repRate = req.rep ? ((s.rep||0)/req.rep*100) : 0;
+  const adv = demRate - repRate;
+  const advLabel = adv >= 0 ? `D +${adv.toFixed(1)}%` : `R +${Math.abs(adv).toFixed(1)}%`;
+  const advClass = adv >= 0 ? 'adv-dem' : 'adv-rep';
+
+  const rows = [
+    {l:'Democrat', v:s.dem||0, r:req.dem||0, c:'dem'},
+    {l:'Republican', v:s.rep||0, r:req.rep||0, c:'rep'},
+    {l:'NPA', v:s.npa||0, r:req.npa||0, c:'npa'},
+    {l:'Other', v:s.other||0, r:req.other||0, c:'other'}
+  ].map(p => {
+    const rate = p.r ? (p.v/p.r*100) : 0;
+    const retW = (p.v/maxReq*100).toFixed(1);
+    const reqW = (p.r/maxReq*100).toFixed(1);
+    const isLead = adv >= 0 ? p.c==='dem' : p.c==='rep';
+    return `<div class="bar-row${isLead?' lead-row':''}">
+      <div class="bar-label">${p.l}</div>
+      <div class="bar-track" style="position:relative;">
+        <div class="bar-req" style="width:${reqW}%"></div>
+        <div class="bar-fill ${p.c}" style="width:${retW}%"></div>
+        <div class="bar-mark" style="left:${reqW}%"></div>
+      </div>
+      <div class="bar-value">${fmt(p.v)}</div>
+      <div class="bar-pct">${rate.toFixed(1)}%</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('partyBars').innerHTML = `
+    <div class="party-header">
+      <div class="party-title">Returned vs Requested (${activeTab==='vbm_voted'?'Mail':activeTab==='vbm_provided'?'Provided':'Early'})</div>
+      <div class="adv-badge ${advClass}"><span class="adv-arrow">${adv>=0?'▲':'▼'}</span> ${advLabel} return rate</div>
+    </div>
+    <div class="party-sub">Solid = returned · Light bar + tick = requested · Return rate %</div>
+    ${rows}`;
+  renderTable();
+}
+
+function renderTable() {
+  const search = (document.getElementById('searchInput').value||'').toLowerCase();
+  const sort = document.getElementById('sortSelect').value;
+  let counties = Object.entries(data.by_county||{}).map(([n,v]) => ({name:n, ...(v[activeTab]||{})}));
+  if (search) counties = counties.filter(c => c.name.toLowerCase().includes(search));
+  counties.sort((a,b) => {
+    if (sort==='alpha') return a.name.localeCompare(b.name);
+    if (sort==='total-desc') return (b.total||0)-(a.total||0);
+    if (sort==='dem-desc') return (b.dem||0)-(a.dem||0);
+    if (sort==='rep-desc') return (b.rep||0)-(a.rep||0);
+    if (sort==='npa-desc') return (b.npa||0)-(a.npa||0);
+    if (sort==='oth-desc') return (b.other||0)-(a.other||0);
+    if (sort==='lead-desc') return ((b.dem||0)-(b.rep||0))-((a.dem||0)-(a.rep||0));
+    return 0;
+  });
+  document.getElementById('tableBody').innerHTML = counties.map(c => {
+    const lead = (c.dem||0)-(c.rep||0);
+    return `<tr><td>${c.name}</td>
+      <td class="num">${fmt(c.total)}</td>
+      <td class="num" style="color:#4A90D9">${fmt(c.dem)}</td>
+      <td class="num" style="color:var(--red)">${fmt(c.rep)}</td>
+      <td class="num" style="color:#58E0E0">${fmt(c.npa)}</td>
+      <td class="num" style="color:#F8D858">${fmt(c.other)}</td>
+      <td class="num dem-lead ${lead>=0?'pos':'neg'}">${lead>=0?'+':''}${fmt(lead)}</td></tr>`;
+  }).join('');
+  document.getElementById('tableCount').textContent = `Showing ${counties.length} of ${Object.keys(data.by_county||{}).length} counties`;
+}
+
+function sortTable(f) { document.getElementById('sortSelect').value = f; renderTable(); }
+init();
+
+// Auto-refresh every 15 minutes to keep early voting & VBM data current
+setInterval(() => {
+  fetch(DATA_URL, { cache: 'no-store' })
+    .then(r => r.json())
+    .then(d => {
+      if (d.fetched_at !== data.fetched_at) {
+        data = d;
+        renderCards();
+        renderTrend();
+        renderDailyNew();
+        renderDailyTable();
+        switchTab(activeTab);
+        document.getElementById('statusText').textContent = 'Updated: ' + fmtET(data.fetched_at) + ' (Updates every 10 min)';
+      }
+    })
+    .catch(() => {});
+}, 15 * 60 * 1000);
+
+// LIVE badge reflects data freshness: green = fresh, yellow = waiting, red = stale
+setTimeout(() => {
+  const badge = document.getElementById('liveBadge');
+  const check = () => {
+    if (!data || !data.fetched_at) return;
+    const raw = data.fetched_at;
+    let s = raw;
+    if (!/Z$|[+-]\d{2}:\d{2}$/.test(s)) s += 'Z';
+    const ageMin = (Date.now() - new Date(s).getTime()) / 60000;
+    const dot = badge.querySelector('.live-dot');
+    if (ageMin < 90) { badge.title = 'Data is current — updates every 15 min'; dot.style.background = '#4CAF50'; badge.style.borderColor = 'rgba(76,175,80,0.6)'; }
+    else if (ageMin < 300) { badge.title = 'Waiting on next state update…'; dot.style.background = '#FFC107'; }
+    else { badge.title = 'Data may be stale — check refresh'; dot.style.background = '#FF4444'; }
+  };
+  check();
+  setInterval(check, 60000);
+}, 2000);
+</script>
+</body>
+</html>
