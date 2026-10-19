@@ -35,6 +35,13 @@
   .card .sub { font-size: 11px; color: var(--text-light); margin-top: 2px; }
 
   .section-card { background: var(--white); border-radius: 12px; box-shadow: var(--shadow); margin-bottom: 20px; overflow: hidden; }
+
+  .margin-banner { display: flex; align-items: center; justify-content: center; gap: 16px; padding: 14px 20px; border-radius: 12px; margin-bottom: 20px; font-size: 14px; }
+  .margin-banner.dem { background: linear-gradient(135deg, #E3EDFB, #D0DFF5); color: var(--blue-dem); border: 1px solid var(--blue-dem); }
+  .margin-banner.rep { background: linear-gradient(135deg, #FDE8E8, #F5D0D0); color: var(--red); border: 1px solid var(--red); }
+  .margin-label { font-weight: 600; font-size: 12px; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; }
+  .margin-value { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
+  .margin-detail { font-size: 13px; opacity: 0.8; }
   .section-card h2 { font-size: 16px; font-weight: 600; color: var(--blue); padding: 16px 20px 0; }
 
   .tabs { display: flex; border-bottom: 2px solid #E8E8E8; padding: 0 20px; gap: 0; }
@@ -135,6 +142,12 @@
     <div><span style="font-size:11px;">Source: FL Division of Elections</span></div>
   </div>
 
+  <div class="margin-banner" id="marginBanner" style="display:none;">
+    <span class="margin-label">Statewide Margin</span>
+    <span class="margin-value" id="marginValue">—</span>
+    <span class="margin-detail" id="marginDetail"></span>
+  </div>
+
   <div class="cards-grid" id="cardsGrid"></div>
 
   <div class="section-card">
@@ -155,9 +168,9 @@
       </div>
     </div>
     <div class="tabs" id="mapTabBar">
-      <div class="tab active" data-tab="vbm_voted" onclick="switchTab('vbm_voted')">✅ Voted VBM</div>
-      <div class="tab" data-tab="vbm_provided" onclick="switchTab('vbm_provided')">📨 VBM Provided</div>
-      <div class="tab" data-tab="early_voted" onclick="switchTab('early_voted')">🏛️ Early Voting</div>
+      <div class="tab active" data-tab="vbm_voted" onclick="switchTab('vbm_voted')">📬 Mail</div>
+      <div class="tab" data-tab="vbm_provided" onclick="switchTab('vbm_provided')">📨 Provided</div>
+      <div class="tab" data-tab="early_voted" onclick="switchTab('early_voted')">🏛️ Early</div>
     </div>
   </div>
 
@@ -435,6 +448,27 @@ function renderCards() {
     {l:'Dem VBM', v:fmt(sw.vbm_voted?.dem), c:'dem'},
     {l:'Rep VBM', v:fmt(sw.vbm_voted?.rep), c:'rep'},
   ].map(c => `<div class="card"><div class="label">${c.l}</div><div class="value ${c.c}">${c.v}</div><div class="sub">${c.s||''}</div></div>`).join('');
+  
+  // Margin banner
+  const banner = document.getElementById('marginBanner');
+  const tab = activeTab || 'vbm_voted';
+  const s = data.statewide[tab]||{};
+  if (s.total) {
+    const demV = s.dem||0, repV = s.rep||0;
+    const total = s.total;
+    const demPct = total > 0 ? (demV/total*100) : 0;
+    const repPct = total > 0 ? (repV/total*100) : 0;
+    const margin = demV - repV;
+    const marginPct = demPct - repPct;
+    const isDem = margin >= 0;
+    banner.className = isDem ? 'margin-banner dem' : 'margin-banner rep';
+    banner.style.display = 'flex';
+    document.getElementById('marginValue').textContent = isDem ? `D +${marginPct.toFixed(1)}%` : `R +${Math.abs(marginPct).toFixed(1)}%`;
+    document.getElementById('marginDetail').textContent = isDem ? `D+${fmt(margin)} votes` : `R+${fmt(-margin)} votes`;
+    // Also update the returns-by-party section
+    if (typeof renderPartyBars === 'function') renderPartyBars();
+    else if (typeof switchTab === 'function') switchTab(activeTab);
+  }
 }
 
 function buildMap() {
@@ -556,7 +590,7 @@ function switchTab(tab) {
 
   document.getElementById('partyBars').innerHTML = `
     <div class="party-header">
-      <div class="party-title">Returned vs Requested (${activeTab==='vbm_voted'?'Voted VBM':activeTab==='vbm_provided'?'VBM Provided':'Early Voting'})</div>
+      <div class="party-title">Returned vs Requested (${activeTab==='vbm_voted'?'Mail':activeTab==='vbm_provided'?'Provided':'Early'})</div>
       <div class="adv-badge ${advClass}"><span class="adv-arrow">${adv>=0?'▲':'▼'}</span> ${advLabel} return rate</div>
     </div>
     <div class="party-sub">Solid = returned · Light bar + tick = requested · Return rate %</div>
