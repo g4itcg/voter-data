@@ -277,7 +277,6 @@ function renderTable() {
   const sort = document.getElementById('sortSelect').value;
   let counties = Object.entries(data.by_county||{}).map(([n,v]) => ({name:n, ...(v[activeTab]||{})}));
   if (search) counties = counties.filter(c => c.name.toLowerCase().includes(search));
-  const sorter = {alpha:[a,b=>a.name.localeCompare(b.name)],'total-desc':(a,b)=>(b.total||0)-(a.total||0),};
   counties.sort((a,b) => {
     if (sort==='alpha') return a.name.localeCompare(b.name);
     if (sort==='total-desc') return (b.total||0)-(a.total||0);
