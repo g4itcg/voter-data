@@ -309,6 +309,12 @@ function renderDailyNew() {
     if (bars.length <= 15) {
       const d = new Date(b.date + 'T00:00:00');
       svg += `<text x="${x + bw/2}" y="${padT + gh + 14}" text-anchor="middle" font-size="9" fill="#666">${d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'})}</text>`;
+    } else {
+      // Show every ~5th date to avoid crowding
+      if (i % 5 === 0 || i === bars.length - 1) {
+        const d = new Date(b.date + 'T00:00:00');
+        svg += `<text x="${x + bw/2}" y="${padT + gh + 14}" text-anchor="middle" font-size="9" fill="#666">${d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'})}</text>`;
+      }
     }
     if (b.total > maxVal * 0.25) {
       svg += `<text x="${x + bw/2}" y="${y(b.total) - 4}" text-anchor="middle" font-size="9" fill="#333" font-weight="600">${Math.round(b.total/1000)}k</text>`;
