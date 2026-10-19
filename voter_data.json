@@ -3,21 +3,22 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-10-19T12:30:54.922917",
+  "fetched_at": "2026-10-19T15:42:19+00:00",
+  "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
-      "rep": 511274,
-      "dem": 655020,
-      "other": 39105,
-      "npa": 326656,
-      "total": 1532055
+      "rep": 510308,
+      "dem": 654388,
+      "other": 39070,
+      "npa": 326343,
+      "total": 1530109
     },
     "vbm_voted": {
-      "rep": 302006,
-      "dem": 353299,
-      "other": 20378,
-      "npa": 155536,
-      "total": 831219
+      "rep": 303121,
+      "dem": 354053,
+      "other": 20435,
+      "npa": 155925,
+      "total": 833534
     },
     "early_voted": {
       "rep": 0,
@@ -26,8 +27,8 @@
       "npa": 0,
       "total": 0
     },
-    "vbm_outstanding": 700836,
-    "vbm_return_rate": 54.3
+    "vbm_outstanding": 696575,
+    "vbm_return_rate": 54.5
   },
   "by_county": {
     "Alachua": {
@@ -447,17 +448,17 @@
     "Gadsden": {
       "vbm_provided": {
         "rep": 270,
-        "dem": 1566,
+        "dem": 1565,
         "other": 21,
         "npa": 131,
-        "total": 1988
+        "total": 1987
       },
       "vbm_voted": {
         "rep": 183,
-        "dem": 858,
+        "dem": 859,
         "other": 7,
         "npa": 62,
-        "total": 1110
+        "total": 1111
       },
       "early_voted": {
         "rep": 0,
@@ -538,18 +539,18 @@
     },
     "Hamilton": {
       "vbm_provided": {
-        "rep": 242,
-        "dem": 195,
+        "rep": 233,
+        "dem": 194,
         "other": 5,
-        "npa": 34,
-        "total": 476
+        "npa": 35,
+        "total": 467
       },
       "vbm_voted": {
-        "rep": 136,
-        "dem": 108,
+        "rep": 145,
+        "dem": 118,
         "other": 5,
-        "npa": 16,
-        "total": 265
+        "npa": 18,
+        "total": 286
       },
       "early_voted": {
         "rep": 0,
@@ -975,11 +976,11 @@
     },
     "Martin": {
       "vbm_provided": {
-        "rep": 5045,
-        "dem": 4223,
-        "other": 389,
-        "npa": 2032,
-        "total": 11689
+        "rep": 5073,
+        "dem": 4236,
+        "other": 394,
+        "npa": 2049,
+        "total": 11752
       },
       "vbm_voted": {
         "rep": 3883,
@@ -1366,11 +1367,11 @@
     },
     "St. Lucie": {
       "vbm_provided": {
-        "rep": 7582,
-        "dem": 11643,
-        "other": 771,
-        "npa": 5131,
-        "total": 25127
+        "rep": 7637,
+        "dem": 11722,
+        "other": 781,
+        "npa": 5170,
+        "total": 25310
       },
       "vbm_voted": {
         "rep": 4666,
@@ -1389,18 +1390,18 @@
     },
     "Sumter": {
       "vbm_provided": {
-        "rep": 11054,
-        "dem": 6887,
-        "other": 588,
-        "npa": 4263,
-        "total": 22792
+        "rep": 10014,
+        "dem": 6165,
+        "other": 538,
+        "npa": 3893,
+        "total": 20610
       },
       "vbm_voted": {
-        "rep": 5092,
-        "dem": 3853,
-        "other": 280,
-        "npa": 1935,
-        "total": 11160
+        "rep": 6198,
+        "dem": 4596,
+        "other": 337,
+        "npa": 2322,
+        "total": 13453
       },
       "early_voted": {
         "rep": 0,

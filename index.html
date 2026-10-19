@@ -9,6 +9,10 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
   .header { background: var(--blue); color: white; padding: 20px 24px 0; text-align: center; }
+  .header-top { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+  .live-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: white; font-size: 11px; font-weight: 700; letter-spacing: 1px; padding: 4px 12px; border-radius: 20px; }
+  .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #FF4444; animation: pulse 1.5s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(0.75); } }
   .header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
   .header .subtitle { font-size: 14px; opacity: 0.85; margin-top: 4px; }
   .header .election-date { display: inline-block; background: var(--yellow); color: var(--blue-dark); padding: 3px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-top: 10px; }
@@ -107,6 +111,11 @@
 </head>
 <body>
 <div class="header">
+  <div class="header-top">
+    <div class="live-badge" id="liveBadge" title="Auto-refreshes every 15 minutes">
+      <span class="live-dot"></span> LIVE
+    </div>
+  </div>
   <h1>🗳️ Florida Early Vote Tracker</h1>
   <div class="subtitle">2026 General Election — Live Data from FL Division of Elections</div>
   <div class="election-date">🗓️ Election Day: November 3, 2026</div>
@@ -222,6 +231,16 @@ const SVG_W = 700, SVG_H = 600;
 
 function fmt(n) { return (n||0).toLocaleString(); }
 
+function fmtET(isoStr) {
+  // Always render in Eastern time (America/New_York) and label as ET
+  let s = isoStr || '';
+  // Legacy timestamps lack timezone marker — they're UTC, so normalize
+  if (!/Z$|[+-]\d{2}:\d{2}$/.test(s)) s += 'Z';
+  const d = new Date(s);
+  if (isNaN(d.getTime())) return isoStr;
+  return d.toLocaleString('en-US', { timeZone: 'America/New_York', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) + ' ET';
+}
+
 async function init() {
   document.getElementById('statusText').textContent = 'Loading data & map...';
   try {
@@ -231,7 +250,7 @@ async function init() {
       fetch(HISTORY_URL).then(r => r.json()).catch(() => null)
     ]);
     data = dr; geojson = gr; history = hr || [];
-    document.getElementById('statusText').textContent = 'Updated: ' + new Date(data.fetched_at).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+    document.getElementById('statusText').textContent = 'Updated: ' + fmtET(data.fetched_at);
     renderCards();
     buildMap();
     renderTrend();
@@ -574,11 +593,29 @@ setInterval(() => {
         renderDailyNew();
         renderDailyTable();
         switchTab(activeTab);
-        document.getElementById('statusText').textContent = 'Updated: ' + new Date(data.fetched_at).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+        document.getElementById('statusText').textContent = 'Updated: ' + fmtET(data.fetched_at);
       }
     })
     .catch(() => {});
 }, 15 * 60 * 1000);
+
+// LIVE badge reflects data freshness: green = fresh, yellow = waiting, red = stale
+setTimeout(() => {
+  const badge = document.getElementById('liveBadge');
+  const check = () => {
+    if (!data || !data.fetched_at) return;
+    const raw = data.fetched_at;
+    let s = raw;
+    if (!/Z$|[+-]\d{2}:\d{2}$/.test(s)) s += 'Z';
+    const ageMin = (Date.now() - new Date(s).getTime()) / 60000;
+    const dot = badge.querySelector('.live-dot');
+    if (ageMin < 90) { badge.title = 'Data is current — updates every 15 min'; dot.style.background = '#4CAF50'; badge.style.borderColor = 'rgba(76,175,80,0.6)'; }
+    else if (ageMin < 300) { badge.title = 'Waiting on next state update…'; dot.style.background = '#FFC107'; }
+    else { badge.title = 'Data may be stale — check refresh'; dot.style.background = '#FF4444'; }
+  };
+  check();
+  setInterval(check, 60000);
+}, 2000);
 </script>
 </body>
 </html>
