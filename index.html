@@ -69,6 +69,18 @@
   .trend-wrap { padding: 16px 20px 20px; text-align: center; }
   .trend-legend { display: flex; justify-content: center; gap: 20px; font-size: 12px; color: var(--text-light); margin-top: 8px; flex-wrap: wrap; }
   .legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+  .daily-table-wrap { max-height: 320px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px; margin-top: 6px; }
+  .daily-table { width: 100%; border-collapse: collapse; font-size: 12px; font-family: inherit; }
+  .daily-table th { position: sticky; top: 0; background: var(--blue); color: white; padding: 6px 8px; text-align: right; font-weight: 600; }
+  .daily-table th:first-child { text-align: left; }
+  .daily-table td { padding: 5px 8px; text-align: right; border-bottom: 1px solid #f0f0f0; }
+  .daily-table td:first-child { text-align: left; color: var(--text-light); }
+  .daily-table tr:nth-child(even) td { background: #fafafa; }
+  .daily-table td.dem { color: var(--blue-dem); font-weight: 600; }
+  .daily-table td.rep { color: var(--red); font-weight: 600; }
+  .daily-table td.npa { color: #2E9E9E; font-weight: 600; }
+  .daily-table td.oth { color: #C9A227; font-weight: 600; }
+  .daily-table td.total { font-weight: 700; }
 
   .brand-footer { text-align: center; padding: 16px; margin-top: 24px; font-size: 12px; color: var(--text-light); }
   .brand-footer .logo-text { font-weight: 700; color: var(--blue); }
@@ -135,6 +147,15 @@
       <div style="margin-top:18px;border-top:1px solid #eee;padding-top:14px;">
         <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px;">New ballots returned each day (daily totals)</div>
         <svg id="dailySvg" viewBox="0 0 900 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:900px;display:block;margin:0 auto;"></svg>
+      </div>
+      <div style="margin-top:18px;border-top:1px solid #eee;padding-top:14px;">
+        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px;">Daily returns by party</div>
+        <div class="daily-table-wrap">
+          <table class="daily-table" id="dailyTable">
+            <thead><tr><th>Date</th><th>Dem</th><th>Rep</th><th>NPA</th><th>Other</th><th>Total</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -203,6 +224,7 @@ async function init() {
     buildMap();
     renderTrend();
     renderDailyNew();
+    renderDailyTable();
     switchTab('vbm_voted');
   } catch(e) { document.getElementById('statusText').textContent = '⚠️ Error loading'; console.error(e); }
 }
@@ -264,6 +286,38 @@ function renderTrend() {
   });
 
   document.getElementById('trendSvg').innerHTML = svg;
+}
+
+function renderDailyTable() {
+  const tbody = document.querySelector('#dailyTable tbody');
+  if (!tbody || !history || history.length < 2) return;
+  const parties = ['dem','rep','npa','oth'];
+  const rows = [];
+  for (let i = 1; i < history.length; i++) {
+    const prev = history[i-1], cur = history[i];
+    const cells = { dem:0, rep:0, npa:0, oth:0 };
+    let total = 0;
+    parties.forEach(p => {
+      const v = Math.max(0, (cur[p]||0) - (prev[p]||0));
+      cells[p] = v; total += v;
+    });
+    const d = new Date(cur.date + 'T00:00:00');
+    rows.push({
+      label: d.toLocaleDateString('en-US',{month:'short',day:'numeric'}),
+      full: cur.date, cells, total
+    });
+  }
+  // Newest first
+  rows.reverse();
+  tbody.innerHTML = rows.map(r => `
+    <tr>
+      <td>${r.label}</td>
+      <td class="dem">${fmt(r.cells.dem)}</td>
+      <td class="rep">${fmt(r.cells.rep)}</td>
+      <td class="npa">${fmt(r.cells.npa)}</td>
+      <td class="oth">${fmt(r.cells.oth)}</td>
+      <td class="total">${fmt(r.total)}</td>
+    </tr>`).join('');
 }
 
 function renderDailyNew() {
