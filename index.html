@@ -80,7 +80,7 @@
   .table-wrap { padding: 0 20px 20px; overflow-x: auto; }
   .table-controls { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
   .table-controls input, .table-controls select { padding: 6px 12px; border: 1px solid #D0D0D0; border-radius: 6px; font-size: 13px; background: white; }
-  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; }
   th { background: #F0F2F5; padding: 8px 5px; text-align: left; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.3px; color: var(--text-light); cursor: pointer; white-space: nowrap; }
   th:hover { background: #E4E7EB; }
   td { padding: 6px 5px; border-bottom: 1px solid #EEE; }
@@ -219,13 +219,13 @@
       </div>
       <table>
         <thead><tr>
-          <th onclick="sortTable('alpha')" style="min-width:0">County ↕</th>
-          <th class="num" onclick="sortTable('total-desc')">Total ↕</th>
-          <th class="num" onclick="sortTable('dem-desc')">Dem ↕</th>
-          <th class="num" onclick="sortTable('rep-desc')">Rep ↕</th>
-          <th class="num" onclick="sortTable('npa-desc')">NPA ↕</th>
-          <th class="num" onclick="sortTable('oth-desc')">Oth ↕</th>
-          <th class="num" onclick="sortTable('lead-desc')">Lead ↕</th>
+          <th onclick="sortTable('alpha')" style="min-width:0;width:22%">County ↕</th>
+          <th class="num" onclick="sortTable('total-desc')" style="width:12%">Total ↕</th>
+          <th class="num" onclick="sortTable('dem-desc')" style="width:12%">Dem ↕</th>
+          <th class="num" onclick="sortTable('rep-desc')" style="width:12%">Rep ↕</th>
+          <th class="num" onclick="sortTable('npa-desc')" style="width:11%">NPA ↕</th>
+          <th class="num" onclick="sortTable('oth-desc')" style="width:10%">Oth ↕</th>
+          <th class="num" onclick="sortTable('lead-desc')" style="width:12%">Lead ↕</th>
         </tr></thead>
         <tbody id="tableBody"></tbody>
       </table>
