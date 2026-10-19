@@ -260,14 +260,27 @@ function renderDailyNew() {
   if (!history || history.length < 2) return;
   const W = 700, H = 140, padL = 60, padR = 20, padT = 16, padB = 28;
 
-  // Compute daily-new = today's cumulative - yesterday's cumulative
+  const parties = [
+    {key:'dem', color:'#0015BC'},
+    {key:'rep', color:'#DE0100'},
+    {key:'npa', color:'#26A69A'},
+    {key:'oth', color:'#F8D858'}
+  ];
+
+  // Compute daily-new per party = today's cumulative - yesterday's cumulative
   const bars = [];
   for (let i = 1; i < history.length; i++) {
-    const prev = history[i-1].vbm_voted || 0;
-    const cur = history[i].vbm_voted || 0;
-    bars.push({ date: history[i].date, val: Math.max(0, cur - prev) });
+    const prev = history[i-1], cur = history[i];
+    const parts = {};
+    let total = 0;
+    parties.forEach(p => {
+      const v = Math.max(0, (cur[p.key]||0) - (prev[p.key]||0));
+      parts[p.key] = v;
+      total += v;
+    });
+    bars.push({ date: cur.date, total, parts });
   }
-  const maxVal = Math.max(...bars.map(b => b.val), 1);
+  const maxVal = Math.max(...bars.map(b => b.total), 1);
   const gw = W - padL - padR, gh = H - padT - padB;
   const bw = Math.min(22, gw / bars.length * 0.7);
   const y = v => padT + gh - (v / maxVal * gh);
@@ -275,7 +288,6 @@ function renderDailyNew() {
   let svg = `<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT+gh}" stroke="#ddd"/>
     <line x1="${padL}" y1="${padT+gh}" x2="${padL+gw}" y2="${padT+gh}" stroke="#ddd"/>`;
 
-  // Y-axis labels
   for (let t = 0; t <= 4; t++) {
     const v = maxVal * t / 4;
     const yy = y(v);
@@ -284,15 +296,22 @@ function renderDailyNew() {
 
   bars.forEach((b, i) => {
     const x = padL + (i * gw / bars.length) + (gw / bars.length - bw) / 2;
-    const hh = gh - (y(b.val) - padT);
-    svg += `<rect x="${x}" y="${y(b.val)}" width="${bw}" height="${Math.max(hh, 1)}" fill="#0033A0" fill-opacity="0.75" rx="2"/>`;
+    if (b.total <= 0) return;
+    let yBottom = padT + gh;
+    parties.forEach(p => {
+      const v = b.parts[p.key] || 0;
+      if (v <= 0) return;
+      const segH = (v / maxVal * gh);
+      const ySegTop = yBottom - segH;
+      svg += `<rect x="${x}" y="${ySegTop}" width="${bw}" height="${segH}" fill="${p.color}" fill-opacity="0.85"/>`;
+      yBottom = ySegTop;
+    });
     if (bars.length <= 15) {
       const d = new Date(b.date + 'T00:00:00');
       svg += `<text x="${x + bw/2}" y="${padT + gh + 14}" text-anchor="middle" font-size="9" fill="#666">${d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'})}</text>`;
     }
-    // Value on top of tall bars
-    if (b.val > maxVal * 0.25) {
-      svg += `<text x="${x + bw/2}" y="${y(b.val) - 4}" text-anchor="middle" font-size="9" fill="#333" font-weight="600">${Math.round(b.val/1000)}k</text>`;
+    if (b.total > maxVal * 0.25) {
+      svg += `<text x="${x + bw/2}" y="${y(b.total) - 4}" text-anchor="middle" font-size="9" fill="#333" font-weight="600">${Math.round(b.total/1000)}k</text>`;
     }
   });
 
