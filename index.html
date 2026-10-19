@@ -477,7 +477,7 @@ function buildMap() {
       tip.style.left = '50%';
       tip.style.top = '10px';
       tip.style.transform = 'translateX(-50%)';
-      tip.innerHTML = `<b>${p.name}</b> &nbsp; Total ${fmt(cd.total)} &nbsp; Dem ${fmt(cd.dem)} &nbsp; Rep ${fmt(cd.rep)} &nbsp; <b>${leadStr}</b>`;
+      tip.innerHTML = `<b>${p.name}</b> &nbsp; Total ${fmt(cd.total)} &nbsp; Dem ${fmt(cd.dem)} &nbsp; Rep ${fmt(cd.rep)} &nbsp; NPA ${fmt(cd.npa)} &nbsp; Other ${fmt(cd.other)} &nbsp; <b>${leadStr}</b>`;
       el.style.strokeWidth = '1.5'; el.style.stroke = '#222';
     });
     el.addEventListener('mouseleave', e => {
