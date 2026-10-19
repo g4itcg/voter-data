@@ -61,6 +61,10 @@
   .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
   .dot.live { background: var(--green); }
 
+  .trend-wrap { padding: 16px 20px 20px; text-align: center; }
+  .trend-legend { display: flex; justify-content: center; gap: 20px; font-size: 12px; color: var(--text-light); margin-top: 8px; flex-wrap: wrap; }
+  .legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+
   .brand-footer { text-align: center; padding: 16px; margin-top: 24px; font-size: 12px; color: var(--text-light); }
   .brand-footer .logo-text { font-weight: 700; color: var(--blue); }
 
@@ -107,6 +111,17 @@
   </div>
 
   <div class="section-card">
+    <h2>📈 Daily VBM Returns</h2>
+    <div class="trend-wrap">
+      <svg id="trendSvg" viewBox="0 0 700 240" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;display:block;margin:0 auto;"></svg>
+      <div class="trend-legend">
+        <span><span class="legend-dot" style="background:#0033A0"></span> Cumulative VBM returned</span>
+        <span><span class="legend-dot" style="background:#FFC107"></span> Ballots outstanding</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
     <h2>📊 Returns by Party</h2>
     <div class="party-bars" id="partyBars"></div>
   </div>
@@ -148,8 +163,9 @@
 <script>
 const DATA_URL = 'https://g4itcg.github.io/voter-data/voter_data.json';
 const GEO_URL = 'https://g4itcg.github.io/voter-data/fl_counties.geojson';
+const HISTORY_URL = 'https://g4itcg.github.io/voter-data/vbm_history.json';
 
-let data = null, geojson = null, activeTab = 'vbm_voted';
+let data = null, geojson = null, history = null, activeTab = 'vbm_voted';
 const DEM_COLOR = '#0015BC', REP_COLOR = '#DE0100';
 const SVG_W = 700, SVG_H = 600;
 
@@ -158,13 +174,63 @@ function fmt(n) { return (n||0).toLocaleString(); }
 async function init() {
   document.getElementById('statusText').textContent = 'Loading data & map...';
   try {
-    const [dr, gr] = await Promise.all([fetch(DATA_URL), fetch(GEO_URL)]);
-    data = await dr.json(); geojson = await gr.json();
+    const [dr, gr, hr] = await Promise.all([
+      fetch(DATA_URL).then(r => r.json()).catch(() => null),
+      fetch(GEO_URL).then(r => r.json()).catch(() => null),
+      fetch(HISTORY_URL).then(r => r.json()).catch(() => null)
+    ]);
+    data = dr; geojson = gr; history = hr || [];
     document.getElementById('statusText').textContent = 'Updated: ' + new Date(data.fetched_at).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
     renderCards();
     buildMap();
+    renderTrend();
     switchTab('vbm_voted');
   } catch(e) { document.getElementById('statusText').textContent = '⚠️ Error loading'; console.error(e); }
+}
+
+function renderTrend() {
+  if (!history || history.length < 1) return;
+  const W = 700, H = 240, padL = 60, padR = 20, padT = 20, padB = 35;
+  const pts = history;
+  const maxVal = Math.max(...pts.map(p => Math.max(p.vbm_provided||0, p.vbm_voted||0)), 1);
+  const gw = W - padL - padR, gh = H - padT - padB;
+  const x = i => padL + (pts.length === 1 ? gw/2 : (i * gw / (pts.length - 1)));
+  const y = v => padT + gh - (v / maxVal * gh);
+
+  let svg = `<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT+gh}" stroke="#ddd" stroke-width="1"/>
+    <line x1="${padL}" y1="${padT+gh}" x2="${padL+gw}" y2="${padT+gh}" stroke="#ddd" stroke-width="1"/>`;
+
+  // Y-axis labels
+  for (let t = 0; t <= 4; t++) {
+    const v = maxVal * t / 4;
+    const yy = y(v);
+    svg += `<text x="${padL-8}" y="${yy+4}" text-anchor="end" font-size="11" fill="#666">${Math.round(v/1000)}k</text>`;
+  }
+
+  // Provided line (light blue)
+  const providedPts = pts.map((p,i) => `${x(i)},${y(p.vbm_provided||0)}`).join(' ');
+  svg += `<polyline points="${providedPts}" fill="none" stroke="#87A6D9" stroke-width="2" stroke-dasharray="5,4"/>`;
+  // Voted line (blue)
+  const votedPts = pts.map((p,i) => `${x(i)},${y(p.vbm_voted||0)}`).join(' ');
+  svg += `<polyline points="${votedPts}" fill="none" stroke="#0033A0" stroke-width="3"/>`;
+  // Outstanding area
+  const outPts = pts.map((p,i) => {
+    const v = Math.max(0, (p.vbm_provided||0) - (p.vbm_voted||0));
+    return `${x(i)},${y(v + (p.vbm_voted||0))}`;
+  });
+  const outArea = `${outPts.join(' ')} ${x(pts.length-1)},${padT+gh} ${x(0)},${padT+gh}`;
+  svg += `<polygon points="${outArea}" fill="#FFC107" fill-opacity="0.35"/>`;
+
+  // X-axis dates
+  pts.forEach((p,i) => {
+    const d = new Date(p.date + 'T00:00:00');
+    const label = d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'});
+    svg += `<text x="${x(i)}" y="${padT+gh+16}" text-anchor="middle" font-size="11" fill="#666">${label}</text>`;
+    // Endpoint dots
+    svg += `<circle cx="${x(i)}" cy="${y(p.vbm_voted||0)}" r="3.5" fill="#0033A0"/>`;
+  });
+
+  document.getElementById('trendSvg').innerHTML = svg;
 }
 
 function renderCards() {
