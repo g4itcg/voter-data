@@ -73,10 +73,10 @@
   .table-wrap { padding: 0 20px 20px; overflow-x: auto; }
   .table-controls { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
   .table-controls input, .table-controls select { padding: 6px 12px; border: 1px solid #D0D0D0; border-radius: 6px; font-size: 13px; background: white; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { background: #F0F2F5; padding: 8px 10px; text-align: left; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.3px; color: var(--text-light); cursor: pointer; white-space: nowrap; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { background: #F0F2F5; padding: 8px 5px; text-align: left; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.3px; color: var(--text-light); cursor: pointer; white-space: nowrap; }
   th:hover { background: #E4E7EB; }
-  td { padding: 6px 10px; border-bottom: 1px solid #EEE; }
+  td { padding: 6px 5px; border-bottom: 1px solid #EEE; }
   tr:hover td { background: #F8F9FA; }
   td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; }
   .dem-lead.pos { color: var(--blue-dem); } .dem-lead.neg { color: var(--red); }
@@ -204,12 +204,13 @@
       </div>
       <table>
         <thead><tr>
-          <th onclick="sortTable('alpha')">County ↕</th>
+          <th onclick="sortTable('alpha')" style="min-width:0">County ↕</th>
           <th class="num" onclick="sortTable('total-desc')">Total ↕</th>
           <th class="num" onclick="sortTable('dem-desc')">Dem ↕</th>
           <th class="num" onclick="sortTable('rep-desc')">Rep ↕</th>
-          <th class="num" onclick="sortTable('lead-desc')">Dem Lead ↕</th>
-          <th class="num" onclick="sortTable('pct-desc')">Dem % ↕</th>
+          <th class="num" onclick="sortTable('npa-desc')">NPA ↕</th>
+          <th class="num" onclick="sortTable('oth-desc')">Oth ↕</th>
+          <th class="num" onclick="sortTable('lead-desc')">Lead ↕</th>
         </tr></thead>
         <tbody id="tableBody"></tbody>
       </table>
@@ -571,12 +572,20 @@ function renderTable() {
     if (sort==='total-desc') return (b.total||0)-(a.total||0);
     if (sort==='dem-desc') return (b.dem||0)-(a.dem||0);
     if (sort==='rep-desc') return (b.rep||0)-(a.rep||0);
+    if (sort==='npa-desc') return (b.npa||0)-(a.npa||0);
+    if (sort==='oth-desc') return (b.other||0)-(a.other||0);
     if (sort==='lead-desc') return ((b.dem||0)-(b.rep||0))-((a.dem||0)-(a.rep||0));
     return 0;
   });
   document.getElementById('tableBody').innerHTML = counties.map(c => {
     const lead = (c.dem||0)-(c.rep||0);
-    return `<tr><td>${c.name}</td><td class="num">${fmt(c.total)}</td><td class="num" style="color:var(--blue-dem)">${fmt(c.dem)}</td><td class="num" style="color:var(--red)">${fmt(c.rep)}</td><td class="num dem-lead ${lead>=0?'pos':'neg'}">${lead>=0?'+':''}${fmt(lead)}</td><td class="num">${c.total>0?((c.dem||0)/c.total*100).toFixed(1):'0.0'}%</td></tr>`;
+    return `<tr><td>${c.name}</td>
+      <td class="num">${fmt(c.total)}</td>
+      <td class="num" style="color:#4A90D9">${fmt(c.dem)}</td>
+      <td class="num" style="color:var(--red)">${fmt(c.rep)}</td>
+      <td class="num" style="color:#58E0E0">${fmt(c.npa)}</td>
+      <td class="num" style="color:#F8D858">${fmt(c.other)}</td>
+      <td class="num dem-lead ${lead>=0?'pos':'neg'}">${lead>=0?'+':''}${fmt(lead)}</td></tr>`;
   }).join('');
   document.getElementById('tableCount').textContent = `Showing ${counties.length} of ${Object.keys(data.by_county||{}).length} counties`;
 }
