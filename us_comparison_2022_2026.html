@@ -431,12 +431,13 @@ function renderMap(containerId, frame, tooltipId) {
     if (cent) {
       var pt = projectPoint(cent[0], cent[1], w, h);
       if (CALLOUT_STATES[abbr]) {
-        // External callout — label to the right with a visible leader line
+        // External callout — right of state with visible leader line
+        // Use the 2-letter state abbreviation instead of full name
+        // (full names like Massachusetts spill past the viewBox edge)
         var ly = CALLOUT_Y[abbr] || pt[1];
-        var lx = pt[0] + 38;
-        // Leader line: centroid → label, with a 6px gap before text
-        html += '<line x1="' + pt[0].toFixed(1) + '" y1="' + pt[1].toFixed(1) + '" x2="' + (lx - 6).toFixed(1) + '" y2="' + ly.toFixed(1) + '" stroke="#777" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.7" pointer-events="none"/>';
-        html += '<text class="county-label callout" x="' + lx.toFixed(1) + '" y="' + ly.toFixed(1) + '">' + name + '</text>';
+        var lx = pt[0] + 36;
+        html += '<line x1="' + pt[0].toFixed(1) + '" y1="' + pt[1].toFixed(1) + '" x2="' + (lx - 5).toFixed(1) + '" y2="' + ly.toFixed(1) + '" stroke="#777" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.7" pointer-events="none"/>';
+        html += '<text class="county-label callout" x="' + lx.toFixed(1) + '" y="' + ly.toFixed(1) + '">' + abbr + '</text>';
       } else {
         html += '<text class="county-label" x="' + pt[0].toFixed(1) + '" y="' + pt[1].toFixed(1) + '">' + name + '</text>';
       }
