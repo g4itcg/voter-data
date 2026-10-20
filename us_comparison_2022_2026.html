@@ -286,16 +286,11 @@ var PARTY_RGB = {
 // Small eastern states — label placed to the right with a dashed leader line
 // to avoid overlapping labels in the crowded Northeast.
 var CALLOUT_STATES = {CT:1, DE:1, DC:1, MD:1, MA:1, NH:1, NJ:1, RI:1, VT:1};
-// Vertical nudges (px from natural centroid y) to spread callout labels apart
-// so 9px labels don't overlap in the tight RI-DC corridor.
-var CALLOUT_ADJUST = {
-  NH: {dy: 8},   // 110.7
-  MA: {dy: -2},  // 118.9
-  RI: {dy: -6},  // 122.2
-  CT: {dy: 4},   // 133.3
-  MD: {dy: -8},  // 154.5
-  DE: {dy: 4},   // 167.2
-  DC: {dy: 8}    // 172.3
+// Fixed y positions for callout labels — spread far enough apart that 9px
+// text never overlaps. Leader lines connect each label to its actual centroid.
+var CALLOUT_Y = {
+  VT: 88, NH: 105, MA: 120, RI: 136, CT: 152,
+  NJ: 168, MD: 184, DE: 200, DC: 216
 };
 
 function getColor(pct, p) {
@@ -436,11 +431,11 @@ function renderMap(containerId, frame, tooltipId) {
     if (cent) {
       var pt = projectPoint(cent[0], cent[1], w, h);
       if (CALLOUT_STATES[abbr]) {
-        // External callout — label to the right with a dashed leader line
-        var adj = CALLOUT_ADJUST[abbr] || {};
-        var dy = adj.dy || 0;
-        var lx = pt[0] + 38, ly = pt[1] + dy;
-        html += '<line x1="' + pt[0].toFixed(1) + '" y1="' + pt[1].toFixed(1) + '" x2="' + lx.toFixed(1) + '" y2="' + ly.toFixed(1) + '" stroke="#888" stroke-width="0.6" stroke-dasharray="3,2" opacity="0.6" pointer-events="none"/>';
+        // External callout — label to the right with a visible leader line
+        var ly = CALLOUT_Y[abbr] || pt[1];
+        var lx = pt[0] + 38;
+        // Leader line: centroid → label, with a 6px gap before text
+        html += '<line x1="' + pt[0].toFixed(1) + '" y1="' + pt[1].toFixed(1) + '" x2="' + (lx - 6).toFixed(1) + '" y2="' + ly.toFixed(1) + '" stroke="#777" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.7" pointer-events="none"/>';
         html += '<text class="county-label callout" x="' + lx.toFixed(1) + '" y="' + ly.toFixed(1) + '">' + name + '</text>';
       } else {
         html += '<text class="county-label" x="' + pt[0].toFixed(1) + '" y="' + pt[1].toFixed(1) + '">' + name + '</text>';
