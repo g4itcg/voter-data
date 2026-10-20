@@ -109,7 +109,8 @@ body {
 .county-path { stroke: #fff; stroke-width: 0.4; transition: fill 0.3s ease, stroke 0.2s; cursor: pointer; }
 .county-path:hover { stroke: #222; stroke-width: 1.2; }
 .county-path.no-data { fill: #DDDDDD !important; }
-.county-label { font-family: 'Montserrat', sans-serif; fill: #444; font-size: 11px; font-weight: 700; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.county-label { font-family: 'Montserrat', sans-serif; fill: #444; font-size: 9px; font-weight: 600; text-anchor: middle; dominant-baseline: central; pointer-events: none; user-select: none; }
+.county-label.callout { fill: #555; font-size: 9px; font-weight: 700; text-anchor: start; }
 .map-legend {
   display: flex; align-items: center; justify-content: center;
   gap: 6px; margin-top: 10px; font-size: 11px; color: var(--text-light);
@@ -282,6 +283,10 @@ var PARTY_RGB = {
   oth:   [248, 216, 88]   // #F8D858
 };
 
+// Small eastern states — label placed to the right with a dashed leader line
+// to avoid overlapping labels in the crowded Northeast.
+var CALLOUT_STATES = {CT:1, DE:1, DC:1, MD:1, MA:1, NH:1, NJ:1, RI:1, VT:1};
+
 function getColor(pct, p) {
   if (pct === undefined || pct === null || pct < 0) return '#DDDDDD';  // no data
   if (pct <= 0) return '#EEE';
@@ -419,7 +424,14 @@ function renderMap(containerId, frame, tooltipId) {
     var cent = featureCentroid(geo);
     if (cent) {
       var pt = projectPoint(cent[0], cent[1], w, h);
-      html += '<text class="county-label" x="' + pt[0].toFixed(1) + '" y="' + pt[1].toFixed(1) + '">' + name + '</text>';
+      if (CALLOUT_STATES[abbr]) {
+        // External callout — label to the right with a dashed leader line
+        var lx = pt[0] + 38, ly = pt[1];
+        html += '<line x1="' + pt[0].toFixed(1) + '" y1="' + pt[1].toFixed(1) + '" x2="' + lx.toFixed(1) + '" y2="' + ly.toFixed(1) + '" stroke="#888" stroke-width="0.6" stroke-dasharray="3,2" opacity="0.6" pointer-events="none"/>';
+        html += '<text class="county-label callout" x="' + lx.toFixed(1) + '" y="' + ly.toFixed(1) + '">' + name + '</text>';
+      } else {
+        html += '<text class="county-label" x="' + pt[0].toFixed(1) + '" y="' + pt[1].toFixed(1) + '">' + name + '</text>';
+      }
     }
   }
   html += '</svg>';
