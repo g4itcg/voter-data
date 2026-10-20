@@ -89,8 +89,15 @@
   td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; }
   .dem-lead.pos { color: var(--blue-dem); } .dem-lead.neg { color: var(--red); }
 
-  .view-btn { background:none; border:1px solid #D0D0D0; border-radius:6px; padding:3px 10px; font-size:11px; cursor:pointer; color:var(--text-light); }
+  .view-btn { background: none; border: 1px solid #D0D0D0; border-radius: 6px; padding: 3px 10px; font-size: 11px; cursor: pointer; color: var(--text-light); }
   .view-btn.active { background: var(--blue); border-color: var(--blue); color: white; }
+
+  /* Turnout by Party table — spacious, readable */
+  .turnout-table { table-layout: fixed; }
+  .turnout-table th, .turnout-table td { padding: 10px 12px; white-space: nowrap; }
+  .turnout-table td { font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .turnout-table td:first-child { font-weight: 700; font-size: 13px; color: var(--text); }
+  .turnout-table tr:last-child td { background: #F0F2F5; font-weight: 700; }
 
   .status-bar { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-light); margin-bottom: 16px; padding: 8px 12px; background: white; border-radius: 8px; box-shadow: var(--shadow); }
   .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
@@ -164,9 +171,9 @@
       </span>
     </h2>
     <div class="table-wrap" style="padding-top:8px;">
-      <table>
+      <table class="turnout-table">
         <thead><tr>
-          <th>Category</th><th class="num">Dem</th><th class="num">Rep</th><th class="num">NPA</th><th class="num">Oth</th><th class="num">Total</th>
+          <th style="width:24%">Category</th><th class="num" style="width:16%">Dem</th><th class="num" style="width:16%">Rep</th><th class="num" style="width:14%">NPA</th><th class="num" style="width:13%">Oth</th><th class="num" style="width:17%">Total</th>
         </tr></thead>
         <tbody id="turnoutBody"></tbody>
       </table>
