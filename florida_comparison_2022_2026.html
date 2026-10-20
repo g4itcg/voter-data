@@ -107,6 +107,7 @@ body {
 .map-panel svg { width: 100%; height: auto; }
 .county-path { stroke: #555; stroke-width: 0.4; transition: fill 0.3s ease, stroke 0.2s; cursor: pointer; }
 .county-path:hover { stroke: #222; stroke-width: 1.5; }
+.county-label { font-family: 'Montserrat', sans-serif; fill: #444; font-size: 6.5px; font-weight: 600; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
 .map-legend {
   display: flex; align-items: center; justify-content: center;
   gap: 6px; margin-top: 10px; font-size: 11px; color: var(--text-light);
@@ -330,6 +331,49 @@ function pathFromCoords(coords, w, h) {
   return d;
 }
 
+// Area-weighted centroid of a polygon ring: returns [lon, lat] or null
+function ringCentroid(ring) {
+  var a = 0, cx = 0, cy = 0;
+  for (var i = 0; i < ring.length - 1; i++) {
+    var x1 = ring[i][0], y1 = ring[i][1], x2 = ring[i+1][0], y2 = ring[i+1][1];
+    var f = x1 * y2 - x2 * y1;
+    a += f; cx += (x1 + x2) * f; cy += (y1 + y2) * f;
+  }
+  a /= 2;
+  if (Math.abs(a) < 1e-9) return null;
+  return [cx / (6 * a), cy / (6 * a)];
+}
+
+// Centroid of the largest polygon in a feature (handles MultiPolygon islands)
+function featureCentroid(geo) {
+  var polys = [];
+  if (geo.type === 'Polygon') { polys = [geo.coordinates[0]]; }
+  else if (geo.type === 'MultiPolygon') {
+    for (var i = 0; i < geo.coordinates.length; i++) { polys.push(geo.coordinates[i][0]); }
+  } else { return null; }
+  var best = null, bestArea = -1;
+  for (var p = 0; p < polys.length; p++) {
+    var c = ringCentroid(polys[p]);
+    if (!c) continue;
+    var area = 0;
+    for (var i = 0; i < polys[p].length - 1; i++) {
+      area += polys[p][i][0] * polys[p][i+1][1] - polys[p][i+1][0] * polys[p][i][1];
+    }
+    area = Math.abs(area / 2);
+    if (area > bestArea) { bestArea = area; best = c; }
+  }
+  return best;
+}
+
+// Project a [lon, lat] to SVG pixel coords (same math as pathFromCoords)
+function projectPoint(lon, lat, w, h) {
+  var bounds = { minLon: -87.6, maxLon: -80.0, minLat: 24.4, maxLat: 31.0 };
+  var padding = 20;
+  var scaleX = (w - 2*padding) / (bounds.maxLon - bounds.minLon);
+  var scaleY = (h - 2*padding) / (bounds.maxLat - bounds.minLat);
+  return [padding + (lon - bounds.minLon) * scaleX, h - padding - (lat - bounds.minLat) * scaleY];
+}
+
 function renderMap(containerId, frame, tooltipId) {
   var container = document.getElementById(containerId);
   if (!container || !GEOJSON) return;
@@ -355,6 +399,12 @@ function renderMap(containerId, frame, tooltipId) {
     for (var pi2 = 0; pi2 < polys.length; pi2++) {
       var path = pathFromCoords(polys[pi2], w, h);
       html += '<path class="county-path" d="' + path + '" fill="' + color + '" data-fips="' + fips + '" data-total="' + total + '" data-pct="' + pct + '" data-dem="' + dem + '" data-rep="' + rep + '" data-npa="' + npa + '" data-oth="' + oth + '" data-mail="' + mail + '" data-inperson="' + inperson + '" data-name="' + name + '"/>';
+    }
+    // County name label at the feature centroid
+    var cent = featureCentroid(geo);
+    if (cent) {
+      var pt = projectPoint(cent[0], cent[1], w, h);
+      html += '<text class="county-label" x="' + pt[0].toFixed(1) + '" y="' + pt[1].toFixed(1) + '">' + name + '</text>';
     }
   }
   html += '</svg>';
