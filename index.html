@@ -100,6 +100,11 @@
   .turnout-table td:first-child { font-weight: 700; font-size: 13px; color: var(--text); }
   .turnout-table tr:last-child td { background: #F0F2F5; font-weight: 700; }
 
+  .main-tabs { display: flex; justify-content: center; border-bottom: 2px solid #E8E8E8; margin-bottom: 20px; gap: 0; }
+  .main-tabs .tab { padding: 12px 28px; font-size: 14px; font-weight: 700; color: var(--text-light); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; user-select: none; }
+  .main-tabs .tab:hover { color: var(--blue); }
+  .main-tabs .tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+
   .status-bar { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-light); margin-bottom: 16px; padding: 8px 12px; background: white; border-radius: 8px; box-shadow: var(--shadow); }
   .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
   .dot.live { background: var(--green); }
@@ -182,6 +187,13 @@
     </div>
   </div>
 
+  <!-- Main view switcher: VBM vs Early/Election Day -->
+  <div class="main-tabs">
+    <div class="tab active" data-main="vbm" onclick="switchMain('vbm')">📬 Vote by Mail</div>
+    <div class="tab" data-main="early" onclick="switchMain('early')">🏛️ Early &amp; Election Day</div>
+  </div>
+
+  <div id="mainVbm">
   <div class="section-card">
     <h2>📊 Returns by Party</h2>
     <div class="party-bars" id="partyBars"></div>
@@ -205,26 +217,7 @@
     </div>
   </div>
 
-  <!-- Separate Early Voting / Election Day map -->
-  <div class="section-card">
-    <h2 style="padding-bottom:12px;">🏛️ Early Voting &amp; Election Day</h2>
-    <div class="map-wrap">
-      <svg id="earlyMapSvg" viewBox="0 0 700 600" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;">
-        <g id="earlyGroup"></g>
-      </svg>
-      <div class="tooltip" id="earlyTooltip"></div>
-      <div class="legend">
-        <span>Fewer</span>
-        <div class="grad-early"></div>
-        <span>More votes →</span>
-      </div>
-    </div>
-    <div class="tabs" id="earlyTabBar">
-      <div class="tab active" data-tab="early_voted" onclick="switchEarlyTab('early_voted')">🏛️ Early</div>
-      <div class="tab" data-tab="election_day" onclick="switchEarlyTab('election_day')">🗳️ Election Day</div>
-    </div>
-  </div>
-
+  <!-- mainVbm continues: Daily VBM Returns + County Breakdown below -->
   <div class="section-card">
     <h2>📈 Daily VBM Returns</h2>
     <div class="trend-wrap">
@@ -290,6 +283,53 @@
       <div style="font-size:12px;color:var(--text-light);padding-top:8px;" id="tableCount"></div>
     </div>
   </div>
+  </div>
+  </div>  <!-- end #mainVbm -->
+
+  <div id="mainEarly" style="display:none;">
+  <div class="section-card">
+    <h2 style="padding-bottom:12px;">🏛️ Early Voting &amp; Election Day</h2>
+    <div class="map-wrap">
+      <svg id="earlyMapSvg" viewBox="0 0 700 600" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;">
+        <g id="earlyGroup"></g>
+      </svg>
+      <div class="tooltip" id="earlyTooltip"></div>
+      <div class="legend">
+        <span>Fewer</span>
+        <div class="grad-early"></div>
+        <span>More votes →</span>
+      </div>
+    </div>
+    <div class="tabs" id="earlyTabBar">
+      <div class="tab active" data-tab="early_voted" onclick="switchEarlyTab('early_voted')">🏛️ Early</div>
+      <div class="tab" data-tab="election_day" onclick="switchEarlyTab('election_day')">🗳️ Election Day</div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <h2>🏛️ Early &amp; Election Day County Breakdown</h2>
+    <div class="table-wrap">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:0 20px 8px;">
+        <button onclick="toggleSection('earlyTableSec')" style="background:none;border:1px solid #D0D0D0;border-radius:6px;padding:4px 12px;font-size:11px;cursor:pointer;color:var(--text-light);">🏛️ Show county table</button>
+      </div>
+      <div id="earlyTableSec" style="display:none;">
+        <div class="table-controls">
+          <input type="text" id="earlySearchInput" placeholder="Search county..." oninput="renderEarlyTable()">
+          <select id="earlySortSelect" onchange="renderEarlyTable()">
+            <option value="total-desc">Early Votes ↓</option>
+            <option value="alpha">A–Z</option>
+          </select>
+        </div>
+        <table class="turnout-table">
+          <thead><tr>
+            <th style="width:28%">County</th><th class="num">Early</th><th class="num">Election Day</th><th class="num">Total</th>
+          </tr></thead>
+          <tbody id="earlyTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  </div>  <!-- end #mainEarly -->
 
   <div class="brand-footer">
     Powered by <span class="logo-text">FLORIDIANS FOR A BETTER FUTURE</span> · 
@@ -776,6 +816,29 @@ function switchEarlyTab(tab) {
   earlyTab = tab;
   document.querySelectorAll('#earlyTabBar .tab').forEach(t => t.classList.toggle('active', t.dataset.tab===tab));
   if (geojson) styleEarlyMap();
+}
+
+function switchMain(which) {
+  document.querySelectorAll('.main-tabs .tab').forEach(t => t.classList.toggle('active', t.dataset.main===which));
+  document.getElementById('mainVbm').style.display = which === 'vbm' ? 'block' : 'none';
+  document.getElementById('mainEarly').style.display = which === 'early' ? 'block' : 'none';
+  if (which === 'early') {
+    if (geojson) styleEarlyMap();
+    renderEarlyTable();
+  } else {
+    if (geojson) styleMap();
+  }
+}
+
+function renderEarlyTable() {
+  const search = (document.getElementById('earlySearchInput').value||'').toLowerCase();
+  const sort = document.getElementById('earlySortSelect').value;
+  let counties = Object.entries(data.by_county||{}).map(([n,v]) => ({name:n, ev:(v.early_voted||{}).total||0, ed:(v.election_day||{}).total||0}));
+  if (search) counties = counties.filter(c => c.name.toLowerCase().includes(search));
+  counties.sort((a,b) => sort === 'alpha' ? a.name.localeCompare(b.name) : (b.ev + b.ed) - (a.ev + a.ed));
+  document.getElementById('earlyTableBody').innerHTML = counties.map(c =>
+    `<tr><td>${c.name}</td><td class="num" style="color:#2E9E9E">${fmt(c.ev)}</td><td class="num">${fmt(c.ed)}</td><td class="num"><b>${fmt(c.ev + c.ed)}</b></td></tr>`
+  ).join('');
 }
 
 function switchTab(tab) {
