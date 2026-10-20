@@ -174,12 +174,13 @@ const DATA_URL = window.location.href.substring(0, window.location.href.lastInde
 
 function getColor(pct) {
     if (pct === 0) return '#1c2128';
-    if (pct < 10) return '#f7f7f7';
-    if (pct < 25) return '#fee08b';
-    if (pct < 50) return '#fdae61';
-    if (pct < 75) return '#f46d43';
-    if (pct < 90) return '#d73027';
-    return '#a50026';
+    if (pct < 1) return '#f7f7f7';
+    if (pct < 10) return '#fee08b';
+    if (pct < 25) return '#fdae61';
+    if (pct < 50) return '#f46d43';
+    if (pct < 75) return '#d73027';
+    if (pct < 90) return '#a50026';
+    return '#67000d';
 }
 
 function formatNum(n) {
