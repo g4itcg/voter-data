@@ -247,16 +247,37 @@ var PARTY_CFG = {
   oth:   { valIdx: 5, pctIdx: 11, sIdx: 5, newIdx: 9, label: 'Other',  refIdx: 4 }
 };
 
-// Heat scale — same for BOTH maps and every party, so a given shade always
-// means the same "% of 2022 final" everywhere. Light (#EEE) → deep blue.
-function getColor(pct) {
+// Party colors — same as the 2026 turnout dashboard (BetterFL brand):
+// Total = blue intensity scale (matches the dashboard's early-vote map)
+// Dem = #4A90D9 · Rep = #DE0100 · NPA = #58E0E0 · Other = #F8D858
+var PARTY_RGB = {
+  total: [11, 45, 102],   // deep blue #0B2D66 (dashboard early-map top of scale)
+  dem:   [74, 144, 217],  // #4A90D9
+  rep:   [222, 1, 0],     // #DE0100
+  npa:   [88, 224, 224],  // #58E0E0
+  oth:   [248, 216, 88]   // #F8D858
+};
+
+// Light (#EEE ≈ 238,238,238) → party color by % of 2022 final.
+// Same ramp shape for every party so the two maps stay directly comparable;
+// only the hue changes to the party's dashboard color.
+function getColor(pct, p) {
+  var key = p || party || 'total';
   if (!pct || pct <= 0) return '#EEE';
   var t = Math.max(0, Math.min(1, pct / 100));
   if (t < 0.05) return '#EEE';
-  var r = Math.round(220 - t * 190);
-  var g = Math.round(235 - t * 175);
-  var b = 255;
+  var c = PARTY_RGB[key] || PARTY_RGB.total;
+  var r = Math.round(238 + (c[0] - 238) * t);
+  var g = Math.round(238 + (c[1] - 238) * t);
+  var b = Math.round(238 + (c[2] - 238) * t);
   return 'rgb(' + r + ',' + g + ',' + b + ')';
+}
+
+function legendGradient(p) {
+  var key = p || party || 'total';
+  var c = PARTY_RGB[key] || PARTY_RGB.total;
+  var mid = 'rgb(' + Math.round((238+c[0])/2) + ',' + Math.round((238+c[1])/2) + ',' + Math.round((238+c[2])/2) + ')';
+  return 'linear-gradient(to right, #EEE, ' + mid + ', rgb(' + c[0] + ',' + c[1] + ',' + c[2] + '))';
 }
 
 function formatNum(n) {
@@ -312,7 +333,7 @@ function renderMap(containerId, frame, tooltipId) {
       var v = frame.c[fips];
       total = v[0]; pct = v[cfg.pctIdx]; dem = v[2]; rep = v[3]; npa = v[4]; oth = v[5];
       mail = v[6]; inperson = v[7];
-      color = getColor(pct);
+      color = getColor(pct, party);
     }
     var polys = [];
     if (geo.type === 'Polygon') { polys = [geo.coordinates[0]]; }
@@ -330,7 +351,7 @@ function renderMap(containerId, frame, tooltipId) {
       var tt = document.getElementById(tooltipId);
       tt.innerHTML = '<div class="tt-name">' + this.dataset.name + '</div>'
         + '<div class="tt-row"><span>EV+VBM</span><span>' + parseInt(this.dataset.total).toLocaleString() + '</span></div>'
-        + '<div class="tt-row"><span>'+cfg.label+' % of final</span><span class="tt-pct" style="color:' + getColor(parseFloat(this.dataset.pct)) + '">' + this.dataset.pct + '%</span></div>'
+        + '<div class="tt-row"><span>'+cfg.label+' % of final</span><span class="tt-pct" style="color:' + getColor(parseFloat(this.dataset.pct), party) + '">' + this.dataset.pct + '%</span></div>'
         + '<div class="tt-row"><span>Mail</span><span>' + parseInt(this.dataset.mail).toLocaleString() + '</span></div>'
         + '<div class="tt-row"><span>Early</span><span>' + parseInt(this.dataset.inperson).toLocaleString() + '</span></div>'
         + '<div class="tt-row"><span>Dem</span><span>' + parseInt(this.dataset.dem).toLocaleString() + '</span></div>'
@@ -408,6 +429,9 @@ function switchParty(p) {
   document.querySelectorAll('#partyTabBar .tab').forEach(function(t) {
     t.classList.toggle('active', t.dataset.party === p);
   });
+  document.querySelectorAll('.map-legend .gradient-bar').forEach(function(g) {
+    g.style.background = legendGradient(p);
+  });
   if (FRAMES) render(currentIdx);
 }
 
@@ -415,6 +439,9 @@ function init() {
   document.getElementById('mapLoading').style.display = 'none';
   document.getElementById('mapsContainer').style.display = 'flex';
   document.getElementById('updatedAt').textContent = new Date().toLocaleString();
+  document.querySelectorAll('.map-legend .gradient-bar').forEach(function(g) {
+    g.style.background = legendGradient('total');
+  });
   var playBtn = document.getElementById('playBtn');
   var slider = document.getElementById('dateSlider');
   playBtn.addEventListener('click', function() {
