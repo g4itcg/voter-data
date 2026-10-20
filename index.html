@@ -54,6 +54,7 @@
   .map-wrap .tooltip { position: absolute; background: var(--blue); color: white; padding: 8px 14px; border-radius: 8px; font-size: 13px; box-shadow: var(--shadow); pointer-events: none; display: none; z-index: 100; white-space: nowrap; }
   .map-wrap .legend { display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 11px; color: var(--text-light); margin-top: 8px; }
   .map-wrap .legend .grad { width: 120px; height: 10px; border-radius: 5px; background: linear-gradient(to right, var(--red), #EBEBEB, var(--blue-dem)); }
+  .map-wrap .legend .grad-early { width: 120px; height: 10px; border-radius: 5px; background: linear-gradient(to right, #EEE, #4A90D9, #0B2D66); }
 
   .party-bars { padding: 16px 20px; }
   .bar-row { display: flex; align-items: center; margin-bottom: 8px; }
@@ -465,22 +466,28 @@ function renderCards() {
     {l:'Rep VBM', v:fmt(sw.vbm_voted?.rep), c:'rep'},
   ].map(c => `<div class="card"><div class="label">${c.l}</div><div class="value ${c.c}">${c.v}</div><div class="sub">${c.s||''}</div></div>`).join('');
   
-  // Margin banner
+  // Margin banner — use COMBINED totals (VBM + Early) when early votes exist
   const banner = document.getElementById('marginBanner');
-  const tab = activeTab || 'vbm_voted';
-  const s = data.statewide[tab]||{};
+  const vbm = data.statewide.vbm_voted||{};
+  const ev = data.statewide.early_voted||{};
+  const combined = {
+    dem: (vbm.dem||0) + (ev.dem||0),
+    rep: (vbm.rep||0) + (ev.rep||0),
+    total: (vbm.total||0) + (ev.total||0)
+  };
+  const s = combined;
   if (s.total) {
-    const demV = s.dem||0, repV = s.rep||0;
+    const demV = s.dem, repV = s.rep;
     const total = s.total;
-    const demPct = total > 0 ? (demV/total*100) : 0;
-    const repPct = total > 0 ? (repV/total*100) : 0;
+    const demPct = demV/total*100;
+    const repPct = repV/total*100;
     const margin = demV - repV;
     const marginPct = demPct - repPct;
     const isDem = margin >= 0;
     banner.className = isDem ? 'margin-banner dem' : 'margin-banner rep';
     banner.style.display = 'flex';
     document.getElementById('marginValue').textContent = isDem ? `D +${marginPct.toFixed(1)}%` : `R +${Math.abs(marginPct).toFixed(1)}%`;
-    document.getElementById('marginDetail').textContent = isDem ? `D+${fmt(margin)} votes` : `R+${fmt(-margin)} votes`;
+    document.getElementById('marginDetail').textContent = `${isDem ? 'D+' : 'R+'}${fmt(Math.abs(margin))} votes (Mail + Early)`;
     // Also update the returns-by-party section
     if (typeof renderPartyBars === 'function') renderPartyBars();
     else if (typeof switchTab === 'function') switchTab(activeTab);
@@ -598,20 +605,57 @@ function getColor(val) {
   }
 }
 
+// Early voting heat map: color by total votes (blue intensity) since
+// party splits aren't available from county sources yet
+function getEarlyColor(val, maxVal) {
+  if (!val || !maxVal) return '#EEE';
+  const t = Math.max(0, Math.min(1, val / maxVal));
+  if (t < 0.05) return '#EEE';
+  // Blue scale: light → deep blue
+  const r = Math.round(220 - t * 190);
+  const g = Math.round(235 - t * 175);
+  const b = 255;
+  return `rgb(${r},${g},${b})`;
+}
+
 function styleMap() {
   const paths = document.querySelectorAll('#countyGroup polygon');
+  // Max early votes for intensity scaling
+  let maxEarly = 0;
+  if (activeTab === 'early_voted') {
+    Object.values(data.by_county||{}).forEach(c => {
+      const t = c.early_voted?.total || 0;
+      if (t > maxEarly) maxEarly = t;
+    });
+  }
   paths.forEach(el => {
     const name = el.getAttribute('data-county');
     const d = data.by_county?.[name]?.[activeTab]||{};
     const total = d.total||0;
-    const demLead = total > 0 ? ((d.dem||0)-(d.rep||0))/total : null;
-    el.style.fill = getColor(demLead);
+    if (activeTab === 'early_voted') {
+      el.style.fill = getEarlyColor(total, maxEarly);
+      el.setAttribute('data-count', total);
+    } else {
+      const demLead = total > 0 ? ((d.dem||0)-(d.rep||0))/total : null;
+      el.style.fill = getColor(demLead);
+    }
   });
 }
 
 function switchTab(tab) {
   activeTab = tab;
   document.querySelectorAll('#mapTabBar .tab').forEach(t => t.classList.toggle('active', t.dataset.tab===tab));
+  // Update legend for the selected tab
+  const legend = document.querySelector('.map-wrap .legend');
+  if (legend) {
+    if (tab === 'early_voted') {
+      legend.innerHTML = '<span>Fewer</span><div class="grad-early"></div><span>More early votes →</span>';
+    } else if (tab === 'vbm_provided') {
+      legend.innerHTML = '<span>← Rep</span><div class="grad"></div><span>Dem →</span>';
+    } else {
+      legend.innerHTML = '<span>← Rep</span><div class="grad"></div><span>Dem →</span>';
+    }
+  }
   if (geojson) styleMap();
   
   const s = data.statewide[tab]||{};
