@@ -315,7 +315,7 @@ function init() {
             if (isPlaying) { clearInterval(playInterval); playInterval = setInterval(function() { if (currentIdx >= FRAMES.length - 1) { clearInterval(playInterval); isPlaying = false; playBtn.textContent = 'Play'; return; } currentIdx++; render(currentIdx); }, playbackSpeed); }
         });
     });
-    render(0);
+    render(FRAMES.length - 1); // Start on most recent frame
 }
 
 // Load data from GitHub Pages with cache-buster
