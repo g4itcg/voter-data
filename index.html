@@ -194,7 +194,26 @@
     <div class="tabs" id="mapTabBar">
       <div class="tab active" data-tab="vbm_voted" onclick="switchTab('vbm_voted')">📬 Mail</div>
       <div class="tab" data-tab="vbm_provided" onclick="switchTab('vbm_provided')">📨 Provided</div>
-      <div class="tab" data-tab="early_voted" onclick="switchTab('early_voted')">🏛️ Early</div>
+    </div>
+  </div>
+
+  <!-- Separate Early Voting / Election Day map -->
+  <div class="section-card">
+    <h2 style="padding-bottom:12px;">🏛️ Early Voting &amp; Election Day</h2>
+    <div class="map-wrap">
+      <svg id="earlyMapSvg" viewBox="0 0 700 600" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;">
+        <g id="earlyGroup"></g>
+      </svg>
+      <div class="tooltip" id="earlyTooltip"></div>
+      <div class="legend">
+        <span>Fewer</span>
+        <div class="grad-early"></div>
+        <span>More votes →</span>
+      </div>
+    </div>
+    <div class="tabs" id="earlyTabBar">
+      <div class="tab active" data-tab="early_voted" onclick="switchEarlyTab('early_voted')">🏛️ Early</div>
+      <div class="tab" data-tab="election_day" onclick="switchEarlyTab('election_day')">🗳️ Election Day</div>
     </div>
   </div>
 
@@ -620,6 +639,34 @@ function buildMap() {
     svg.appendChild(el);
   });
 
+  // ---- Build the second map (Early Voting / Election Day) ----
+  const earlySvg = document.getElementById('earlyGroup');
+  const earlyTip = document.getElementById('earlyTooltip');
+  paths.forEach(p => {
+    const el = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    el.setAttribute('points', p.d);
+    el.setAttribute('data-county', p.name);
+    el.setAttribute('class', 'county');
+    el.style.stroke = '#555';
+    el.style.strokeWidth = '0.4';
+    el.style.transition = 'fill 0.3s';
+    el.addEventListener('mouseenter', e => {
+      const cd = data.by_county?.[p.name]?.[earlyTab]||{};
+      earlyTip.style.display = 'block';
+      earlyTip.style.left = '50%';
+      earlyTip.style.top = '10px';
+      earlyTip.style.transform = 'translateX(-50%)';
+      earlyTip.innerHTML = `<b>${p.name}</b> &nbsp; Early ${fmt(cd.total||0)} &nbsp; Dem ${fmt(cd.dem||0)} &nbsp; Rep ${fmt(cd.rep||0)} &nbsp; NPA ${fmt(cd.npa||0)} &nbsp; Other ${fmt(cd.other||0)}`;
+      el.style.strokeWidth = '1.5'; el.style.stroke = '#222';
+    });
+    el.addEventListener('mouseleave', e => {
+      earlyTip.style.display = 'none';
+      el.style.strokeWidth = '0.4'; el.style.stroke = '#555';
+    });
+    earlySvg.appendChild(el);
+  });
+  styleEarlyMap();
+
   // Add county name labels at polygon centroids
   const labelFontSize = Math.max(5, Math.min(8, scale * 0.04));
   // Pre-computed centroids (lng, lat) for each county name
@@ -688,47 +735,48 @@ function getEarlyColor(val, maxVal) {
   return `rgb(${r},${g},${b})`;
 }
 
+let earlyTab = 'early_voted';  // which dataset the early map shows
+
 function styleMap() {
   const paths = document.querySelectorAll('#countyGroup polygon');
-  // Max early votes for intensity scaling
-  let maxEarly = 0;
-  if (activeTab === 'early_voted') {
-    Object.values(data.by_county||{}).forEach(c => {
-      const t = c.early_voted?.total || 0;
-      if (t > maxEarly) maxEarly = t;
-    });
-  }
   paths.forEach(el => {
     const name = el.getAttribute('data-county');
     const d = data.by_county?.[name]?.[activeTab]||{};
     const total = d.total||0;
-    if (activeTab === 'early_voted') {
-      el.style.fill = getEarlyColor(total, maxEarly);
-      el.setAttribute('data-count', total);
-    } else {
-      const demLead = total > 0 ? ((d.dem||0)-(d.rep||0))/total : null;
-      el.style.fill = getColor(demLead);
-    }
+    const demLead = total > 0 ? ((d.dem||0)-(d.rep||0))/total : null;
+    el.style.fill = getColor(demLead);
   });
+}
+
+function styleEarlyMap() {
+  const paths = document.querySelectorAll('#earlyGroup polygon');
+  // Max votes for intensity scaling
+  let maxVal = 0;
+  Object.values(data.by_county||{}).forEach(c => {
+    const t = c[earlyTab]?.total || 0;
+    if (t > maxVal) maxVal = t;
+  });
+  paths.forEach(el => {
+    const name = el.getAttribute('data-county');
+    const d = data.by_county?.[name]?.[earlyTab]||{};
+    el.style.fill = getEarlyColor(d.total||0, maxVal);
+  });
+}
+
+function switchEarlyTab(tab) {
+  earlyTab = tab;
+  document.querySelectorAll('#earlyTabBar .tab').forEach(t => t.classList.toggle('active', t.dataset.tab===tab));
+  if (geojson) styleEarlyMap();
 }
 
 function switchTab(tab) {
   activeTab = tab;
   document.querySelectorAll('#mapTabBar .tab').forEach(t => t.classList.toggle('active', t.dataset.tab===tab));
-  // Update legend for the selected tab
-  const legend = document.querySelector('.map-wrap .legend');
-  if (legend) {
-    if (tab === 'early_voted') {
-      legend.innerHTML = '<span>Fewer</span><div class="grad-early"></div><span>More early votes →</span>';
-    } else if (tab === 'vbm_provided') {
-      legend.innerHTML = '<span>← Rep</span><div class="grad"></div><span>Dem →</span>';
-    } else {
-      legend.innerHTML = '<span>← Rep</span><div class="grad"></div><span>Dem →</span>';
-    }
-  }
   if (geojson) styleMap();
   
-  const s = data.statewide[tab]||{};
+  // Party bars ALWAYS show pure VBM (Mail) — never early voting.
+  // The map tabs (Mail/Provided/Early) only affect the map + county table.
+  const s = data.statewide.vbm_voted||{};
   const req = data.statewide.vbm_provided||{};
   const total = s.total||1;
   const maxReq = Math.max(req.dem||0, req.rep||0, req.npa||0, req.other||0, 1);
