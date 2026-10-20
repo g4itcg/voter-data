@@ -53,16 +53,27 @@ shutil.copy(DATA_SRC, repo_data)
 shutil.copy(os.path.join(os.path.dirname(DATA_SRC), "vbm_history.json"),
             os.path.join(REPO_DIR, "vbm_history.json"))
 
-# 5. Commit and push
+# 5. Commit
 run(["git", "add", "voter_data.json", "vbm_history.json"], REPO_DIR)
 run(["git", "commit", "--author", "Jarvis <jarvis.green.net@gmail.com>",
      "-m", f"Auto-update {__import__('datetime').datetime.now().strftime('%b %d %H:%M')} ET"],
     REPO_DIR)
-push_result = run(["git", "push", "origin", "main"], REPO_DIR)
 
-if push_result.returncode == 0:
-    print("✅ Pushed to GitHub successfully")
-    sys.exit(0)
-else:
-    print("❌ Push failed")
-    sys.exit(1)
+# 6. Push with retry on race (concurrent push from another cron instance)
+MAX_ATTEMPTS = 3
+for attempt in range(1, MAX_ATTEMPTS + 1):
+    push_result = run(["git", "push", "origin", "main"], REPO_DIR)
+    if push_result.returncode == 0:
+        print("✅ Pushed to GitHub successfully")
+        sys.exit(0)
+    # Race condition — remote has new commits; rebase and retry
+    if "cannot lock ref" in push_result.stderr or "fetch first" in push_result.stderr:
+        print(f"⚠️  Remote has diverged (race), rebasing (attempt {attempt}/{MAX_ATTEMPTS})...")
+        run(["git", "pull", "--rebase", "origin", "main"], REPO_DIR)
+    else:
+        # Non-race failure; bail
+        print("❌ Push failed")
+        sys.exit(1)
+
+print("❌ Push failed after retries")
+sys.exit(1)
