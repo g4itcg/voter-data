@@ -529,7 +529,7 @@ function renderTurnout() {
   document.getElementById('turnoutBody').innerHTML = rows.map(r => {
     if (turnoutView === 'pct') {
       const cells = ['dem','rep','npa','oth','total'].map(k => {
-        const base = r.label === 'Registered' ? 1 : regs[k];
+        const base = r.label === 'Registered' ? regs.total : regs[k];
         const pct = base > 0 ? (r.d[k]/base*100) : 0;
         return `<td class="num">${pct.toFixed(1)}%</td>`;
       }).join('');
@@ -793,9 +793,10 @@ function switchTab(tab) {
   // Return-rate advantage: Dem return rate % - Rep return rate %
   const demRate = req.dem ? ((s.dem||0)/req.dem*100) : 0;
   const repRate = req.rep ? ((s.rep||0)/req.rep*100) : 0;
-  const adv = demRate - repRate;
-  const advLabel = adv >= 0 ? `D +${adv.toFixed(1)}%` : `R +${Math.abs(adv).toFixed(1)}%`;
-  const advClass = adv >= 0 ? 'adv-dem' : 'adv-rep';
+  const returnRateAdv = demRate - repRate;
+  const voteAdv = (s.dem||0) - (s.rep||0);  // raw ballot lead for highlighting
+  const advLabel = returnRateAdv >= 0 ? `Dem ${demRate.toFixed(1)}% · Rep ${repRate.toFixed(1)}% return rate` : `Rep ${repRate.toFixed(1)}% · Dem ${demRate.toFixed(1)}% return rate`;
+  const advClass = returnRateAdv >= 0 ? 'adv-dem' : 'adv-rep';
 
   const rows = [
     {l:'Democrat', v:s.dem||0, r:req.dem||0, c:'dem'},
@@ -806,7 +807,7 @@ function switchTab(tab) {
     const rate = p.r ? (p.v/p.r*100) : 0;
     const retW = (p.v/maxReq*100).toFixed(1);
     const reqW = (p.r/maxReq*100).toFixed(1);
-    const isLead = adv >= 0 ? p.c==='dem' : p.c==='rep';
+    const isLead = voteAdv >= 0 ? p.c==='dem' : p.c==='rep';
     return `<div class="bar-row${isLead?' lead-row':''}">
       <div class="bar-label">${p.l}</div>
       <div class="bar-track" style="position:relative;">
