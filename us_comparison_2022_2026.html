@@ -26,6 +26,15 @@ body {
   padding: 24px 30px 0;
   text-align: center;
 }
+.header-top { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+.live-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.15); color: #fff;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+  padding: 4px 12px; border-radius: 20px;
+}
+.live-dot { width: 8px; height: 8px; border-radius: 50%; background: #FF4444; animation: pulse 1.5s infinite; }
+@keyframes pulse { 0% {opacity:1;} 50% {opacity:0.35;} 100% {opacity:1;} }
 .header h1 { font-size: 26px; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
 .header .subtitle { font-size: 14px; color: rgba(255,255,255,0.85); margin-top: 6px; }
 .badge-live {
@@ -152,6 +161,11 @@ body {
 <body>
 
 <div class="header">
+  <div class="header-top">
+    <div class="live-badge" id="liveBadge" title="Auto-refreshes every 10 minutes">
+      <span class="live-dot" id="liveDot"></span> LIVE
+    </div>
+  </div>
   <h1>NATIONAL EARLY VOTE COMPARISON <span class="badge-live">2022 vs 2026</span></h1>
   <div class="subtitle">Daily Vote-by-Mail + Early In-Person Turnout by State · Animated Heat Map</div>
   <div class="brand-strip">
@@ -477,12 +491,53 @@ function init() {
 }
 
 // Load data from GitHub Pages with cache-buster
+function framesSig(f) {
+  // Cheap fingerprint of frame count + latest date + latest total
+  var last = f[f.length - 1];
+  return (f.length) + '|' + (last && last.f26 ? last.f26.d : '') + '|' + (last && last.f26 ? last.f26.s[0] : 0);
+}
+
+var lastSig = null;
+var lastCheck = 0;
+
+function pollFreshness() {
+  var age = (Date.now() - lastCheck) / 60000;
+  var dot = document.getElementById('liveDot');
+  var badge = document.getElementById('liveBadge');
+  if (age < 30)      { dot.style.background = '#4CAF50'; badge.title = 'Auto-refreshes every 10 minutes — data current'; }
+  else if (age < 90) { dot.style.background = '#FFC107'; badge.title = 'Last check ' + Math.round(age) + ' min ago'; }
+  else               { dot.style.background = '#FF4444'; badge.title = 'Stale — last check ' + Math.round(age) + ' min ago'; }
+}
+
+function refreshFrames() {
+  var cb = Date.now();
+  fetch(DATA_URL + 'us_comparison_frames.json?v=' + cb, { cache: 'no-store' }).then(function(r) { return r.json(); }).then(function(frames) {
+    lastCheck = Date.now();
+    var sig = framesSig(frames);
+    if (sig !== lastSig) {
+      lastSig = sig;
+      FRAMES = frames;
+      document.getElementById('updatedAt').textContent = new Date().toLocaleString();
+      currentIdx = Math.min(currentIdx, FRAMES.length - 1);  // keep position if possible
+      render(currentIdx);
+    }
+    pollFreshness();
+  }).catch(function() {
+    lastCheck = Date.now();
+    pollFreshness();
+  });
+}
+
 fetch(DATA_URL + 'us_states.geojson?v=1').then(function(r) { return r.json(); }).then(function(geo) {
   GEOJSON = geo;
-  return fetch(DATA_URL + 'us_comparison_frames.json?v=1').then(function(r) { return r.json(); });
+  return fetch(DATA_URL + 'us_comparison_frames.json?v=2').then(function(r) { return r.json(); });
 }).then(function(frames) {
   FRAMES = frames;
+  lastSig = framesSig(frames);
+  lastCheck = Date.now();
   init();
+  pollFreshness();
+  setInterval(refreshFrames, 10 * 60 * 1000);  // auto-refresh every 10 min like the main dashboard
 }).catch(function(err) {
   document.getElementById('dateDisplay').textContent = 'Connection Error';
   document.getElementById('statsRow').innerHTML = '<div class="stat-card"><div class="label">Cannot load data from GitHub Pages</div><div class="value" style="color:#DE0100;font-size:14px">'+err.message+'</div></div>';
