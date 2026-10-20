@@ -89,6 +89,9 @@
   td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; }
   .dem-lead.pos { color: var(--blue-dem); } .dem-lead.neg { color: var(--red); }
 
+  .view-btn { background:none; border:1px solid #D0D0D0; border-radius:6px; padding:3px 10px; font-size:11px; cursor:pointer; color:var(--text-light); }
+  .view-btn.active { background: var(--blue); border-color: var(--blue); color: white; }
+
   .status-bar { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-light); margin-bottom: 16px; padding: 8px 12px; background: white; border-radius: 8px; box-shadow: var(--shadow); }
   .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
   .dot.live { background: var(--green); }
@@ -150,6 +153,26 @@
   </div>
 
   <div class="cards-grid" id="cardsGrid"></div>
+
+  <!-- FreshTake-style: Statewide Turnout by Party with Numbers/Percent toggle -->
+  <div class="section-card">
+    <h2 style="display:flex;justify-content:space-between;align-items:center;padding-right:20px;">
+      <span>📈 Turnout by Party</span>
+      <span style="font-size:11px;display:flex;gap:4px;">
+        <button id="toggleNums" onclick="toggleView('nums')" class="view-btn active">Numbers</button>
+        <button id="togglePct" onclick="toggleView('pct')" class="view-btn">% Registered</button>
+      </span>
+    </h2>
+    <div class="table-wrap" style="padding-top:8px;">
+      <table>
+        <thead><tr>
+          <th>Category</th><th class="num">Dem</th><th class="num">Rep</th><th class="num">NPA</th><th class="num">Oth</th><th class="num">Total</th>
+        </tr></thead>
+        <tbody id="turnoutBody"></tbody>
+      </table>
+      <div style="font-size:11px;color:var(--text-light);padding-top:8px;" id="regAsOf"></div>
+    </div>
+  </div>
 
   <div class="section-card">
     <h2>📊 Returns by Party</h2>
@@ -279,6 +302,7 @@ async function init() {
     data = dr; geojson = gr; history = hr || [];
     document.getElementById('statusText').textContent = 'Updated: ' + fmtET(data.fetched_at) + ' (Updates every 10 min)';
     renderCards();
+    renderTurnout();
     buildMap();
     renderTrend();
     renderDailyNew();
@@ -453,6 +477,50 @@ function toggleSection(id) {
   const isHidden = el.style.display === 'none' || el.style.display === '';
   el.style.display = isHidden ? 'block' : 'none';
   if (btn) btn.textContent = isHidden ? btn.textContent.replace('Show', 'Hide').replace('📊 Show', '📊 Hide').replace('🏛️ Show', '🏛️ Hide') : btn.textContent.replace('Hide', 'Show').replace('📊 Hide', '📊 Show').replace('🏛️ Hide', '🏛️ Show');
+}
+
+let turnoutView = 'nums';  // 'nums' = counts, 'pct' = % of registered
+
+function renderTurnout() {
+  const reg = data.registration || {};
+  const vbm = data.statewide.vbm_voted || {};
+  const ev = data.statewide.early_voted || {};
+  const regs = { dem: reg.dem||0, rep: reg.rep||0, npa: reg.npa||0, oth: (reg.minor||0), total: reg.total||0 };
+  const mail = { dem: vbm.dem||0, rep: vbm.rep||0, npa: vbm.npa||0, oth: vbm.other||0, total: vbm.total||0 };
+  const early = { dem: ev.dem||0, rep: ev.rep||0, npa: ev.npa||0, oth: ev.other||0, total: ev.total||0 };
+  
+  const rows = [
+    { label: 'Registered', d: regs },
+    { label: 'Mail voted', d: mail },
+    { label: 'Early in-person', d: early },
+    { label: 'Total voted', d: {
+        dem: mail.dem + early.dem, rep: mail.rep + early.rep,
+        npa: mail.npa + early.npa, oth: mail.oth + early.oth,
+        total: mail.total + early.total } }
+  ];
+  
+  document.getElementById('turnoutBody').innerHTML = rows.map(r => {
+    if (turnoutView === 'pct') {
+      const cells = ['dem','rep','npa','oth','total'].map(k => {
+        const base = r.label === 'Registered' ? 1 : regs[k];
+        const pct = base > 0 ? (r.d[k]/base*100) : 0;
+        return `<td class="num">${pct.toFixed(1)}%</td>`;
+      }).join('');
+      return `<tr><td>${r.label}</td>${cells}</tr>`;
+    }
+    return `<tr><td>${r.label}</td><td class="num">${fmt(r.d.dem)}</td><td class="num">${fmt(r.d.rep)}</td><td class="num">${fmt(r.d.npa)}</td><td class="num">${fmt(r.d.oth)}</td><td class="num">${fmt(r.d.total)}</td></tr>`;
+  }).join('');
+  
+  const asOf = reg.as_of ? `Registration: FL Division of Elections (active voters as of ${reg.as_of})` : '';
+  const src = data.source ? ` · Voted: ${data.source}` : '';
+  document.getElementById('regAsOf').textContent = asOf + src;
+}
+
+function toggleView(v) {
+  turnoutView = v;
+  document.getElementById('toggleNums').classList.toggle('active', v==='nums');
+  document.getElementById('togglePct').classList.toggle('active', v==='pct');
+  renderTurnout();
 }
 
 function renderCards() {
