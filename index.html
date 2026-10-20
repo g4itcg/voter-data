@@ -823,7 +823,7 @@ function switchTab(tab) {
   document.getElementById('partyBars').innerHTML = `
     <div class="party-header">
       <div class="party-title">Returned vs Requested (${activeTab==='vbm_voted'?'Mail':activeTab==='vbm_provided'?'Provided':'Early'})</div>
-      <div class="adv-badge ${advClass}"><span class="adv-arrow">${adv>=0?'▲':'▼'}</span> ${advLabel} return rate</div>
+      <div class="adv-badge ${advClass}"><span class="adv-arrow">${returnRateAdv>=0?'▲':'▼'}</span> ${advLabel} return rate</div>
     </div>
     <div class="party-sub">Solid = returned · Light bar + tick = requested · Return rate %</div>
     ${rows}`;
