@@ -5,208 +5,243 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Florida 2022/2026 Comparison Turnout Dashboard</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+:root {
+  --blue: #0033A0; --blue-dark: #002080; --yellow: #F8D858; --teal: #58E0E0;
+  --bg: #F5F5F5; --white: #FFFFFF; --text: #333333; --text-light: #666666;
+  --red: #DE0100; --blue-dem: #4A90D9; --green: #28A745;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
-    font-family: 'Montserrat', sans-serif;
-    background: #0d1117;
-    color: #e6edf3;
-    min-height: 100vh;
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  min-height: 100vh;
 }
 .header {
-    background: linear-gradient(135deg, #0033A0 0%, #002070 100%);
-    padding: 20px 30px;
-    border-bottom: 4px solid #F8D858;
-    text-align: center;
+  background: var(--blue);
+  color: white;
+  padding: 24px 30px 0;
+  text-align: center;
 }
-.header h1 { font-size: 28px; font-weight: 800; color: #fff; letter-spacing: 1px; }
-.header .subtitle { font-size: 14px; color: rgba(255,255,255,0.75); margin-top: 4px; }
+.header h1 { font-size: 26px; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
+.header .subtitle { font-size: 14px; color: rgba(255,255,255,0.85); margin-top: 6px; }
 .badge-live {
-    display: inline-block; background: #F8D858; color: #0033A0; font-weight: 700;
-    font-size: 11px; padding: 2px 10px; border-radius: 12px; margin-left: 8px;
+  display: inline-block; background: var(--yellow); color: var(--blue-dark); font-weight: 700;
+  font-size: 12px; padding: 4px 14px; border-radius: 20px; margin-left: 10px; vertical-align: middle;
 }
+.brand-strip { display: flex; height: 6px; margin-top: 18px; overflow: hidden; }
+.brand-strip span { flex: 1; }
+.brand-strip .s-blue { background: #0033A0; }
+.brand-strip .s-gold { background: #F8D858; }
+.brand-strip .s-teal { background: #58E0E0; }
+
+.container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
 .controls {
-    background: #161b22; padding: 15px 30px; display: flex; align-items: center;
-    gap: 16px; flex-wrap: wrap; border-bottom: 1px solid #30363d;
+  background: var(--white); border: 1px solid #E8E8E8; border-radius: 12px;
+  padding: 14px 18px; display: flex; align-items: center;
+  gap: 14px; flex-wrap: wrap; box-shadow: var(--shadow);
 }
-.controls label { font-size: 13px; font-weight: 600; color: #8b949e; }
-.controls .date-display { font-size: 15px; font-weight: 700; color: #F8D858; min-width: 120px; }
-.controls input[type=range] { flex: 1; min-width: 200px; accent-color: #58E0E0; height: 6px; }
+.controls label { font-size: 13px; font-weight: 600; color: var(--text-light); }
+.controls .date-display { font-size: 15px; font-weight: 700; color: var(--blue); min-width: 130px; }
+.controls input[type=range] { flex: 1; min-width: 200px; accent-color: var(--teal); height: 6px; }
 .controls button {
-    background: #0033A0; color: white; border: none; padding: 8px 20px; border-radius: 6px;
-    font-weight: 600; font-size: 13px; cursor: pointer; transition: all .2s;
-    font-family: 'Montserrat', sans-serif;
+  background: var(--blue); color: white; border: none; padding: 8px 20px; border-radius: 6px;
+  font-weight: 600; font-size: 13px; cursor: pointer; transition: all .2s;
+  font-family: 'Montserrat', sans-serif;
 }
-.controls button:hover { background: #0044cc; }
+.controls button:hover { background: var(--blue-dark); }
 .speed-btn {
-    background: #21262d; color: #c9d1d9; border: 1px solid #30363d;
-    padding: 6px 12px; font-size: 12px; cursor: pointer; border-radius: 4px;
-    font-family: 'Montserrat', sans-serif;
+  background: none; color: var(--text-light); border: 1px solid #D0D0D0;
+  padding: 5px 12px; font-size: 12px; cursor: pointer; border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
 }
-.speed-btn.active { background: #58E0E0; color: #0033A0; border-color: #58E0E0; font-weight: 700; }
-.stats-row { display: flex; gap: 12px; padding: 12px 30px; flex-wrap: wrap; }
+.speed-btn.active { background: var(--teal); color: var(--blue-dark); border-color: var(--teal); font-weight: 700; }
+.dte-label { margin-left: auto; font-size: 11px; color: var(--text-light); font-weight: 600; }
+
+.stats-row { display: flex; gap: 12px; padding: 16px 0; flex-wrap: wrap; }
 .stat-card {
-    background: #161b22; border: 1px solid #30363d; border-radius: 8px;
-    padding: 10px 18px; flex: 1; min-width: 140px; text-align: center;
+  background: var(--white); border: 1px solid #E8E8E8; border-radius: 12px;
+  padding: 12px 18px; flex: 1; min-width: 150px; text-align: center; box-shadow: var(--shadow);
 }
-.stat-card .label { font-size: 10px; text-transform: uppercase; color: #8b949e; letter-spacing: 1px; font-weight: 600; }
-.stat-card .value { font-size: 22px; font-weight: 800; margin-top: 2px; }
-.stat-card .value.dem { color: #4A90D9; }
-.stat-card .value.rep { color: #e03c31; }
-.stat-card .value.total { color: #e6edf3; }
-.maps-container { display: flex; gap: 8px; padding: 12px 30px; }
+.stat-card .label { font-size: 10px; text-transform: uppercase; color: var(--text-light); letter-spacing: 1px; font-weight: 700; }
+.stat-card .value { font-size: 22px; font-weight: 800; margin-top: 2px; color: var(--text); }
+.stat-card .value.dem { color: var(--blue-dem); }
+.stat-card .value.rep { color: var(--red); }
+.stat-card .value.total { color: var(--blue); }
+.stat-card .delta-card { border-left: 3px solid var(--yellow); }
+.stat-card .value.delta { color: var(--blue); }
+.stat-card .sub { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+
+.maps-container { display: flex; gap: 16px; }
 .map-panel {
-    flex: 1; background: #161b22; border: 1px solid #30363d;
-    border-radius: 8px; padding: 12px; position: relative; min-height: 420px;
+  flex: 1; background: var(--white); border: 1px solid #E8E8E8;
+  border-radius: 12px; padding: 14px; position: relative; min-height: 420px; box-shadow: var(--shadow);
 }
-.map-panel .map-title { text-align: center; font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-.map-panel .map-title .y2022 { background: #0033A0; color: #fff; padding: 2px 12px; border-radius: 4px; }
-.map-panel .map-title .y2026 { background: #58E0E0; color: #0033A0; padding: 2px 12px; border-radius: 4px; }
+.map-panel .map-title { text-align: center; font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+.map-panel .map-title .y2022 { background: var(--blue); color: #fff; padding: 3px 14px; border-radius: 6px; font-size: 13px; }
+.map-panel .map-title .y2026 { background: var(--teal); color: var(--blue-dark); padding: 3px 14px; border-radius: 6px; font-size: 13px; }
 .map-panel svg { width: 100%; height: auto; }
-.county-path { stroke: #0d1117; stroke-width: 0.5; transition: fill 0.3s ease; cursor: pointer; }
-.county-path:hover { stroke: #fff; stroke-width: 1.5; }
+.county-path { stroke: #555; stroke-width: 0.4; transition: fill 0.3s ease, stroke 0.2s; cursor: pointer; }
+.county-path:hover { stroke: #222; stroke-width: 1.5; }
 .map-legend {
-    display: flex; align-items: center; justify-content: center;
-    gap: 4px; margin-top: 6px; font-size: 10px; color: #8b949e;
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; margin-top: 10px; font-size: 11px; color: var(--text-light);
 }
 .map-legend .gradient-bar {
-    width: 200px; height: 10px; border-radius: 3px;
-    background: linear-gradient(to right, #e0f3f8, #abd9e9, #74add1, #4575b4, #f46d43);
+  width: 160px; height: 10px; border-radius: 5px;
+  background: linear-gradient(to right, #EEE, #4A90D9, #0B2D66);
 }
+.pct-label { font-weight: 700; color: var(--text); }
 .county-tooltip {
-    position: absolute; background: #0d1117; border: 1px solid #30363d;
-    border-radius: 6px; padding: 8px 12px; font-size: 12px;
-    pointer-events: none; opacity: 0; transition: opacity .2s; z-index: 100; max-width: 220px;
+  position: absolute; background: var(--blue); color: white;
+  border-radius: 8px; padding: 8px 14px; font-size: 12px;
+  pointer-events: none; opacity: 0; transition: opacity .2s; z-index: 100; max-width: 230px;
+  box-shadow: var(--shadow);
 }
 .county-tooltip.visible { opacity: 1; }
-.county-tooltip .tt-name { font-weight: 700; color: #F8D858; margin-bottom: 4px; }
-.county-tooltip .tt-row { display: flex; justify-content: space-between; gap: 12px; }
+.county-tooltip .tt-name { font-weight: 700; color: var(--yellow); margin-bottom: 4px; }
+.county-tooltip .tt-row { display: flex; justify-content: space-between; gap: 14px; }
 .county-tooltip .tt-pct { font-weight: 700; }
-.loading {
-    text-align: center; padding: 80px 20px; color: #8b949e;
-}
+.loading { text-align: center; padding: 80px 20px; color: var(--text-light); }
 .loading .spinner {
-    width: 40px; height: 40px; border: 3px solid #30363d;
-    border-top-color: #58E0E0; border-radius: 50%;
-    animation: spin 0.8s linear infinite; margin: 0 auto 16px;
+  width: 40px; height: 40px; border: 3px solid #E8E8E8;
+  border-top-color: var(--blue); border-radius: 50%;
+  animation: spin 0.8s linear infinite; margin: 0 auto 16px;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+
 .footer {
-    text-align: center; padding: 16px 30px; font-size: 11px;
-    color: #484f58; border-top: 1px solid #21262d; margin-top: 20px;
+  text-align: center; padding: 20px; font-size: 11px;
+  color: var(--text-light); margin-top: 10px;
 }
-.footer a { color: #58E0E0; text-decoration: none; }
+.footer a { color: var(--blue); text-decoration: none; font-weight: 600; }
+
 @media (max-width: 768px) {
-    .maps-container { flex-direction: column; }
-    .header h1 { font-size: 20px; }
-    .stat-card .value { font-size: 18px; }
+  .maps-container { flex-direction: column; }
+  .header h1 { font-size: 19px; }
+  .stat-card .value { font-size: 18px; }
+  .controls .dte-label { margin-left: 0; }
 }
 </style>
 </head>
 <body>
 
 <div class="header">
-    <h1>FLORIDA EARLY VOTE COMPARISON <span class="badge-live">2022 2026</span></h1>
-    <div class="subtitle">Daily Vote-by-Mail + Early In-Person Turnout by County · Animated Heat Map</div>
+  <h1>FLORIDA EARLY VOTE COMPARISON <span class="badge-live">2022 vs 2026</span></h1>
+  <div class="subtitle">Daily Vote-by-Mail + Early In-Person Turnout by County · Animated Heat Map</div>
+  <div class="brand-strip">
+    <span class="s-blue"></span>
+    <span class="s-gold"></span>
+    <span class="s-teal"></span>
+  </div>
 </div>
 
+<div class="container">
+
 <div class="controls">
-    <label><span class="date-display" id="dateDisplay">Loading...</span></label>
-    <input type="range" id="dateSlider" min="0" max="0" value="0" step="1">
-    <button id="playBtn">Play</button>
-    <button class="speed-btn active" data-speed="500">2x</button>
-    <button class="speed-btn" data-speed="200">5x</button>
-    <button class="speed-btn" data-speed="100">10x</button>
-    <label style="margin-left:auto;font-size:11px">
-        <span id="daysToElection"></span>
-    </label>
+  <label><span class="date-display" id="dateDisplay">Loading...</span></label>
+  <input type="range" id="dateSlider" min="0" max="0" value="0" step="1">
+  <button id="playBtn">Play</button>
+  <button class="speed-btn active" data-speed="500">2x</button>
+  <button class="speed-btn" data-speed="200">5x</button>
+  <button class="speed-btn" data-speed="100">10x</button>
+  <label class="dte-label">
+    <span id="daysToElection"></span>
+  </label>
 </div>
 
 <div class="stats-row" id="statsRow">
-    <div class="stat-card"><div class="label">Loading data...</div></div>
+  <div class="stat-card"><div class="label">Loading data...</div></div>
 </div>
 
 <div class="maps-container" id="mapLoading">
-    <div class="map-panel">
-        <div class="map-title"><span class="y2022">2022 MIDTERM</span></div>
-        <div class="loading"><div class="spinner"></div>Loading county data...</div>
-    </div>
-    <div class="map-panel">
-        <div class="map-title"><span class="y2026">2026 MIDTERM</span></div>
-        <div class="loading"><div class="spinner"></div>Loading county data...</div>
-    </div>
+  <div class="map-panel">
+    <div class="map-title"><span class="y2022">2022 MIDTERM</span></div>
+    <div class="loading"><div class="spinner"></div>Loading county data...</div>
+  </div>
+  <div class="map-panel">
+    <div class="map-title"><span class="y2026">2026 MIDTERM</span></div>
+    <div class="loading"><div class="spinner"></div>Loading county data...</div>
+  </div>
 </div>
 
 <div class="maps-container" id="mapsContainer" style="display:none">
-    <div class="map-panel">
-        <div class="map-title"><span class="y2022">2022 MIDTERM</span></div>
-        <div id="mapSvg2022"></div>
-        <div class="map-legend">
-            <span>0%</span>
-            <div class="gradient-bar"></div>
-            <span>100%</span>
-            <span class="pct-label" id="legend2022" style="margin-left:8px;font-weight:600;color:#e6edf3">of county final</span>
-        </div>
-        <div class="county-tooltip" id="tooltip2022"></div>
+  <div class="map-panel">
+    <div class="map-title"><span class="y2022">2022 MIDTERM</span></div>
+    <div id="mapSvg2022"></div>
+    <div class="map-legend">
+      <span>0%</span>
+      <div class="gradient-bar"></div>
+      <span>100%</span>
+      <span class="pct-label" id="legend2022" style="margin-left:8px;">of county final</span>
     </div>
-    <div class="map-panel">
-        <div class="map-title"><span class="y2026">2026 MIDTERM</span></div>
-        <div id="mapSvg2026"></div>
-        <div class="map-legend">
-            <span>0%</span>
-            <div class="gradient-bar"></div>
-            <span>100%</span>
-            <span class="pct-label" id="legend2026" style="margin-left:8px;font-weight:600;color:#e6edf3">of county final</span>
-        </div>
-        <div class="county-tooltip" id="tooltip2026"></div>
+    <div class="county-tooltip" id="tooltip2022"></div>
+  </div>
+  <div class="map-panel">
+    <div class="map-title"><span class="y2026">2026 MIDTERM</span></div>
+    <div id="mapSvg2026"></div>
+    <div class="map-legend">
+      <span>0%</span>
+      <div class="gradient-bar"></div>
+      <span>100%</span>
+      <span class="pct-label" id="legend2026" style="margin-left:8px;">of county final</span>
     </div>
+    <div class="county-tooltip" id="tooltip2026"></div>
+  </div>
+</div>
+
 </div>
 
 <div class="footer">
-    Data: Florida Division of Elections via <a href="https://github.com/ElectIndex/26_early_vote" target="_blank">ElectIndex</a> ·
-    Dashboard: <a href="https://g4itcg.github.io/voter-data/" target="_blank">BetterFL</a> ·
-    Updated <span id="updatedAt"></span>
+  Powered by <b>FLORIDIANS FOR A BETTER FUTURE</b> · Data: Florida Division of Elections via
+  <a href="https://github.com/ElectIndex/26_early_vote" target="_blank">ElectIndex</a> ·
+  Updated <span id="updatedAt"></span>
 </div>
 
 <script>
 // Use hardcoded GitHub Pages URL so Wix embeds always find the data files
 var DATA_URL = 'https://g4itcg.github.io/voter-data/';
 
+// Heat scale matching the main turnout dashboard's early-vote map:
+// light (#EEE) → deep blue. Same scale for both years so they are directly comparable.
 function getColor(pct) {
-    if (pct === 0) return '#1c2128';
-    if (pct < 1) return '#e0f3f8';
-    if (pct < 10) return '#abd9e9';
-    if (pct < 25) return '#74add1';
-    if (pct < 50) return '#4575b4';
-    if (pct < 75) return '#313695';
-    if (pct < 90) return '#f46d43';
-    return '#fdae61';
+  if (!pct || pct <= 0) return '#EEE';
+  var t = Math.max(0, Math.min(1, pct / 100));
+  if (t < 0.05) return '#EEE';
+  var r = Math.round(220 - t * 190);
+  var g = Math.round(235 - t * 175);
+  var b = 255;
+  return 'rgb(' + r + ',' + g + ',' + b + ')';
 }
 
 function formatNum(n) {
-    if (n >= 1000000) return (n/1000000).toFixed(1) + 'M';
-    if (n >= 1000) return (n/1000).toFixed(1) + 'K';
-    return n.toString();
+  if (n >= 1000000) return (n/1000000).toFixed(1) + 'M';
+  if (n >= 1000) return (n/1000).toFixed(1) + 'K';
+  return n.toString();
 }
 
 function formatDate(dateStr) {
-    var d = new Date(dateStr + 'T12:00:00');
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  var d = new Date(dateStr + 'T12:00:00');
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
 function pathFromCoords(coords, w, h) {
-    var bounds = { minLon: -87.6, maxLon: -80.0, minLat: 24.4, maxLat: 31.0 };
-    var padding = 20;
-    var scaleX = (w - 2*padding) / (bounds.maxLon - bounds.minLon);
-    var scaleY = (h - 2*padding) / (bounds.maxLat - bounds.minLat);
-    var d = '';
-    for (var i = 0; i < coords.length; i++) {
-        var x = padding + (coords[i][0] - bounds.minLon) * scaleX;
-        var y = h - padding - (coords[i][1] - bounds.minLat) * scaleY;
-        d += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
-    }
-    d += 'Z';
-    return d;
+  var bounds = { minLon: -87.6, maxLon: -80.0, minLat: 24.4, maxLat: 31.0 };
+  var padding = 20;
+  var scaleX = (w - 2*padding) / (bounds.maxLon - bounds.minLon);
+  var scaleY = (h - 2*padding) / (bounds.maxLat - bounds.minLat);
+  var d = '';
+  for (var i = 0; i < coords.length; i++) {
+    var x = padding + (coords[i][0] - bounds.minLon) * scaleX;
+    var y = h - padding - (coords[i][1] - bounds.minLat) * scaleY;
+    d += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
+  }
+  d += 'Z';
+  return d;
 }
 
 var GEOJSON = null;
@@ -217,117 +252,117 @@ var playInterval = null;
 var playbackSpeed = 500;
 
 function renderMap(containerId, frame, tooltipId) {
-    var container = document.getElementById(containerId);
-    if (!container || !GEOJSON) return;
-    var w = 500, h = 450;
-    var html = '<svg viewBox="0 0 ' + w + ' ' + h + '" xmlns="http://www.w3.org/2000/svg">';
-    for (var fi = 0; fi < GEOJSON.features.length; fi++) {
-        var feat = GEOJSON.features[fi];
-        var fips = feat.properties.fips;
-        var name = feat.properties.name;
-        var geo = feat.geometry;
-        var color = '#1c2128', total = 0, pct = 0;
-        var dem = 0, rep = 0, mail = 0, inperson = 0;
-        if (frame && frame.c && frame.c[fips]) {
-            var d = frame.c[fips];
-            total = d[0]; pct = d[1]; dem = d[2]; rep = d[3]; mail = d[4]; inperson = d[5];
-            color = getColor(pct);
-        }
-        var polys = [];
-        if (geo.type === 'Polygon') { polys = [geo.coordinates[0]]; }
-        else if (geo.type === 'MultiPolygon') { for (var pi = 0; pi < geo.coordinates.length; pi++) { polys.push(geo.coordinates[pi][0]); } }
-        for (var pi2 = 0; pi2 < polys.length; pi2++) {
-            var path = pathFromCoords(polys[pi2], w, h);
-            html += '<path class="county-path" d="' + path + '" fill="' + color + '" data-fips="' + fips + '" data-total="' + total + '" data-pct="' + pct + '" data-dem="' + dem + '" data-rep="' + rep + '" data-mail="' + mail + '" data-inperson="' + inperson + '" data-name="' + name + '"/>';
-        }
+  var container = document.getElementById(containerId);
+  if (!container || !GEOJSON) return;
+  var w = 500, h = 450;
+  var html = '<svg viewBox="0 0 ' + w + ' ' + h + '" xmlns="http://www.w3.org/2000/svg">';
+  for (var fi = 0; fi < GEOJSON.features.length; fi++) {
+    var feat = GEOJSON.features[fi];
+    var fips = feat.properties.fips;
+    var name = feat.properties.name;
+    var geo = feat.geometry;
+    var color = '#EEE', total = 0, pct = 0;
+    var dem = 0, rep = 0, mail = 0, inperson = 0;
+    if (frame && frame.c && frame.c[fips]) {
+      var d = frame.c[fips];
+      total = d[0]; pct = d[1]; dem = d[2]; rep = d[3]; mail = d[4]; inperson = d[5];
+      color = getColor(pct);
     }
-    html += '</svg>';
-    container.innerHTML = html;
-    container.querySelectorAll('.county-path').forEach(function(el) {
-        el.addEventListener('mousemove', function(e) {
-            var rect = container.getBoundingClientRect();
-            var tt = document.getElementById(tooltipId);
-            tt.innerHTML = '<div class="tt-name">' + this.dataset.name + '</div>'
-                + '<div class="tt-row"><span>EV+VBM</span><span>' + parseInt(this.dataset.total).toLocaleString() + '</span></div>'
-                + '<div class="tt-row"><span>% of final</span><span class="tt-pct" style="color:' + getColor(parseFloat(this.dataset.pct)) + '">' + this.dataset.pct + '%</span></div>'
-                + '<div class="tt-row"><span>Mail</span><span>' + parseInt(this.dataset.mail).toLocaleString() + '</span></div>'
-                + '<div class="tt-row"><span>Early</span><span>' + parseInt(this.dataset.inperson).toLocaleString() + '</span></div>'
-                + '<div class="tt-row"><span>Dem</span><span>' + parseInt(this.dataset.dem).toLocaleString() + '</span></div>'
-                + '<div class="tt-row"><span>Rep</span><span>' + parseInt(this.dataset.rep).toLocaleString() + '</span></div>';
-            tt.style.left = (e.clientX - rect.left + 12) + 'px';
-            tt.style.top = (e.clientY - rect.top - 10) + 'px';
-            tt.classList.add('visible');
-        });
-        el.addEventListener('mouseleave', function() {
-            document.getElementById(tooltipId).classList.remove('visible');
-        });
+    var polys = [];
+    if (geo.type === 'Polygon') { polys = [geo.coordinates[0]]; }
+    else if (geo.type === 'MultiPolygon') { for (var pi = 0; pi < geo.coordinates.length; pi++) { polys.push(geo.coordinates[pi][0]); } }
+    for (var pi2 = 0; pi2 < polys.length; pi2++) {
+      var path = pathFromCoords(polys[pi2], w, h);
+      html += '<path class="county-path" d="' + path + '" fill="' + color + '" data-fips="' + fips + '" data-total="' + total + '" data-pct="' + pct + '" data-dem="' + dem + '" data-rep="' + rep + '" data-mail="' + mail + '" data-inperson="' + inperson + '" data-name="' + name + '"/>';
+    }
+  }
+  html += '</svg>';
+  container.innerHTML = html;
+  container.querySelectorAll('.county-path').forEach(function(el) {
+    el.addEventListener('mousemove', function(e) {
+      var rect = container.getBoundingClientRect();
+      var tt = document.getElementById(tooltipId);
+      tt.innerHTML = '<div class="tt-name">' + this.dataset.name + '</div>'
+        + '<div class="tt-row"><span>EV+VBM</span><span>' + parseInt(this.dataset.total).toLocaleString() + '</span></div>'
+        + '<div class="tt-row"><span>% of final</span><span class="tt-pct" style="color:' + getColor(parseFloat(this.dataset.pct)) + '">' + this.dataset.pct + '%</span></div>'
+        + '<div class="tt-row"><span>Mail</span><span>' + parseInt(this.dataset.mail).toLocaleString() + '</span></div>'
+        + '<div class="tt-row"><span>Early</span><span>' + parseInt(this.dataset.inperson).toLocaleString() + '</span></div>'
+        + '<div class="tt-row"><span>Dem</span><span>' + parseInt(this.dataset.dem).toLocaleString() + '</span></div>'
+        + '<div class="tt-row"><span>Rep</span><span>' + parseInt(this.dataset.rep).toLocaleString() + '</span></div>';
+      tt.style.left = (e.clientX - rect.left + 12) + 'px';
+      tt.style.top = (e.clientY - rect.top - 12) + 'px';
+      tt.classList.add('visible');
     });
+    el.addEventListener('mouseleave', function() {
+      document.getElementById(tooltipId).classList.remove('visible');
+    });
+  });
 }
 
 function updateStats(f22, f26) {
-    var row = document.getElementById('statsRow');
-    var s22 = f22 ? f22.s : [0,0,0,0];
-    var s26 = f26 ? f26.s : [0,0,0,0];
-    var dP22 = s22[0] ? ((s22[2]/(s22[2]+s22[3])*100)).toFixed(1)+'%' : '-';
-    var dP26 = s26[0] ? ((s26[2]/(s26[2]+s26[3])*100)).toFixed(1)+'%' : '-';
-    var delta = s26[0] > 0 && s22[0] > 0 ? ((s26[0]/s22[0]-1)*100).toFixed(1)+'%' : '-';
-    row.innerHTML =
-        '<div class="stat-card"><div class="label">2022 Total EV+VBM</div><div class="value total">'+formatNum(s22[0])+'</div><div style="font-size:10px;color:#8b949e">+'+formatNum(s22[1])+' new</div></div>'
-        + '<div class="stat-card"><div class="label">2022 Dem Share</div><div class="value dem">'+dP22+'</div><div style="font-size:10px;color:#8b949e">D '+formatNum(s22[2])+' R '+formatNum(s22[3])+'</div></div>'
-        + '<div class="stat-card"><div class="label">2026 Total EV+VBM</div><div class="value total">'+formatNum(s26[0])+'</div><div style="font-size:10px;color:#8b949e">+'+formatNum(s26[1])+' new</div></div>'
-        + '<div class="stat-card"><div class="label">2026 Dem Share</div><div class="value dem">'+dP26+'</div><div style="font-size:10px;color:#8b949e">D '+formatNum(s26[2])+' R '+formatNum(s26[3])+'</div></div>'
-        + '<div class="stat-card" style="border-left:3px solid #F8D858"><div class="label">2026 vs 2022</div><div class="value" style="color:#F8D858">'+delta+'</div><div style="font-size:10px;color:#8b949e">same DTE comparison</div></div>';
+  var row = document.getElementById('statsRow');
+  var s22 = f22 ? f22.s : [0,0,0,0];
+  var s26 = f26 ? f26.s : [0,0,0,0];
+  var dP22 = s22[0] ? ((s22[2]/(s22[2]+s22[3])*100)).toFixed(1)+'%' : '-';
+  var dP26 = s26[0] ? ((s26[2]/(s26[2]+s26[3])*100)).toFixed(1)+'%' : '-';
+  var delta = s26[0] > 0 && s22[0] > 0 ? ((s26[0]/s22[0]-1)*100).toFixed(1)+'%' : '-';
+  row.innerHTML =
+    '<div class="stat-card"><div class="label">2022 Total EV+VBM</div><div class="value total">'+formatNum(s22[0])+'</div><div class="sub">+'+formatNum(s22[1])+' new</div></div>'
+    + '<div class="stat-card"><div class="label">2022 Dem Share</div><div class="value dem">'+dP22+'</div><div class="sub">D '+formatNum(s22[2])+' · R '+formatNum(s22[3])+'</div></div>'
+    + '<div class="stat-card"><div class="label">2026 Total EV+VBM</div><div class="value total">'+formatNum(s26[0])+'</div><div class="sub">+'+formatNum(s26[1])+' new</div></div>'
+    + '<div class="stat-card"><div class="label">2026 Dem Share</div><div class="value dem">'+dP26+'</div><div class="sub">D '+formatNum(s26[2])+' · R '+formatNum(s26[3])+'</div></div>'
+    + '<div class="stat-card delta-card"><div class="label">2026 vs 2022</div><div class="value delta">'+delta+'</div><div class="sub">same DTE comparison</div></div>';
 }
 
 function render(idx) {
-    var sync = FRAMES[idx];
-    if (!sync) return;
-    var f22 = sync.f22, f26 = sync.f26;
-    var displayDate = f26 ? f26.d : (f22 ? f22.d : '');
-    document.getElementById('dateDisplay').textContent = formatDate(displayDate);
-    var dte = sync.dte;
-    document.getElementById('daysToElection').textContent = dte > 1 ? dte + ' days before Election Day' : dte === 1 ? '1 day before Election Day' : dte === 0 ? 'Election Day!' : 'Final (' + Math.abs(dte) + ' days after)';
-    renderMap('mapSvg2022', f22, 'tooltip2022');
-    renderMap('mapSvg2026', f26, 'tooltip2026');
-    updateStats(f22, f26);
-    document.getElementById('dateSlider').max = FRAMES.length - 1;
-    document.getElementById('dateSlider').value = idx;
-    document.getElementById('legend2022').textContent = f22 ? 'of 2022 final (' + formatNum(f22.s[0]) + ')' : 'no data';
-    document.getElementById('legend2026').textContent = f26 ? 'of 2026 final (' + formatNum(f26.s[0]) + ')' : 'no data';
+  var sync = FRAMES[idx];
+  if (!sync) return;
+  var f22 = sync.f22, f26 = sync.f26;
+  var displayDate = f26 ? f26.d : (f22 ? f22.d : '');
+  document.getElementById('dateDisplay').textContent = formatDate(displayDate);
+  var dte = sync.dte;
+  document.getElementById('daysToElection').textContent = dte > 1 ? dte + ' days before Election Day' : dte === 1 ? '1 day before Election Day' : dte === 0 ? 'Election Day!' : 'Final (' + Math.abs(dte) + ' days after)';
+  renderMap('mapSvg2022', f22, 'tooltip2022');
+  renderMap('mapSvg2026', f26, 'tooltip2026');
+  updateStats(f22, f26);
+  document.getElementById('dateSlider').max = FRAMES.length - 1;
+  document.getElementById('dateSlider').value = idx;
+  document.getElementById('legend2022').textContent = f22 ? 'of 2022 final (' + formatNum(f22.s[0]) + ')' : 'no data';
+  document.getElementById('legend2026').textContent = f26 ? 'of 2026 final (' + formatNum(f26.s[0]) + ')' : 'no data';
 }
 
 function init() {
-    document.getElementById('mapLoading').style.display = 'none';
-    document.getElementById('mapsContainer').style.display = 'flex';
-    document.getElementById('updatedAt').textContent = new Date().toLocaleString();
-    var playBtn = document.getElementById('playBtn');
-    var slider = document.getElementById('dateSlider');
-    playBtn.addEventListener('click', function() {
-        if (isPlaying) { clearInterval(playInterval); isPlaying = false; playBtn.textContent = 'Play'; }
-        else { if (currentIdx >= FRAMES.length - 1) currentIdx = 0; isPlaying = true; playBtn.textContent = 'Pause'; playInterval = setInterval(function() { if (currentIdx >= FRAMES.length - 1) { clearInterval(playInterval); isPlaying = false; playBtn.textContent = 'Play'; return; } currentIdx++; render(currentIdx); }, playbackSpeed); }
+  document.getElementById('mapLoading').style.display = 'none';
+  document.getElementById('mapsContainer').style.display = 'flex';
+  document.getElementById('updatedAt').textContent = new Date().toLocaleString();
+  var playBtn = document.getElementById('playBtn');
+  var slider = document.getElementById('dateSlider');
+  playBtn.addEventListener('click', function() {
+    if (isPlaying) { clearInterval(playInterval); isPlaying = false; playBtn.textContent = 'Play'; }
+    else { if (currentIdx >= FRAMES.length - 1) currentIdx = 0; isPlaying = true; playBtn.textContent = 'Pause'; playInterval = setInterval(function() { if (currentIdx >= FRAMES.length - 1) { clearInterval(playInterval); isPlaying = false; playBtn.textContent = 'Play'; return; } currentIdx++; render(currentIdx); }, playbackSpeed); }
+  });
+  slider.addEventListener('input', function() { if (isPlaying) { clearInterval(playInterval); isPlaying = false; playBtn.textContent = 'Play'; } currentIdx = parseInt(this.value); render(currentIdx); });
+  document.querySelectorAll('.speed-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); });
+      this.classList.add('active');
+      playbackSpeed = parseInt(this.dataset.speed);
+      if (isPlaying) { clearInterval(playInterval); playInterval = setInterval(function() { if (currentIdx >= FRAMES.length - 1) { clearInterval(playInterval); isPlaying = false; playBtn.textContent = 'Play'; return; } currentIdx++; render(currentIdx); }, playbackSpeed); }
     });
-    slider.addEventListener('input', function() { if (isPlaying) { clearInterval(playInterval); isPlaying = false; playBtn.textContent = 'Play'; } currentIdx = parseInt(this.value); render(currentIdx); });
-    document.querySelectorAll('.speed-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); });
-            this.classList.add('active');
-            playbackSpeed = parseInt(this.dataset.speed);
-            if (isPlaying) { clearInterval(playInterval); playInterval = setInterval(function() { if (currentIdx >= FRAMES.length - 1) { clearInterval(playInterval); isPlaying = false; playBtn.textContent = 'Play'; return; } currentIdx++; render(currentIdx); }, playbackSpeed); }
-        });
-    });
-    render(FRAMES.length - 1); // Start on most recent frame
+  });
+  render(FRAMES.length - 1); // Start on most recent frame
 }
 
 // Load data from GitHub Pages with cache-buster
-fetch(DATA_URL + 'fl_counties.geojson?v=2').then(function(r) { return r.json(); }).then(function(geo) {
-    GEOJSON = geo;
-    return fetch(DATA_URL + 'fl_comparison_frames.json?v=2').then(function(r) { return r.json(); });
+fetch(DATA_URL + 'fl_counties.geojson?v=3').then(function(r) { return r.json(); }).then(function(geo) {
+  GEOJSON = geo;
+  return fetch(DATA_URL + 'fl_comparison_frames.json?v=3').then(function(r) { return r.json(); });
 }).then(function(frames) {
-    FRAMES = frames;
-    init();
+  FRAMES = frames;
+  init();
 }).catch(function(err) {
-    document.getElementById('dateDisplay').textContent = 'Connection Error';
-    document.getElementById('statsRow').innerHTML = '<div class="stat-card"><div class="label">Cannot load data from GitHub Pages</div><div class="value" style="color:#e03c31;font-size:14px">'+err.message+'</div></div>';
+  document.getElementById('dateDisplay').textContent = 'Connection Error';
+  document.getElementById('statsRow').innerHTML = '<div class="stat-card"><div class="label">Cannot load data from GitHub Pages</div><div class="value" style="color:#DE0100;font-size:14px">'+err.message+'</div></div>';
 });
 </script>
 </body>
