@@ -71,7 +71,7 @@ body {
 }
 .map-legend .gradient-bar {
     width: 200px; height: 10px; border-radius: 3px;
-    background: linear-gradient(to right, #f7f7f7, #fee08b, #fdae61, #f46d43, #d73027);
+    background: linear-gradient(to right, #e0f3f8, #abd9e9, #74add1, #4575b4, #f46d43);
 }
 .county-tooltip {
     position: absolute; background: #0d1117; border: 1px solid #30363d;
@@ -174,13 +174,13 @@ var DATA_URL = 'https://g4itcg.github.io/voter-data/';
 
 function getColor(pct) {
     if (pct === 0) return '#1c2128';
-    if (pct < 1) return '#f7f7f7';
-    if (pct < 10) return '#fee08b';
-    if (pct < 25) return '#fdae61';
-    if (pct < 50) return '#f46d43';
-    if (pct < 75) return '#d73027';
-    if (pct < 90) return '#a50026';
-    return '#67000d';
+    if (pct < 1) return '#e0f3f8';
+    if (pct < 10) return '#abd9e9';
+    if (pct < 25) return '#74add1';
+    if (pct < 50) return '#4575b4';
+    if (pct < 75) return '#313695';
+    if (pct < 90) return '#f46d43';
+    return '#fdae61';
 }
 
 function formatNum(n) {
