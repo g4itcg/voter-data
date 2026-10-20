@@ -318,10 +318,10 @@ function init() {
     render(0);
 }
 
-// Load data from GitHub Pages
-fetch(DATA_URL + 'fl_counties.geojson').then(function(r) { return r.json(); }).then(function(geo) {
+// Load data from GitHub Pages with cache-buster
+fetch(DATA_URL + 'fl_counties.geojson?v=2').then(function(r) { return r.json(); }).then(function(geo) {
     GEOJSON = geo;
-    return fetch(DATA_URL + 'fl_comparison_frames.json').then(function(r) { return r.json(); });
+    return fetch(DATA_URL + 'fl_comparison_frames.json?v=2').then(function(r) { return r.json(); });
 }).then(function(frames) {
     FRAMES = frames;
     init();
