@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>National 2022/2026 Early Vote Comparison Dashboard</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+:root {
+  --blue: #0033A0; --blue-dark: #002080; --yellow: #F8D858; --teal: #58E0E0;
+  --bg: #F5F5F5; --white: #FFFFFF; --text: #333333; --text-light: #666666;
+  --red: #DE0100; --blue-dem: #4A90D9; --green: #28A745;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+.header {
+  background: var(--blue);
+  color: white;
+  padding: 24px 30px 0;
+  text-align: center;
+}
+.header h1 { font-size: 26px; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
+.header .subtitle { font-size: 14px; color: rgba(255,255,255,0.85); margin-top: 6px; }
+.badge-live {
+  display: inline-block; background: var(--yellow); color: var(--blue-dark); font-weight: 700;
+  font-size: 12px; padding: 4px 14px; border-radius: 20px; margin-left: 10px; vertical-align: middle;
+}
+.brand-strip { display: flex; height: 6px; margin-top: 18px; overflow: hidden; }
+.brand-strip span { flex: 1; }
+.brand-strip .s-blue { background: #0033A0; }
+.brand-strip .s-gold { background: #F8D858; }
+.brand-strip .s-teal { background: #58E0E0; }
+
+.container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+.controls {
+  background: var(--white); border: 1px solid #E8E8E8; border-radius: 12px;
+  padding: 14px 18px; display: flex; align-items: center;
+  gap: 14px; flex-wrap: wrap; box-shadow: var(--shadow);
+}
+.controls label { font-size: 13px; font-weight: 600; color: var(--text-light); }
+.controls .date-display { font-size: 15px; font-weight: 700; color: var(--blue); min-width: 130px; }
+.controls input[type=range] { flex: 1; min-width: 200px; accent-color: var(--teal); height: 6px; }
+.controls button {
+  background: var(--blue); color: white; border: none; padding: 8px 20px; border-radius: 6px;
+  font-weight: 600; font-size: 13px; cursor: pointer; transition: all .2s;
+  font-family: 'Montserrat', sans-serif;
+}
+.controls button:hover { background: var(--blue-dark); }
+.speed-btn {
+  background: none; color: var(--text-light); border: 1px solid #D0D0D0;
+  padding: 5px 12px; font-size: 12px; cursor: pointer; border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
+}
+.speed-btn.active { background: var(--teal); color: var(--blue-dark); border-color: var(--teal); font-weight: 700; }
+.dte-label { margin-left: auto; font-size: 11px; color: var(--text-light); font-weight: 600; }
+
+.tabs { display: flex; border-bottom: 2px solid #E8E8E8; padding: 0 4px; gap: 0; flex-wrap: wrap; }
+.tab { padding: 10px 18px; font-size: 13px; font-weight: 600; color: var(--text-light); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; user-select: none; }
+.tab:hover { color: var(--blue); }
+.tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+.tab .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+
+.party-bar { background: var(--white); border: 1px solid #E8E8E8; border-bottom: none; border-radius: 12px 12px 0 0; padding: 10px 14px 0; box-shadow: var(--shadow); }
+.party-bar .party-hint { font-size: 11px; color: var(--text-light); padding: 0 6px 6px; font-weight: 600; }
+
+.stats-row { display: flex; gap: 12px; padding: 16px 0; flex-wrap: wrap; }
+.stat-card {
+  background: var(--white); border: 1px solid #E8E8E8; border-radius: 12px;
+  padding: 12px 18px; flex: 1; min-width: 150px; text-align: center; box-shadow: var(--shadow);
+}
+.stat-card .label { font-size: 10px; text-transform: uppercase; color: var(--text-light); letter-spacing: 1px; font-weight: 700; }
+.stat-card .value { font-size: 22px; font-weight: 800; margin-top: 2px; color: var(--text); }
+.stat-card .value.dem { color: var(--blue-dem); }
+.stat-card .value.rep { color: var(--red); }
+.stat-card .value.npa { color: #2E9E9E; }
+.stat-card .value.oth { color: #B8860B; }
+.stat-card .value.total { color: var(--blue); }
+.stat-card .delta-card { border-left: 3px solid var(--yellow); }
+.stat-card .value.delta { color: var(--blue); }
+.stat-card .sub { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+
+.maps-container { display: flex; gap: 16px; }
+.map-panel {
+  flex: 1; background: var(--white); border: 1px solid #E8E8E8;
+  border-radius: 12px; padding: 14px; position: relative; min-height: 420px; box-shadow: var(--shadow);
+}
+.map-panel .map-title { text-align: center; font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+.map-panel .map-title .y2022 { background: var(--blue); color: #fff; padding: 3px 14px; border-radius: 6px; font-size: 13px; }
+.map-panel .map-title .y2026 { background: var(--teal); color: var(--blue-dark); padding: 3px 14px; border-radius: 6px; font-size: 13px; }
+.map-panel .map-svg-wrap { overflow: hidden; border-radius: 8px; }
+.map-panel svg { width: 100%; height: auto; display: block; }
+.county-path { stroke: #fff; stroke-width: 0.4; transition: fill 0.3s ease, stroke 0.2s; cursor: pointer; }
+.county-path:hover { stroke: #222; stroke-width: 1.2; }
+.county-path.no-data { fill: #DDDDDD !important; }
+.map-legend {
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; margin-top: 10px; font-size: 11px; color: var(--text-light);
+}
+.map-legend .gradient-bar {
+  width: 160px; height: 10px; border-radius: 5px;
+  background: linear-gradient(to right, #EEE, #4A90D9, #0B2D66);
+}
+.gray-swatch { width: 14px; height: 10px; border-radius: 2px; background: #DDDDDD; display: inline-block; margin-left: 10px; vertical-align: -1px; }
+.pct-label { font-weight: 700; color: var(--text); }
+.county-tooltip {
+  position: absolute; background: var(--blue); color: white;
+  border-radius: 8px; padding: 8px 14px; font-size: 12px;
+  pointer-events: none; opacity: 0; transition: opacity .2s; z-index: 100; max-width: 250px;
+  box-shadow: var(--shadow);
+}
+.county-tooltip.visible { opacity: 1; }
+.county-tooltip .tt-name { font-weight: 700; color: var(--yellow); margin-bottom: 4px; }
+.county-tooltip .tt-row { display: flex; justify-content: space-between; gap: 14px; }
+.county-tooltip .tt-pct { font-weight: 700; }
+.loading { text-align: center; padding: 80px 20px; color: var(--text-light); }
+.loading .spinner {
+  width: 40px; height: 40px; border: 3px solid #E8E8E8;
+  border-top-color: var(--blue); border-radius: 50%;
+  animation: spin 0.8s linear infinite; margin: 0 auto 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.footer {
+  text-align: center; padding: 20px; font-size: 11px;
+  color: var(--text-light); margin-top: 10px;
+}
+.footer a { color: var(--blue); text-decoration: none; font-weight: 600; }
+
+@media (max-width: 768px) {
+  .maps-container { flex-direction: column; }
+  .header h1 { font-size: 19px; }
+  .stat-card .value { font-size: 18px; }
+  .controls .dte-label { margin-left: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>NATIONAL EARLY VOTE COMPARISON <span class="badge-live">2022 vs 2026</span></h1>
+  <div class="subtitle">Daily Vote-by-Mail + Early In-Person Turnout by State · Animated Heat Map</div>
+  <div class="brand-strip">
+    <span class="s-blue"></span>
+    <span class="s-gold"></span>
+    <span class="s-teal"></span>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="controls">
+  <label><span class="date-display" id="dateDisplay">Loading...</span></label>
+  <input type="range" id="dateSlider" min="0" max="0" value="0" step="1">
+  <button id="playBtn">Play</button>
+  <button class="speed-btn active" data-speed="500">2x</button>
+  <button class="speed-btn" data-speed="200">5x</button>
+  <button class="speed-btn" data-speed="100">10x</button>
+  <label class="dte-label">
+    <span id="daysToElection"></span>
+  </label>
+</div>
+
+<div class="party-bar">
+  <div class="party-hint">Color states by party turnout — % of that party's 2022 final · gray = no 2022 data / state doesn't report party</div>
+  <div class="tabs" id="partyTabBar">
+    <div class="tab active" data-party="total" onclick="switchParty('total')"><span class="dot" style="background:#0033A0"></span>Total</div>
+    <div class="tab" data-party="dem" onclick="switchParty('dem')"><span class="dot" style="background:#4A90D9"></span>Democrat</div>
+    <div class="tab" data-party="rep" onclick="switchParty('rep')"><span class="dot" style="background:#DE0100"></span>Republican</div>
+    <div class="tab" data-party="npa" onclick="switchParty('npa')"><span class="dot" style="background:#58E0E0"></span>NPA</div>
+    <div class="tab" data-party="oth" onclick="switchParty('oth')"><span class="dot" style="background:#F8D858"></span>Other</div>
+  </div>
+</div>
+
+<div class="stats-row" id="statsRow">
+  <div class="stat-card"><div class="label">Loading data...</div></div>
+</div>
+
+<div class="maps-container" id="mapLoading">
+  <div class="map-panel">
+    <div class="map-title"><span class="y2022">2022 MIDTERM</span></div>
+    <div class="loading"><div class="spinner"></div>Loading state data...</div>
+  </div>
+  <div class="map-panel">
+    <div class="map-title"><span class="y2026">2026 MIDTERM</span></div>
+    <div class="loading"><div class="spinner"></div>Loading state data...</div>
+  </div>
+</div>
+
+<div class="maps-container" id="mapsContainer" style="display:none">
+  <div class="map-panel">
+    <div class="map-title"><span class="y2022">2022 MIDTERM</span></div>
+    <div class="map-svg-wrap"><div id="mapSvg2022"></div></div>
+    <div class="map-legend">
+      <span>0%</span>
+      <div class="gradient-bar"></div>
+      <span>100%</span>
+      <span class="pct-label" id="legend2022" style="margin-left:8px;">of 2022 final</span>
+      <span class="gray-swatch"></span><span>no data</span>
+    </div>
+    <div class="county-tooltip" id="tooltip2022"></div>
+  </div>
+  <div class="map-panel">
+    <div class="map-title"><span class="y2026">2026 MIDTERM</span></div>
+    <div class="map-svg-wrap"><div id="mapSvg2026"></div></div>
+    <div class="map-legend">
+      <span>0%</span>
+      <div class="gradient-bar"></div>
+      <span>100%</span>
+      <span class="pct-label" id="legend2026" style="margin-left:8px;">of 2022 final</span>
+      <span class="gray-swatch"></span><span>no data</span>
+    </div>
+    <div class="county-tooltip" id="tooltip2026"></div>
+  </div>
+</div>
+
+</div>
+
+<div class="footer">
+  Powered by <b>FLORIDIANS FOR A BETTER FUTURE</b> · Data: Florida Division of Elections via
+  <a href="https://github.com/ElectIndex/26_early_vote" target="_blank">ElectIndex</a> ·
+  AK &amp; HI not shown on map (no 2022 daily baseline) ·
+  Updated <span id="updatedAt"></span>
+</div>
+
+<script>
+// ── Config ──────────────────────────────────────────────────────────────
+var DATA_URL = 'https://g4itcg.github.io/voter-data/';
+
+// Compact layout per state:
+//   [t, p, d, r, n, o, m, i, pd, pr, pn, po]
+//   p / pd/pr/pn/po = -1 when no 2022 baseline (or state doesn't report party)
+var PARTY_CFG = {
+  total: { valIdx: 0, pctIdx: 1, sIdx: 0, newIdx: 1, label: 'Total',   refIdx: 0 },
+  dem:   { valIdx: 2, pctIdx: 8, sIdx: 2, newIdx: 6, label: 'Dem',     refIdx: 1 },
+  rep:   { valIdx: 3, pctIdx: 9, sIdx: 3, newIdx: 7, label: 'Rep',     refIdx: 2 },
+  npa:   { valIdx: 4, pctIdx: 10, sIdx: 4, newIdx: 8, label: 'NPA',    refIdx: 3 },
+  oth:   { valIdx: 5, pctIdx: 11, sIdx: 5, newIdx: 9, label: 'Other',  refIdx: 4 }
+};
+
+var PARTY_RGB = {
+  total: [11, 45, 102],   // deep blue
+  dem:   [74, 144, 217],  // #4A90D9
+  rep:   [222, 1, 0],     // #DE0100
+  npa:   [88, 224, 224],  // #58E0E0
+  oth:   [248, 216, 88]   // #F8D858
+};
+
+function getColor(pct, p) {
+  if (pct === undefined || pct === null || pct < 0) return '#DDDDDD';  // no data
+  if (pct <= 0) return '#EEE';
+  var t = Math.max(0, Math.min(1, pct / 100));
+  if (t < 0.05) return '#EEE';
+  var key = p || party || 'total';
+  var c = PARTY_RGB[key] || PARTY_RGB.total;
+  var r = Math.round(238 + (c[0] - 238) * t);
+  var g = Math.round(238 + (c[1] - 238) * t);
+  var b = Math.round(238 + (c[2] - 238) * t);
+  return 'rgb(' + r + ',' + g + ',' + b + ')';
+}
+
+function legendGradient(p) {
+  var key = p || party || 'total';
+  var c = PARTY_RGB[key] || PARTY_RGB.total;
+  var mid = 'rgb(' + Math.round((238+c[0])/2) + ',' + Math.round((238+c[1])/2) + ',' + Math.round((238+c[2])/2) + ')';
+  return 'linear-gradient(to right, #EEE, ' + mid + ', rgb(' + c[0] + ',' + c[1] + ',' + c[2] + '))';
+}
+
+function formatNum(n) {
+  if (n >= 1000000) return (n/1000000).toFixed(1) + 'M';
+  if (n >= 1000) return (n/1000).toFixed(1) + 'K';
+  return n.toString();
+}
+
+function formatDate(dateStr) {
+  var d = new Date(dateStr + 'T12:00:00');
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+// ── State ───────────────────────────────────────────────────────────────
+var GEOJSON = null;
+var FRAMES = null;
+var currentIdx = 0;
+var isPlaying = false;
+var playInterval = null;
+var playbackSpeed = 500;
+var party = 'total';
+
+// ── Maps ────────────────────────────────────────────────────────────────
+function pathFromCoords(coords, w, h) {
+  var bounds = { minLon: -125.5, maxLon: -66.5, minLat: 24.0, maxLat: 49.8 };
+  var pad = 24;
+  var scaleX = (w - 2*pad) / (bounds.maxLon - bounds.minLon);
+  var scaleY = (h - 2*pad) / (bounds.maxLat - bounds.minLat);
+  var d = '';
+  for (var i = 0; i < coords.length; i++) {
+    var lon = coords[i][0], lat = coords[i][1];
+    if (lon < bounds.minLon) lon = bounds.minLon;
+    if (lon > bounds.maxLon) lon = bounds.maxLon;
+    var x = pad + (lon - bounds.minLon) * scaleX;
+    var y = h - pad - (lat - bounds.minLat) * scaleY;
+    d += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
+  }
+  d += 'Z';
+  return d;
+}
+
+function renderMap(containerId, frame, tooltipId) {
+  var container = document.getElementById(containerId);
+  if (!container || !GEOJSON) return;
+  var cfg = PARTY_CFG[party];
+  var w = 560, h = 380;
+  var html = '<svg viewBox="0 0 ' + w + ' ' + h + '" xmlns="http://www.w3.org/2000/svg">';
+  for (var fi = 0; fi < GEOJSON.features.length; fi++) {
+    var feat = GEOJSON.features[fi];
+    var abbr = feat.properties.abbr;
+    var name = feat.properties.name;
+    var geo = feat.geometry;
+    // AK/HI excluded here — true geodetic positions would smear along the
+    // CONUS map's left edge; shown via data tooltip/per-state stats instead.
+    if (abbr === 'AK' || abbr === 'HI' || abbr === 'PR') continue;
+    var color = '#EEE';
+    var total = 0, pct = -1, dem = 0, rep = 0, npa = 0, oth = 0, mail = 0, inperson = 0;
+    if (frame && frame.c && frame.c[abbr]) {
+      var v = frame.c[abbr];
+      total = v[0]; pct = v[cfg.pctIdx]; dem = v[2]; rep = v[3]; npa = v[4]; oth = v[5];
+      mail = v[6]; inperson = v[7];
+      color = getColor(pct, party);
+    }
+    var polys = [];
+    if (geo.type === 'Polygon') { polys = [geo.coordinates[0]]; }
+    else if (geo.type === 'MultiPolygon') { for (var pi = 0; pi < geo.coordinates.length; pi++) { polys.push(geo.coordinates[pi][0]); } }
+    for (var pi2 = 0; pi2 < polys.length; pi2++) {
+      var path = pathFromCoords(polys[pi2], w, h);
+      html += '<path class="county-path' + (pct < 0 ? ' no-data' : '') + '" d="' + path + '" fill="' + color + '" data-abbr="' + abbr + '" data-total="' + total + '" data-pct="' + pct + '" data-dem="' + dem + '" data-rep="' + rep + '" data-npa="' + npa + '" data-oth="' + oth + '" data-mail="' + mail + '" data-inperson="' + inperson + '" data-name="' + name + '"/>';
+    }
+  }
+  html += '</svg>';
+  container.innerHTML = html;
+  container.querySelectorAll('.county-path').forEach(function(el) {
+    el.addEventListener('mousemove', function(e) {
+      var rect = container.getBoundingClientRect();
+      var tt = document.getElementById(tooltipId);
+      var pct = parseFloat(this.dataset.pct);
+      var pctRow = pct < 0
+        ? '<div class="tt-row"><span>% of 2022 final</span><span style="color:#DDD">no data</span></div>'
+        : '<div class="tt-row"><span>'+cfg.label+' % of final</span><span class="tt-pct" style="color:' + getColor(pct, party) + '">' + pct + '%</span></div>';
+      tt.innerHTML = '<div class="tt-name">' + this.dataset.name + '</div>'
+        + '<div class="tt-row"><span>EV+VBM</span><span>' + parseInt(this.dataset.total).toLocaleString() + '</span></div>'
+        + pctRow
+        + '<div class="tt-row"><span>Mail</span><span>' + parseInt(this.dataset.mail).toLocaleString() + '</span></div>'
+        + '<div class="tt-row"><span>Early</span><span>' + parseInt(this.dataset.inperson).toLocaleString() + '</span></div>'
+        + '<div class="tt-row"><span>Dem</span><span>' + parseInt(this.dataset.dem).toLocaleString() + '</span></div>'
+        + '<div class="tt-row"><span>Rep</span><span>' + parseInt(this.dataset.rep).toLocaleString() + '</span></div>'
+        + '<div class="tt-row"><span>NPA</span><span>' + parseInt(this.dataset.npa).toLocaleString() + '</span></div>'
+        + '<div class="tt-row"><span>Other</span><span>' + parseInt(this.dataset.oth).toLocaleString() + '</span></div>';
+      tt.style.left = (e.clientX - rect.left + 12) + 'px';
+      tt.style.top = (e.clientY - rect.top - 12) + 'px';
+      tt.classList.add('visible');
+    });
+    el.addEventListener('mouseleave', function() {
+      document.getElementById(tooltipId).classList.remove('visible');
+    });
+  });
+}
+
+// ── Stats ───────────────────────────────────────────────────────────────
+function updateStats(f22, f26) {
+  var row = document.getElementById('statsRow');
+  var cfg = PARTY_CFG[party];
+  var s22 = f22 ? f22.s : [0,0,0,0,0,0,0,0,0,0];
+  var s26 = f26 ? f26.s : [0,0,0,0,0,0,0,0,0,0];
+  var lbl = cfg.label;
+  var v22 = s22[cfg.sIdx] || 0, v26 = s26[cfg.sIdx] || 0;
+  var n22 = s22[cfg.newIdx] || 0, n26 = s26[cfg.newIdx] || 0;
+  var total22 = s22[0] || 0, total26 = s26[0] || 0;
+
+  if (party === 'total') {
+    var dP22 = (s22[2] + s22[3]) > 0 ? ((s22[2]/(s22[2]+s22[3])*100)).toFixed(1)+'%' : '-';
+    var dP26 = (s26[2] + s26[3]) > 0 ? ((s26[2]/(s26[2]+s26[3])*100)).toFixed(1)+'%' : '-';
+    var delta = v22 > 0 ? ((v26/v22-1)*100).toFixed(1)+'%' : '-';
+    row.innerHTML =
+      '<div class="stat-card"><div class="label">2022 Total EV+VBM</div><div class="value total">'+formatNum(v22)+'</div><div class="sub">+'+formatNum(n22)+' new</div></div>'
+      + '<div class="stat-card"><div class="label">2022 Dem Share</div><div class="value dem">'+dP22+'</div><div class="sub">reporting states only</div></div>'
+      + '<div class="stat-card"><div class="label">2026 Total EV+VBM</div><div class="value total">'+formatNum(v26)+'</div><div class="sub">+'+formatNum(n26)+' new</div></div>'
+      + '<div class="stat-card"><div class="label">2026 Dem Share</div><div class="value dem">'+dP26+'</div><div class="sub">reporting states only</div></div>'
+      + '<div class="stat-card delta-card"><div class="label">2026 vs 2022</div><div class="value delta">'+delta+'</div><div class="sub">same DTE comparison</div></div>';
+  } else {
+    var sh22 = total22 > 0 ? ((v22/total22)*100).toFixed(1)+'%' : '-';
+    var sh26 = total26 > 0 ? ((v26/total26)*100).toFixed(1)+'%' : '-';
+    var delta = v22 > 0 ? ((v26/v22-1)*100).toFixed(1)+'%' : '-';
+    row.innerHTML =
+      '<div class="stat-card"><div class="label">2022 '+lbl+' EV+VBM</div><div class="value '+party+'">'+formatNum(v22)+'</div><div class="sub">+'+formatNum(n22)+' new</div></div>'
+      + '<div class="stat-card"><div class="label">2022 '+lbl+' Share</div><div class="value '+party+'">'+sh22+'</div><div class="sub">reporting states only</div></div>'
+      + '<div class="stat-card"><div class="label">2026 '+lbl+' EV+VBM</div><div class="value '+party+'">'+formatNum(v26)+'</div><div class="sub">+'+formatNum(n26)+' new</div></div>'
+      + '<div class="stat-card"><div class="label">2026 '+lbl+' Share</div><div class="value '+party+'">'+sh26+'</div><div class="sub">reporting states only</div></div>'
+      + '<div class="stat-card delta-card"><div class="label">2026 vs 2022</div><div class="value delta">'+delta+'</div><div class="sub">same DTE · '+lbl+' turnout</div></div>';
+  }
+}
+
+// ── Render / controls ───────────────────────────────────────────────────
+function render(idx) {
+  var sync = FRAMES[idx];
+  if (!sync) return;
+  var f22 = sync.f22, f26 = sync.f26;
+  var displayDate = f26 ? f26.d : (f22 ? f22.d : '');
+  document.getElementById('dateDisplay').textContent = formatDate(displayDate);
+  var dte = sync.dte;
+  document.getElementById('daysToElection').textContent = dte > 1 ? dte + ' days before Election Day' : dte === 1 ? '1 day before Election Day' : dte === 0 ? 'Election Day!' : 'Final (' + Math.abs(dte) + ' days after)';
+  renderMap('mapSvg2022', f22, 'tooltip2022');
+  renderMap('mapSvg2026', f26, 'tooltip2026');
+  updateStats(f22, f26);
+  document.getElementById('dateSlider').max = FRAMES.length - 1;
+  document.getElementById('dateSlider').value = idx;
+  var cfg = PARTY_CFG[party];
+  var ref = sync.ref || [0,0,0,0,0];
+  var refTxt = party === 'total' ? 'final' : cfg.label + ' final';
+  document.getElementById('legend2022').textContent = ref[cfg.refIdx] > 0 ? ('of 2022 ' + refTxt + ' (' + formatNum(ref[cfg.refIdx]) + ')') : 'no baseline';
+  document.getElementById('legend2026').textContent = ref[cfg.refIdx] > 0 ? ('of 2022 ' + refTxt + ' (' + formatNum(ref[cfg.refIdx]) + ')') : 'no baseline';
+}
+
+function switchParty(p) {
+  party = p;
+  document.querySelectorAll('#partyTabBar .tab').forEach(function(t) {
+    t.classList.toggle('active', t.dataset.party === p);
+  });
+  document.querySelectorAll('.map-legend .gradient-bar').forEach(function(g) {
+    g.style.background = legendGradient(p);
+  });
+  if (FRAMES) render(currentIdx);
+}
+
+function init() {
+  document.getElementById('mapLoading').style.display = 'none';
+  document.getElementById('mapsContainer').style.display = 'flex';
+  document.getElementById('updatedAt').textContent = new Date().toLocaleString();
+  document.querySelectorAll('.map-legend .gradient-bar').forEach(function(g) {
+    g.style.background = legendGradient('total');
+  });
+  var playBtn = document.getElementById('playBtn');
+  var slider = document.getElementById('dateSlider');
+  playBtn.addEventListener('click', function() {
+    if (isPlaying) { clearInterval(playInterval); isPlaying = false; playBtn.textContent = 'Play'; }
+    else { if (currentIdx >= FRAMES.length - 1) currentIdx = 0; isPlaying = true; playBtn.textContent = 'Pause'; playInterval = setInterval(function() { if (currentIdx >= FRAMES.length - 1) { clearInterval(playInterval); isPlaying = false; playBtn.textContent = 'Play'; return; } currentIdx++; render(currentIdx); }, playbackSpeed); }
+  });
+  slider.addEventListener('input', function() { if (isPlaying) { clearInterval(playInterval); isPlaying = false; playBtn.textContent = 'Play'; } currentIdx = parseInt(this.value); render(currentIdx); });
+  document.querySelectorAll('.speed-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); });
+      this.classList.add('active');
+      playbackSpeed = parseInt(this.dataset.speed);
+      if (isPlaying) { clearInterval(playInterval); playInterval = setInterval(function() { if (currentIdx >= FRAMES.length - 1) { clearInterval(playInterval); isPlaying = false; playBtn.textContent = 'Play'; return; } currentIdx++; render(currentIdx); }, playbackSpeed); }
+    });
+  });
+  render(FRAMES.length - 1); // Start on most recent frame
+}
+
+// Load data from GitHub Pages with cache-buster
+fetch(DATA_URL + 'us_states.geojson?v=1').then(function(r) { return r.json(); }).then(function(geo) {
+  GEOJSON = geo;
+  return fetch(DATA_URL + 'us_comparison_frames.json?v=1').then(function(r) { return r.json(); });
+}).then(function(frames) {
+  FRAMES = frames;
+  init();
+}).catch(function(err) {
+  document.getElementById('dateDisplay').textContent = 'Connection Error';
+  document.getElementById('statsRow').innerHTML = '<div class="stat-card"><div class="label">Cannot load data from GitHub Pages</div><div class="value" style="color:#DE0100;font-size:14px">'+err.message+'</div></div>';
+});
+</script>
+</body>
+</html>
