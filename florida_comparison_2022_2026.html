@@ -62,6 +62,15 @@ body {
 .speed-btn.active { background: var(--teal); color: var(--blue-dark); border-color: var(--teal); font-weight: 700; }
 .dte-label { margin-left: auto; font-size: 11px; color: var(--text-light); font-weight: 600; }
 
+.tabs { display: flex; border-bottom: 2px solid #E8E8E8; padding: 0 4px; gap: 0; flex-wrap: wrap; }
+.tab { padding: 10px 18px; font-size: 13px; font-weight: 600; color: var(--text-light); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; user-select: none; }
+.tab:hover { color: var(--blue); }
+.tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+.tab .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+
+.party-bar { background: var(--white); border: 1px solid #E8E8E8; border-bottom: none; border-radius: 12px 12px 0 0; padding: 10px 14px 0; box-shadow: var(--shadow); }
+.party-bar .party-hint { font-size: 11px; color: var(--text-light); padding: 0 6px 6px; font-weight: 600; }
+
 .stats-row { display: flex; gap: 12px; padding: 16px 0; flex-wrap: wrap; }
 .stat-card {
   background: var(--white); border: 1px solid #E8E8E8; border-radius: 12px;
@@ -71,6 +80,8 @@ body {
 .stat-card .value { font-size: 22px; font-weight: 800; margin-top: 2px; color: var(--text); }
 .stat-card .value.dem { color: var(--blue-dem); }
 .stat-card .value.rep { color: var(--red); }
+.stat-card .value.npa { color: #2E9E9E; }
+.stat-card .value.oth { color: #B8860B; }
 .stat-card .value.total { color: var(--blue); }
 .stat-card .delta-card { border-left: 3px solid var(--yellow); }
 .stat-card .value.delta { color: var(--blue); }
@@ -99,7 +110,7 @@ body {
 .county-tooltip {
   position: absolute; background: var(--blue); color: white;
   border-radius: 8px; padding: 8px 14px; font-size: 12px;
-  pointer-events: none; opacity: 0; transition: opacity .2s; z-index: 100; max-width: 230px;
+  pointer-events: none; opacity: 0; transition: opacity .2s; z-index: 100; max-width: 240px;
   box-shadow: var(--shadow);
 }
 .county-tooltip.visible { opacity: 1; }
@@ -154,6 +165,17 @@ body {
   </label>
 </div>
 
+<div class="party-bar">
+  <div class="party-hint">Color counties by party turnout — % of that party's 2022 final</div>
+  <div class="tabs" id="partyTabBar">
+    <div class="tab active" data-party="total" onclick="switchParty('total')"><span class="dot" style="background:#0033A0"></span>Total</div>
+    <div class="tab" data-party="dem" onclick="switchParty('dem')"><span class="dot" style="background:#4A90D9"></span>Democrat</div>
+    <div class="tab" data-party="rep" onclick="switchParty('rep')"><span class="dot" style="background:#DE0100"></span>Republican</div>
+    <div class="tab" data-party="npa" onclick="switchParty('npa')"><span class="dot" style="background:#58E0E0"></span>NPA</div>
+    <div class="tab" data-party="oth" onclick="switchParty('oth')"><span class="dot" style="background:#F8D858"></span>Other</div>
+  </div>
+</div>
+
 <div class="stats-row" id="statsRow">
   <div class="stat-card"><div class="label">Loading data...</div></div>
 </div>
@@ -177,7 +199,7 @@ body {
       <span>0%</span>
       <div class="gradient-bar"></div>
       <span>100%</span>
-      <span class="pct-label" id="legend2022" style="margin-left:8px;">of county final</span>
+      <span class="pct-label" id="legend2022" style="margin-left:8px;">of 2022 final</span>
     </div>
     <div class="county-tooltip" id="tooltip2022"></div>
   </div>
@@ -188,7 +210,7 @@ body {
       <span>0%</span>
       <div class="gradient-bar"></div>
       <span>100%</span>
-      <span class="pct-label" id="legend2026" style="margin-left:8px;">of county final</span>
+      <span class="pct-label" id="legend2026" style="margin-left:8px;">of 2022 final</span>
     </div>
     <div class="county-tooltip" id="tooltip2026"></div>
   </div>
@@ -203,11 +225,30 @@ body {
 </div>
 
 <script>
-// Use hardcoded GitHub Pages URL so Wix embeds always find the data files
+// ── Config ──────────────────────────────────────────────────────────────
+// Hardcoded GitHub Pages URL so Wix embeds always find the data files
 var DATA_URL = 'https://g4itcg.github.io/voter-data/';
 
-// Heat scale matching the main turnout dashboard's early-vote map:
-// light (#EEE) → deep blue. Same scale for both years so they are directly comparable.
+// County compact layout per frame:
+//   [t, p, d, r, n, o, m, i, pd, pr, pn, po]
+//   0 t  = total EV+VBM        1 p  = total % of 2022 final
+//   2 d  = Dem votes           3 r  = Rep votes
+//   4 n  = NPA votes           5 o  = Other votes
+//   6 m  = Mail                7 i  = In-person early
+//   8 pd = Dem % of 2022 Dem final   9 pr = Rep % of 2022 Rep final
+//   10 pn = NPA % of 2022 NPA final  11 po = Other % of 2022 Other final
+// State array per frame: [total, newT, dem, rep, npa, oth, newD, newR, newN, newO]
+
+var PARTY_CFG = {
+  total: { valIdx: 0, pctIdx: 1, sIdx: 0, newIdx: 1, label: 'Total',   refIdx: 0 },
+  dem:   { valIdx: 2, pctIdx: 8, sIdx: 2, newIdx: 6, label: 'Dem',     refIdx: 1 },
+  rep:   { valIdx: 3, pctIdx: 9, sIdx: 3, newIdx: 7, label: 'Rep',     refIdx: 2 },
+  npa:   { valIdx: 4, pctIdx: 10, sIdx: 4, newIdx: 8, label: 'NPA',    refIdx: 3 },
+  oth:   { valIdx: 5, pctIdx: 11, sIdx: 5, newIdx: 9, label: 'Other',  refIdx: 4 }
+};
+
+// Heat scale — same for BOTH maps and every party, so a given shade always
+// means the same "% of 2022 final" everywhere. Light (#EEE) → deep blue.
 function getColor(pct) {
   if (!pct || pct <= 0) return '#EEE';
   var t = Math.max(0, Math.min(1, pct / 100));
@@ -229,6 +270,16 @@ function formatDate(dateStr) {
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
+// ── State ───────────────────────────────────────────────────────────────
+var GEOJSON = null;
+var FRAMES = null;
+var currentIdx = 0;
+var isPlaying = false;
+var playInterval = null;
+var playbackSpeed = 500;
+var party = 'total';
+
+// ── Maps ────────────────────────────────────────────────────────────────
 function pathFromCoords(coords, w, h) {
   var bounds = { minLon: -87.6, maxLon: -80.0, minLat: 24.4, maxLat: 31.0 };
   var padding = 20;
@@ -244,16 +295,10 @@ function pathFromCoords(coords, w, h) {
   return d;
 }
 
-var GEOJSON = null;
-var FRAMES = null;
-var currentIdx = 0;
-var isPlaying = false;
-var playInterval = null;
-var playbackSpeed = 500;
-
 function renderMap(containerId, frame, tooltipId) {
   var container = document.getElementById(containerId);
   if (!container || !GEOJSON) return;
+  var cfg = PARTY_CFG[party];
   var w = 500, h = 450;
   var html = '<svg viewBox="0 0 ' + w + ' ' + h + '" xmlns="http://www.w3.org/2000/svg">';
   for (var fi = 0; fi < GEOJSON.features.length; fi++) {
@@ -261,11 +306,12 @@ function renderMap(containerId, frame, tooltipId) {
     var fips = feat.properties.fips;
     var name = feat.properties.name;
     var geo = feat.geometry;
-    var color = '#EEE', total = 0, pct = 0;
-    var dem = 0, rep = 0, mail = 0, inperson = 0;
+    var color = '#EEE';
+    var total = 0, pct = 0, dem = 0, rep = 0, npa = 0, oth = 0, mail = 0, inperson = 0;
     if (frame && frame.c && frame.c[fips]) {
-      var d = frame.c[fips];
-      total = d[0]; pct = d[1]; dem = d[2]; rep = d[3]; mail = d[4]; inperson = d[5];
+      var v = frame.c[fips];
+      total = v[0]; pct = v[cfg.pctIdx]; dem = v[2]; rep = v[3]; npa = v[4]; oth = v[5];
+      mail = v[6]; inperson = v[7];
       color = getColor(pct);
     }
     var polys = [];
@@ -273,7 +319,7 @@ function renderMap(containerId, frame, tooltipId) {
     else if (geo.type === 'MultiPolygon') { for (var pi = 0; pi < geo.coordinates.length; pi++) { polys.push(geo.coordinates[pi][0]); } }
     for (var pi2 = 0; pi2 < polys.length; pi2++) {
       var path = pathFromCoords(polys[pi2], w, h);
-      html += '<path class="county-path" d="' + path + '" fill="' + color + '" data-fips="' + fips + '" data-total="' + total + '" data-pct="' + pct + '" data-dem="' + dem + '" data-rep="' + rep + '" data-mail="' + mail + '" data-inperson="' + inperson + '" data-name="' + name + '"/>';
+      html += '<path class="county-path" d="' + path + '" fill="' + color + '" data-fips="' + fips + '" data-total="' + total + '" data-pct="' + pct + '" data-dem="' + dem + '" data-rep="' + rep + '" data-npa="' + npa + '" data-oth="' + oth + '" data-mail="' + mail + '" data-inperson="' + inperson + '" data-name="' + name + '"/>';
     }
   }
   html += '</svg>';
@@ -284,11 +330,13 @@ function renderMap(containerId, frame, tooltipId) {
       var tt = document.getElementById(tooltipId);
       tt.innerHTML = '<div class="tt-name">' + this.dataset.name + '</div>'
         + '<div class="tt-row"><span>EV+VBM</span><span>' + parseInt(this.dataset.total).toLocaleString() + '</span></div>'
-        + '<div class="tt-row"><span>% of final</span><span class="tt-pct" style="color:' + getColor(parseFloat(this.dataset.pct)) + '">' + this.dataset.pct + '%</span></div>'
+        + '<div class="tt-row"><span>'+cfg.label+' % of final</span><span class="tt-pct" style="color:' + getColor(parseFloat(this.dataset.pct)) + '">' + this.dataset.pct + '%</span></div>'
         + '<div class="tt-row"><span>Mail</span><span>' + parseInt(this.dataset.mail).toLocaleString() + '</span></div>'
         + '<div class="tt-row"><span>Early</span><span>' + parseInt(this.dataset.inperson).toLocaleString() + '</span></div>'
         + '<div class="tt-row"><span>Dem</span><span>' + parseInt(this.dataset.dem).toLocaleString() + '</span></div>'
-        + '<div class="tt-row"><span>Rep</span><span>' + parseInt(this.dataset.rep).toLocaleString() + '</span></div>';
+        + '<div class="tt-row"><span>Rep</span><span>' + parseInt(this.dataset.rep).toLocaleString() + '</span></div>'
+        + '<div class="tt-row"><span>NPA</span><span>' + parseInt(this.dataset.npa).toLocaleString() + '</span></div>'
+        + '<div class="tt-row"><span>Other</span><span>' + parseInt(this.dataset.oth).toLocaleString() + '</span></div>';
       tt.style.left = (e.clientX - rect.left + 12) + 'px';
       tt.style.top = (e.clientY - rect.top - 12) + 'px';
       tt.classList.add('visible');
@@ -299,21 +347,42 @@ function renderMap(containerId, frame, tooltipId) {
   });
 }
 
+// ── Stats ───────────────────────────────────────────────────────────────
 function updateStats(f22, f26) {
   var row = document.getElementById('statsRow');
-  var s22 = f22 ? f22.s : [0,0,0,0];
-  var s26 = f26 ? f26.s : [0,0,0,0];
-  var dP22 = s22[0] ? ((s22[2]/(s22[2]+s22[3])*100)).toFixed(1)+'%' : '-';
-  var dP26 = s26[0] ? ((s26[2]/(s26[2]+s26[3])*100)).toFixed(1)+'%' : '-';
-  var delta = s26[0] > 0 && s22[0] > 0 ? ((s26[0]/s22[0]-1)*100).toFixed(1)+'%' : '-';
-  row.innerHTML =
-    '<div class="stat-card"><div class="label">2022 Total EV+VBM</div><div class="value total">'+formatNum(s22[0])+'</div><div class="sub">+'+formatNum(s22[1])+' new</div></div>'
-    + '<div class="stat-card"><div class="label">2022 Dem Share</div><div class="value dem">'+dP22+'</div><div class="sub">D '+formatNum(s22[2])+' · R '+formatNum(s22[3])+'</div></div>'
-    + '<div class="stat-card"><div class="label">2026 Total EV+VBM</div><div class="value total">'+formatNum(s26[0])+'</div><div class="sub">+'+formatNum(s26[1])+' new</div></div>'
-    + '<div class="stat-card"><div class="label">2026 Dem Share</div><div class="value dem">'+dP26+'</div><div class="sub">D '+formatNum(s26[2])+' · R '+formatNum(s26[3])+'</div></div>'
-    + '<div class="stat-card delta-card"><div class="label">2026 vs 2022</div><div class="value delta">'+delta+'</div><div class="sub">same DTE comparison</div></div>';
+  var cfg = PARTY_CFG[party];
+  var s22 = f22 ? f22.s : [0,0,0,0,0,0,0,0,0,0];
+  var s26 = f26 ? f26.s : [0,0,0,0,0,0,0,0,0,0];
+  var lbl = cfg.label;
+  var v22 = s22[cfg.sIdx] || 0, v26 = s26[cfg.sIdx] || 0;
+  var n22 = s22[cfg.newIdx] || 0, n26 = s26[cfg.newIdx] || 0;
+  var total22 = s22[0] || 0, total26 = s26[0] || 0;
+
+  if (party === 'total') {
+    // Two-party Dem share (matches main dashboard convention)
+    var dP22 = (s22[2] + s22[3]) > 0 ? ((s22[2]/(s22[2]+s22[3])*100)).toFixed(1)+'%' : '-';
+    var dP26 = (s26[2] + s26[3]) > 0 ? ((s26[2]/(s26[2]+s26[3])*100)).toFixed(1)+'%' : '-';
+    var delta = v22 > 0 ? ((v26/v22-1)*100).toFixed(1)+'%' : '-';
+    row.innerHTML =
+      '<div class="stat-card"><div class="label">2022 Total EV+VBM</div><div class="value total">'+formatNum(v22)+'</div><div class="sub">+'+formatNum(n22)+' new</div></div>'
+      + '<div class="stat-card"><div class="label">2022 Dem Share</div><div class="value dem">'+dP22+'</div><div class="sub">D '+formatNum(s22[2])+' · R '+formatNum(s22[3])+'</div></div>'
+      + '<div class="stat-card"><div class="label">2026 Total EV+VBM</div><div class="value total">'+formatNum(v26)+'</div><div class="sub">+'+formatNum(n26)+' new</div></div>'
+      + '<div class="stat-card"><div class="label">2026 Dem Share</div><div class="value dem">'+dP26+'</div><div class="sub">D '+formatNum(s26[2])+' · R '+formatNum(s26[3])+'</div></div>'
+      + '<div class="stat-card delta-card"><div class="label">2026 vs 2022</div><div class="value delta">'+delta+'</div><div class="sub">same DTE comparison</div></div>';
+  } else {
+    var sh22 = total22 > 0 ? ((v22/total22)*100).toFixed(1)+'%' : '-';
+    var sh26 = total26 > 0 ? ((v26/total26)*100).toFixed(1)+'%' : '-';
+    var delta = v22 > 0 ? ((v26/v22-1)*100).toFixed(1)+'%' : '-';
+    row.innerHTML =
+      '<div class="stat-card"><div class="label">2022 '+lbl+' EV+VBM</div><div class="value '+party+'">'+formatNum(v22)+'</div><div class="sub">+'+formatNum(n22)+' new</div></div>'
+      + '<div class="stat-card"><div class="label">2022 '+lbl+' Share</div><div class="value '+party+'">'+sh22+'</div><div class="sub">of '+formatNum(total22)+' all ballots</div></div>'
+      + '<div class="stat-card"><div class="label">2026 '+lbl+' EV+VBM</div><div class="value '+party+'">'+formatNum(v26)+'</div><div class="sub">+'+formatNum(n26)+' new</div></div>'
+      + '<div class="stat-card"><div class="label">2026 '+lbl+' Share</div><div class="value '+party+'">'+sh26+'</div><div class="sub">of '+formatNum(total26)+' all ballots</div></div>'
+      + '<div class="stat-card delta-card"><div class="label">2026 vs 2022</div><div class="value delta">'+delta+'</div><div class="sub">same DTE · '+lbl+' turnout</div></div>';
+  }
 }
 
+// ── Render / controls ───────────────────────────────────────────────────
 function render(idx) {
   var sync = FRAMES[idx];
   if (!sync) return;
@@ -327,8 +396,19 @@ function render(idx) {
   updateStats(f22, f26);
   document.getElementById('dateSlider').max = FRAMES.length - 1;
   document.getElementById('dateSlider').value = idx;
-  document.getElementById('legend2022').textContent = f22 ? 'of 2022 final (' + formatNum(f22.s[0]) + ')' : 'no data';
-  document.getElementById('legend2026').textContent = f26 ? 'of 2026 final (' + formatNum(f26.s[0]) + ')' : 'no data';
+  var cfg = PARTY_CFG[party];
+  var ref = sync.ref || [0,0,0,0,0];
+  var refTxt = party === 'total' ? 'final' : cfg.label + ' final';
+  document.getElementById('legend2022').textContent = f22 ? 'of 2022 ' + refTxt + ' (' + formatNum(ref[cfg.refIdx]) + ')' : 'no data';
+  document.getElementById('legend2026').textContent = f26 ? 'of 2022 ' + refTxt + ' (' + formatNum(ref[cfg.refIdx]) + ')' : 'no data';
+}
+
+function switchParty(p) {
+  party = p;
+  document.querySelectorAll('#partyTabBar .tab').forEach(function(t) {
+    t.classList.toggle('active', t.dataset.party === p);
+  });
+  if (FRAMES) render(currentIdx);
 }
 
 function init() {
@@ -354,9 +434,9 @@ function init() {
 }
 
 // Load data from GitHub Pages with cache-buster
-fetch(DATA_URL + 'fl_counties.geojson?v=3').then(function(r) { return r.json(); }).then(function(geo) {
+fetch(DATA_URL + 'fl_counties.geojson?v=4').then(function(r) { return r.json(); }).then(function(geo) {
   GEOJSON = geo;
-  return fetch(DATA_URL + 'fl_comparison_frames.json?v=3').then(function(r) { return r.json(); });
+  return fetch(DATA_URL + 'fl_comparison_frames.json?v=4').then(function(r) { return r.json(); });
 }).then(function(frames) {
   FRAMES = frames;
   init();
