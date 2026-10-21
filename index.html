@@ -51,7 +51,8 @@
 
   .map-wrap { padding: 16px 20px; text-align: center; position: relative; }
   .map-wrap svg { width: 100%; max-width: 700px; height: auto; display: block; margin: 0 auto; }
-  .map-wrap .tooltip { position: absolute; background: var(--blue); color: white; padding: 8px 14px; border-radius: 8px; font-size: 13px; box-shadow: var(--shadow); pointer-events: none; display: none; z-index: 100; white-space: nowrap; }
+  .map-wrap .tooltip { position: absolute; background: var(--blue); color: white; padding: 8px 14px; border-radius: 8px; font-size: 13px; box-shadow: var(--shadow); pointer-events: none; display: none; z-index: 100; white-space: nowrap; max-width: 90vw; word-break: keep-all; }
+  @media (max-width: 600px) { .map-wrap .tooltip { font-size: 11px; padding: 6px 10px; white-space: normal; max-width: 85vw; } }
   .map-wrap .legend { display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 11px; color: var(--text-light); margin-top: 8px; }
   .map-wrap .legend .grad { width: 120px; height: 10px; border-radius: 5px; background: linear-gradient(to right, var(--red), #EBEBEB, var(--blue-dem)); }
   .map-wrap .legend .grad-early { width: 120px; height: 10px; border-radius: 5px; background: linear-gradient(to right, #EEE, #4A90D9, #0B2D66); }
@@ -189,7 +190,7 @@
       <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px;">Daily Turnout Advantage</div>
       <div style="font-size:10px;color:var(--text-light);margin-bottom:6px;">Single-day margin (new ballots each day: Dem − Rep). Below zero = Rep leads · hover for details</div>
       <svg id="marginTrendSvg" viewBox="0 0 700 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;display:block;margin:0 auto;"></svg>
-      <div class="tooltip" id="marginTooltip" style="display:none;position:absolute;left:50%;top:8px;transform:translateX(-50%);background:#222;color:#fff;padding:5px 10px;border-radius:6px;font-size:11px;pointer-events:none;white-space:nowrap;z-index:10;"></div>
+      <div class="tooltip" id="marginTooltip" style="display:none;position:absolute;left:50%;top:8px;transform:translateX(-50%);background:#222;color:#fff;padding:5px 10px;border-radius:6px;font-size:11px;pointer-events:none;white-space:nowrap;z-index:10;max-width:90%;word-wrap:break-word;"></div>
     </div>
   </div>
 
@@ -766,7 +767,7 @@ function buildMap() {
       tip.style.left = '50%';
       tip.style.top = '10px';
       tip.style.transform = 'translateX(-50%)';
-      tip.innerHTML = `<b>${p.name}</b> &nbsp; Total ${fmt(cd.total)} &nbsp; Dem ${fmt(cd.dem)} &nbsp; Rep ${fmt(cd.rep)} &nbsp; NPA ${fmt(cd.npa)} &nbsp; Other ${fmt(cd.other)} &nbsp; <b>${leadStr}</b>`;
+      tip.innerHTML = `<b>${p.name}</b> &nbsp; Total ${fmt(cd.total)}<br>Dem ${fmt(cd.dem)} &nbsp; Rep ${fmt(cd.rep)} &nbsp; NPA ${fmt(cd.npa)} &nbsp; Other ${fmt(cd.other)}<br><b>${leadStr}</b>`;
       el.style.strokeWidth = '1.5'; el.style.stroke = '#222';
     });
     el.addEventListener('mouseleave', e => {
@@ -786,7 +787,7 @@ function buildMap() {
         tip.style.left = '50%';
         tip.style.top = '10px';
         tip.style.transform = 'translateX(-50%)';
-        tip.innerHTML = `<b>${p.name}</b> &nbsp; Total ${fmt(cd.total)} &nbsp; Dem ${fmt(cd.dem)} &nbsp; Rep ${fmt(cd.rep)} &nbsp; NPA ${fmt(cd.npa)} &nbsp; Other ${fmt(cd.other)} &nbsp; <b>${leadStr}</b>`;
+        tip.innerHTML = `<b>${p.name}</b> &nbsp; Total ${fmt(cd.total)}<br>Dem ${fmt(cd.dem)} &nbsp; Rep ${fmt(cd.rep)} &nbsp; NPA ${fmt(cd.npa)} &nbsp; Other ${fmt(cd.other)}<br><b>${leadStr}</b>`;
       } else {
         this.style.strokeWidth = '0.4'; this.style.stroke = '#555';
         tip.style.display = 'none';
@@ -819,7 +820,7 @@ function buildMap() {
       earlyTip.style.left = '50%';
       earlyTip.style.top = '10px';
       earlyTip.style.transform = 'translateX(-50%)';
-      earlyTip.innerHTML = `<b>${p.name}</b> &nbsp; Early ${fmt(cd.total||0)} &nbsp; Dem ${fmt(cd.dem||0)} &nbsp; Rep ${fmt(cd.rep||0)} &nbsp; NPA ${fmt(cd.npa||0)} &nbsp; Other ${fmt(cd.other||0)}`;
+      earlyTip.innerHTML = `<b>${p.name}</b> &nbsp; Early ${fmt(cd.total||0)}<br>Dem ${fmt(cd.dem||0)} &nbsp; Rep ${fmt(cd.rep||0)} &nbsp; NPA ${fmt(cd.npa||0)} &nbsp; Other ${fmt(cd.other||0)}`;
       el.style.strokeWidth = '1.5'; el.style.stroke = '#222';
     });
     el.addEventListener('mouseleave', e => {
@@ -837,7 +838,7 @@ function buildMap() {
         earlyTip.style.left = '50%';
         earlyTip.style.top = '10px';
         earlyTip.style.transform = 'translateX(-50%)';
-        earlyTip.innerHTML = `<b>${p.name}</b> &nbsp; Early ${fmt(cd.total||0)} &nbsp; Dem ${fmt(cd.dem||0)} &nbsp; Rep ${fmt(cd.rep||0)} &nbsp; NPA ${fmt(cd.npa||0)} &nbsp; Other ${fmt(cd.other||0)}`;
+        earlyTip.innerHTML = `<b>${p.name}</b> &nbsp; Early ${fmt(cd.total||0)}<br>Dem ${fmt(cd.dem||0)} &nbsp; Rep ${fmt(cd.rep||0)} &nbsp; NPA ${fmt(cd.npa||0)} &nbsp; Other ${fmt(cd.other||0)}`;
       } else {
         earlyTip.style.display = 'none';
       }
