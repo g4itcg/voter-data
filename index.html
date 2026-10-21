@@ -772,8 +772,34 @@ function buildMap() {
     el.addEventListener('mouseleave', e => {
       tip.style.display = 'none';
       el.style.strokeWidth = '0.4'; el.style.stroke = '#555';
+      el.classList.remove('tapped');
+    });
+    // Mobile: tap to toggle tooltip
+    el.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const isOpen = this.classList.toggle('tapped');
+      if (isOpen) {
+        const cd = data.by_county?.[p.name]?.[activeTab]||{};
+        const lead = (cd.dem||0) - (cd.rep||0);
+        const leadStr = lead >= 0 ? `Dem +${fmt(lead)}` : `Rep +${fmt(-lead)}`;
+        tip.style.display = 'block';
+        tip.style.left = '50%';
+        tip.style.top = '10px';
+        tip.style.transform = 'translateX(-50%)';
+        tip.innerHTML = `<b>${p.name}</b> &nbsp; Total ${fmt(cd.total)} &nbsp; Dem ${fmt(cd.dem)} &nbsp; Rep ${fmt(cd.rep)} &nbsp; NPA ${fmt(cd.npa)} &nbsp; Other ${fmt(cd.other)} &nbsp; <b>${leadStr}</b>`;
+      } else {
+        this.style.strokeWidth = '0.4'; this.style.stroke = '#555';
+        tip.style.display = 'none';
+      }
     });
     svg.appendChild(el);
+  });
+  // Tap outside closes tooltip
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.map-wrap')) {
+      document.querySelectorAll('#countyGroup polygon.tapped').forEach(p => { p.classList.remove('tapped'); });
+      tip.style.display = 'none';
+    }
   });
 
   // ---- Build the second map (Early Voting / Election Day) ----
@@ -799,8 +825,30 @@ function buildMap() {
     el.addEventListener('mouseleave', e => {
       earlyTip.style.display = 'none';
       el.style.strokeWidth = '0.4'; el.style.stroke = '#555';
+      el.classList.remove('tapped');
+    });
+    // Mobile: tap to toggle
+    el.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const isOpen = this.classList.toggle('tapped');
+      if (isOpen) {
+        const cd = data.by_county?.[p.name]?.[earlyTab]||{};
+        earlyTip.style.display = 'block';
+        earlyTip.style.left = '50%';
+        earlyTip.style.top = '10px';
+        earlyTip.style.transform = 'translateX(-50%)';
+        earlyTip.innerHTML = `<b>${p.name}</b> &nbsp; Early ${fmt(cd.total||0)} &nbsp; Dem ${fmt(cd.dem||0)} &nbsp; Rep ${fmt(cd.rep||0)} &nbsp; NPA ${fmt(cd.npa||0)} &nbsp; Other ${fmt(cd.other||0)}`;
+      } else {
+        earlyTip.style.display = 'none';
+      }
     });
     earlySvg.appendChild(el);
+  });
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.map-wrap')) {
+      document.querySelectorAll('#earlyGroup polygon.tapped').forEach(p => { p.classList.remove('tapped'); });
+      earlyTip.style.display = 'none';
+    }
   });
   styleEarlyMap();
 
