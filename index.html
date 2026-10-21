@@ -743,7 +743,7 @@ function buildMap() {
         const y = SVG_H - ((c[1] - minLat) * scale + padding);
         return `${x},${y}`;
       });
-      paths.push({name: f.properties.NAME, d: pts.join(' ')});
+      paths.push({name: f.properties.name || f.properties.NAME, d: pts.join(' ')});
     });
   });
 
