@@ -26,9 +26,7 @@
   .brand-strip .s-teal { background: #58E0E0; }
   .container { max-width: 1200px; margin: 0 auto; padding: 20px 16px; }
 
-  .cards-grid { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
-  .cards-row { display: flex; gap: 14px; }
-  .cards-row .card { flex: 1; min-width: 0; }
+  .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
   .card { background: var(--white); border-radius: 12px; padding: 16px; box-shadow: var(--shadow); text-align: center; }
   .card .label { font-size: 11px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
   .card .value { font-size: 24px; font-weight: 700; margin-top: 4px; }
@@ -101,9 +99,6 @@
   .turnout-table td { font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
   .turnout-table td:first-child { font-weight: 700; font-size: 13px; color: var(--text); }
   .turnout-table tr:last-child td { background: #F0F2F5; font-weight: 700; }
-  /* Turnout by Party: center party numbers under their column headers */
-  #turnoutPctTable th, #turnoutPctTable td { text-align: center; }
-  #turnoutPctTable th:first-child, #turnoutPctTable td:first-child { text-align: left; }
 
   .main-tabs { display: flex; justify-content: center; border-bottom: 2px solid #E8E8E8; margin-bottom: 20px; gap: 0; }
   .main-tabs .tab { padding: 12px 28px; font-size: 14px; font-weight: 700; color: var(--text-light); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; user-select: none; }
@@ -135,8 +130,7 @@
 
   @media (max-width: 768px) {
     .header h1 { font-size: 22px; }
-    .cards-row { flex-wrap: wrap; }
-    .cards-row .card { flex: 1 1 30%; min-width: 130px; }
+    .cards-grid { grid-template-columns: repeat(2, 1fr); }
     .tab { padding: 8px 12px; font-size: 12px; }
     .map-wrap svg { max-width: 100%; }
   }
@@ -171,11 +165,7 @@
     <span class="margin-detail" id="marginDetail"></span>
   </div>
 
-  <div class="cards-grid" id="cardsGrid">
-    <div class="cards-row" id="cardsRowVoting"></div>
-    <div class="cards-row" id="cardsRowVbm"></div>
-    <div class="cards-row" id="cardsRowParties"></div>
-  </div>
+  <div class="cards-grid" id="cardsGrid"></div>
 
   <!-- FreshTake-style: Statewide Turnout by Party with Numbers/Percent toggle -->
   <div class="section-card">
@@ -187,7 +177,7 @@
       </span>
     </h2>
     <div class="table-wrap" style="padding-top:8px;">
-      <table class="turnout-table" id="turnoutPctTable">
+      <table class="turnout-table">
         <thead><tr>
           <th style="width:24%">Category</th><th class="num" style="width:16%">Dem</th><th class="num" style="width:16%">Rep</th><th class="num" style="width:14%">NPA</th><th class="num" style="width:13%">Oth</th><th class="num" style="width:17%">Total</th>
         </tr></thead>
@@ -195,13 +185,17 @@
       </table>
       <div style="font-size:11px;color:var(--text-light);padding-top:8px;" id="regAsOf"></div>
     </div>
+    <div style="margin-top:8px;border-top:1px solid #eee;padding:12px 12px 0;text-align:center;">
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px;">Daily Turnout Advantage</div>
+      <div style="font-size:10px;color:var(--text-light);margin-bottom:6px;">Dem − Rep ballot margin over time (below zero = Rep leads)</div>
+      <svg id="marginTrendSvg" viewBox="0 0 700 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;display:block;margin:0 auto;"></svg>
+    </div>
   </div>
 
-  <!-- Main view switcher: VBM vs Early/Election Day vs 2022/2026 Comparison -->
+  <!-- Main view switcher: VBM vs Early/Election Day -->
   <div class="main-tabs">
     <div class="tab active" data-main="vbm" onclick="switchMain('vbm')">📬 Vote by Mail</div>
     <div class="tab" data-main="early" onclick="switchMain('early')">🏛️ Early &amp; Election Day</div>
-    <div class="tab" data-main="compare" onclick="switchMain('compare')">⚖️ 2022 vs 2026</div>
   </div>
 
   <div id="mainVbm">
@@ -342,19 +336,6 @@
   </div>
   </div>  <!-- end #mainEarly -->
 
-  <div id="mainCompare" style="display:none;">
-    <div class="section-card">
-      <div style="padding:16px 20px 4px;">
-        <h2 style="padding:0;margin-bottom:6px;">⚖️ 2022 vs 2026 Comparison</h2>
-        <div style="font-size:12px;color:var(--text-light);">Animated county heat map comparing Vote-by-Mail + Early In-Person turnout, day-for-day across cycles. Drag the slider or press Play.</div>
-      </div>
-      <div id="compareEmbedWrap" style="padding:0 16px 16px;"></div>
-      <div style="padding:0 20px 16px;">
-        <a href="us_comparison_2022_2026.html" target="_blank" style="display:inline-block;background:#0033A0;color:#fff;text-decoration:none;font-weight:600;font-size:13px;padding:8px 18px;border-radius:6px;margin-bottom:14px;">🇺🇸 View National 2022 vs 2026 Comparison →</a>
-      </div>
-    </div>
-  </div>
-
   <div class="brand-footer">
     Powered by <span class="logo-text">FLORIDIANS FOR A BETTER FUTURE</span> · 
     Data from <a href="https://countyfilesvbm-ev.floridados.gov/VoteByMailEarlyVotingReports/PublicStats" target="_blank" style="color:var(--blue)">Florida Division of Elections</a>
@@ -362,9 +343,9 @@
 </div>
 
 <script>
-const DATA_URL = 'https://g4itcg.github.io/voter-data/voter_data.json';
-const GEO_URL = 'https://g4itcg.github.io/voter-data/fl_counties.geojson';
-const HISTORY_URL = 'https://g4itcg.github.io/voter-data/vbm_history.json';
+const DATA_URL = 'https://raw.githubusercontent.com/g4itcg/voter-data/main/voter_data.json';
+const GEO_URL = 'https://raw.githubusercontent.com/g4itcg/voter-data/main/fl_counties.geojson';
+const HISTORY_URL = 'https://raw.githubusercontent.com/g4itcg/voter-data/main/vbm_history.json';
 
 let data = null, geojson = null, history = null, activeTab = 'vbm_voted';
 const DEM_COLOR = '#4A90D9', REP_COLOR = '#DE0100';
@@ -398,6 +379,7 @@ async function init() {
     renderTrend();
     renderDailyNew();
     renderDailyTable();
+    renderMarginTrend();
     switchTab('vbm_voted');
   } catch(e) { document.getElementById('statusText').textContent = '⚠️ Error loading'; console.error(e); }
 }
@@ -491,6 +473,72 @@ function renderDailyTable() {
       <td class="oth">${fmt(r.cells.oth)}</td>
       <td class="total">${fmt(r.total)}</td>
     </tr>`).join('');
+}
+
+function renderMarginTrend() {
+  const svgEl = document.getElementById('marginTrendSvg');
+  if (!svgEl || !history || history.length < 3) return;
+  
+  // Daily margins (Dem - Rep) from history
+  const margins = [];
+  for (let i = 1; i < history.length; i++) {
+    const prev = history[i-1], cur = history[i];
+    const dem = (cur.dem||0) - (prev.dem||0);
+    const rep = (cur.rep||0) - (prev.rep||0);
+    margins.push({label: cur.date.slice(5), m: dem - rep});
+  }
+  
+  const vals = margins.map(p => p.m);
+  const maxAbs = Math.max(...vals.map(Math.abs), 1000);
+  const W = 700, H = 160, padL = 50, padR = 10, padT = 14, padB = 20;
+  const gw = W - padL - padR, gh = H - padT - padB;
+  const x = i => padL + (i / (margins.length - 1)) * gw;
+  const y = v => H/2 + (-v / maxAbs) * (gh/2);
+  
+  let out = `<line x1="${padL}" y1="${H/2}" x2="${padL+gw}" y2="${H/2}" stroke="#CCC" stroke-width="1"/>`;
+  const mid = H/2;
+  
+  // Area under curve (blue above zero, red below)
+  for (let i = 0; i < margins.length - 1; i++) {
+    const x1 = x(i), x2 = x(i+1);
+    const y1 = y(margins[i].m), y2 = y(margins[i+1].m);
+    if (margins[i].m >= 0 && margins[i+1].m >= 0) {
+      const top = Math.min(y1, y2), hgt = Math.max(y1, y2) - top;
+      out += `<rect x="${x1}" y="${top}" width="${x2-x1}" height="${hgt}" fill="#4A90D9" fill-opacity="0.18"/>`;
+    } else if (margins[i].m <= 0 && margins[i+1].m <= 0) {
+      const top = Math.min(y1, y2), hgt = Math.max(y1, y2) - top;
+      out += `<rect x="${x1}" y="${Math.max(y1,y2)}" width="${x2-x1}" height="${hgt}" fill="#DE0100" fill-opacity="0.18"/>`;
+    } else {
+      // Crossing zero: split segment at the zero crossing
+      const t = -margins[i].m / (margins[i+1].m - margins[i].m);
+      const xcross = x1 + t * (x2 - x1);
+      const h1 = Math.abs(y1 - mid), h2 = Math.abs(y2 - mid);
+      const w1 = xcross - x1, w2 = x2 - xcross;
+      if (w1 > 0 && h1 > 0)
+        out += `<rect x="${x1}" y="${margins[i].m>=0?y1:mid}" width="${w1}" height="${h1}" fill="#${margins[i].m>=0?'4A90D9':'DE0100'}" fill-opacity="0.18"/>`;
+      if (w2 > 0 && h2 > 0)
+        out += `<rect x="${xcross}" y="${margins[i+1].m>=0?Math.min(y1,y2):mid}" width="${w2}" height="${h2}" fill="#${margins[i+1].m>=0?'4A90D9':'DE0100'}" fill-opacity="0.18"/>`;
+    }
+  }
+  
+  // Trend line
+  const pts = margins.map((p,i) => `${x(i)},${y(p.m)}`).join(' ');
+  out += `<polyline points="${pts}" fill="none" stroke="#333" stroke-width="2" stroke-linejoin="round"/>`;
+  
+  // Latest point label
+  const last = margins[margins.length-1];
+  const lastX = x(margins.length-1), lastY = y(last.m);
+  const lastLabel = `${last.m>=0?'D+':'R+'}${fmt(Math.abs(last.m))}`;
+  out += `<circle cx="${lastX}" cy="${lastY}" r="3.5" fill="${last.m>=0?'#4A90D9':'#DE0100'}"/>`;
+  out += `<text x="${Math.min(lastX-8, W-90)}" y="${lastY-8}" font-size="11" font-weight="700" fill="#333">${lastLabel}</text>`;
+  
+  // Date labels
+  const labelIdx = [0, Math.floor((margins.length-1)/3), Math.floor((margins.length-1)*2/3), margins.length-1];
+  labelIdx.forEach(i => {
+    out += `<text x="${x(i)}" y="${H-3}" font-size="9" fill="#999" text-anchor="middle">${margins[i].label}</text>`;
+  });
+  
+  svgEl.innerHTML = out;
 }
 
 function renderDailyNew() {
@@ -616,28 +664,17 @@ function toggleView(v) {
 
 function renderCards() {
   const sw = data.statewide;
-  const card = c => `<div class="card"><div class="label">${c.l}</div><div class="value ${c.c}">${c.v}</div><div class="sub">${c.s||''}</div></div>`;
-
-  // Row 1 — Voting methods, on their own line
-  document.getElementById('cardsRowVoting').innerHTML = [
+  document.getElementById('cardsGrid').innerHTML = [
     {l:'🗳️ Election Day', v:fmt(sw.election_day?.total), c:'total', s:'Nov 3, 2026'},
     {l:'Early In-Person', v:fmt(sw.early_voted?.total), c:'early', s:sw.early_voted?.total?'voted':'Not yet started'},
-  ].map(card).join('');
-
-  // Row 2 — Vote by Mail
-  document.getElementById('cardsRowVbm').innerHTML = [
     {l:'VBM Provided', v:fmt(sw.vbm_provided?.total), c:'total', s:`Dem ${fmt(sw.vbm_provided?.dem)} · Rep ${fmt(sw.vbm_provided?.rep)}`},
     {l:'VBM Returned', v:fmt(sw.vbm_voted?.total), c:'total', s:`${sw.vbm_return_rate||0}% return rate`},
     {l:'VBM Outstanding', v:fmt(sw.vbm_outstanding), c:'total', s:'awaiting return'},
-  ].map(card).join('');
-
-  // Row 3 — Party breakdown
-  document.getElementById('cardsRowParties').innerHTML = [
     {l:'Dem VBM', v:fmt(sw.vbm_voted?.dem), c:'dem'},
     {l:'Rep VBM', v:fmt(sw.vbm_voted?.rep), c:'rep'},
     {l:'NPA VBM', v:fmt(sw.vbm_voted?.npa), c:'npa'},
     {l:'Other VBM', v:fmt(sw.vbm_voted?.other), c:'other'},
-  ].map(card).join('');
+  ].map(c => `<div class="card"><div class="label">${c.l}</div><div class="value ${c.c}">${c.v}</div><div class="sub">${c.s||''}</div></div>`).join('');
   
   // Margin banner — use COMBINED totals (VBM + Early) when early votes exist
   const banner = document.getElementById('marginBanner');
@@ -690,7 +727,7 @@ function buildMap() {
         const y = SVG_H - ((c[1] - minLat) * scale + padding);
         return `${x},${y}`;
       });
-      paths.push({name: f.properties.name, d: pts.join(' ')});
+      paths.push({name: f.properties.NAME, d: pts.join(' ')});
     });
   });
 
@@ -857,23 +894,7 @@ function switchMain(which) {
   document.querySelectorAll('.main-tabs .tab').forEach(t => t.classList.toggle('active', t.dataset.main===which));
   document.getElementById('mainVbm').style.display = which === 'vbm' ? 'block' : 'none';
   document.getElementById('mainEarly').style.display = which === 'early' ? 'block' : 'none';
-  document.getElementById('mainCompare').style.display = which === 'compare' ? 'block' : 'none';
-  if (which === 'compare') {
-    // Lazily embed the standalone 2022/2026 comparison dashboard (same-origin,
-    // GitHub Pages doesn't send X-Frame-Options, so iframe embed works)
-    const wrap = document.getElementById('compareEmbedWrap');
-    if (wrap && !wrap.querySelector('iframe')) {
-      const iframe = document.createElement('iframe');
-      iframe.src = 'florida_comparison_2022_2026.html';
-      iframe.style.width = '100%';
-      iframe.style.height = '1020px';
-      iframe.style.border = '1px solid #E8E8E8';
-      iframe.style.borderRadius = '8px';
-      iframe.style.background = '#0d1117';
-      iframe.setAttribute('scrolling', 'yes');
-      wrap.appendChild(iframe);
-    }
-  } else if (which === 'early') {
+  if (which === 'early') {
     if (geojson) styleEarlyMap();
     renderEarlyTable();
   } else {
