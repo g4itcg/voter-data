@@ -60,16 +60,21 @@ run(["git", "commit", "--author", "Jarvis <jarvis.green.net@gmail.com>",
     REPO_DIR)
 
 # 6. Push with retry on race (concurrent push from another cron instance)
-MAX_ATTEMPTS = 3
+import time
+MAX_ATTEMPTS = 5
 for attempt in range(1, MAX_ATTEMPTS + 1):
+    # Fetch latest remote refs before push to avoid stale expected-SHA rejection
+    run(["git", "fetch", "origin"], REPO_DIR)
     push_result = run(["git", "push", "origin", "main"], REPO_DIR)
     if push_result.returncode == 0:
         print("✅ Pushed to GitHub successfully")
         sys.exit(0)
-    # Race condition — remote has new commits; rebase and retry
-    if "cannot lock ref" in push_result.stderr or "fetch first" in push_result.stderr:
-        print(f"⚠️  Remote has diverged (race), rebasing (attempt {attempt}/{MAX_ATTEMPTS})...")
+    # Race condition — remote has new commits (concurrent cron jobs); rebase and retry
+    if "cannot lock ref" in push_result.stderr or "fetch first" in push_result.stderr or "[rejected]" in push_result.stderr:
+        wait = 5 + attempt * 3  # backoff: 8s, 11s, 14s, 17s, 20s
+        print(f"⚠️  Remote has diverged (race), rebasing (attempt {attempt}/{MAX_ATTEMPTS}), retrying in {wait}s...")
         run(["git", "pull", "--rebase", "origin", "main"], REPO_DIR)
+        time.sleep(wait)
     else:
         # Non-race failure; bail
         print("❌ Push failed")
