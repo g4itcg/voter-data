@@ -422,8 +422,14 @@ function renderMap(containerId, frame, tooltipId) {
         + '<div class="tt-row"><span>Rep</span><span>' + parseInt(this.dataset.rep).toLocaleString() + '</span></div>'
         + '<div class="tt-row"><span>NPA</span><span>' + parseInt(this.dataset.npa).toLocaleString() + '</span></div>'
         + '<div class="tt-row"><span>Other</span><span>' + parseInt(this.dataset.oth).toLocaleString() + '</span></div>';
-      tt.style.left = (e.clientX - rect.left + 12) + 'px';
+      tt.style.left = (e.clientX - rect.left + 14) + 'px';
       tt.style.top = (e.clientY - rect.top - 12) + 'px';
+      // Flip to left side when cursor is on the right half of the map
+      var ml = e.clientX - rect.left;
+      if (ml > rect.width / 2) {
+        var tw = tt.offsetWidth || 230;
+        tt.style.left = Math.max(4, ml - tw - 14) + 'px';
+      }
       tt.classList.add('visible');
     });
     el.addEventListener('mouseleave', function() {
