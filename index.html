@@ -726,7 +726,7 @@ let _vbmLayer = null, _earlyLayer = null;
 function buildMap() {
   try {
     const base = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    _vbmMap = L.map('vbmMap', {zoomControl: true, scrollWheelZoom: true, center: [28.5, -83], zoom: 6, renderer: L.canvas()});
+    _vbmMap = L.map('vbmMap', {zoomControl: true, scrollWheelZoom: true, center: [28.5, -83], zoom: 6});
     L.tileLayer(base, {maxZoom: 10, minZoom: 5}).addTo(_vbmMap);
     addVbmLayer();
     // Early map is lazy-initialized in switchMain
@@ -745,7 +745,7 @@ function addVbmLayer() {
     },
     onEachFeature: function(f, layer) {
       const name = f.properties.name;
-      layer.bind(`<div style="font-size:12px;min-width:170px;"><b>${name}</b><br><span id="gTip${name.replace(/[^a-z]/gi,'')}">hover</span></div>`);
+      layer.bindPopup(`<div style="font-size:12px;min-width:170px;"><b>${name}</b><br><span id="gTip${name.replace(/[^a-z]/gi,'')}">hover</span></div>`);
       layer.on('mouseover', function() {
         const d = data.by_county?.[name]?.[activeTab]||{};
         const lead = (d.dem||0)-(d.rep||0);
@@ -767,7 +767,7 @@ function addEarlyLayer() {
     },
     onEachFeature: function(f, layer) {
       const name = f.properties.name;
-      layer.bind(`<div style="font-size:12px;min-width:170px;"><b>${name}</b><br><span id="eTip${name.replace(/[^a-z]/gi,'')}">hover</span></div>`);
+      layer.bindPopup(`<div style="font-size:12px;min-width:170px;"><b>${name}</b><br><span id="eTip${name.replace(/[^a-z]/gi,'')}">hover</span></div>`);
       layer.on('mouseover', function() {
         const d = data.by_county?.[name]?.[earlyTab]||{};
         const el = document.getElementById('eTip'+name.replace(/[^a-z]/gi,''));
@@ -826,7 +826,7 @@ function switchMain(which) {
       window._earlyInit = true;
       try {
         const base = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-        _earlyMap = L.map('earlyMap', {zoomControl: true, scrollWheelZoom: true, center: [28.5, -83], zoom: 6, renderer: L.canvas()});
+        _earlyMap = L.map('earlyMap', {zoomControl: true, scrollWheelZoom: true, center: [28.5, -83], zoom: 6});
         L.tileLayer(base, {maxZoom: 10, minZoom: 5}).addTo(_earlyMap);
         addEarlyLayer();
       } catch(e) { console.error('Early map init error:', e); }
