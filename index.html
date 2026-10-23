@@ -747,7 +747,7 @@ function addCountyPoly(group, feature, polyList, type) {
   const name = feature.properties.name;
   const add = (coords) => {
     const pts = coords.map(c => [c[1], c[0]]);  // Leaflet uses [lat, lng]
-    const poly = L.polygon(pts, {color: '#999', weight: 0.6, fillColor: '#EEE', fillOpacity: 0.85}).addTo(group);
+    const poly = L.polygon(pts, {color: '#666', weight: 1.2, fillColor: '#DFDFDF', fillOpacity: 0.75}).addTo(group);
     poly._county = name;
     poly._feature = feature;
     polyList.push(poly);
@@ -777,7 +777,7 @@ function styleMap() {
     const d = data.by_county?.[poly._county]?.[activeTab]||{};
     const total = d.total||0;
     const demLead = total > 0 ? ((d.dem||0)-(d.rep||0))/total : null;
-    poly.setStyle({fillColor: getColor(demLead), fillOpacity: 0.85});
+    poly.setStyle({fillColor: getColor(demLead), fillOpacity: 0.8});
   });
 }
 
@@ -797,9 +797,9 @@ function getColor(val) {
   if (val === null || val === undefined) return '#CCC';
   const t = Math.max(-1, Math.min(1, val));
   if (t > 0) {
-    const s = t; return `rgb(${Math.round(255-s*255)},${Math.round(255-s*255)},255)`;
+    const s = Math.min(t * 1.5, 1); return `rgb(${Math.round(255-s*200)},${Math.round(255-s*180)},255)`;
   } else {
-    const s = -t; return `rgb(255,${Math.round(255-s*255)},${Math.round(255-s*255)})`;
+    const s = Math.min(-t * 1.5, 1); return `rgb(255,${Math.round(255-s*180)},${Math.round(255-s*180)})`;
   }
 }
 
