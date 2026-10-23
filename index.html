@@ -713,9 +713,7 @@ function renderCards() {
     banner.style.display = 'flex';
     document.getElementById('marginValue').textContent = isDem ? `D +${marginPct.toFixed(1)}%` : `R +${Math.abs(marginPct).toFixed(1)}%`;
     document.getElementById('marginDetail').textContent = `${isDem ? 'D+' : 'R+'}${fmt(Math.abs(margin))} votes (Mail + Early)`;
-    // Also update the returns-by-party section
-    if (typeof renderPartyBars === 'function') renderPartyBars();
-    else if (typeof switchTab === 'function') switchTab(activeTab);
+    // Map + party bars updated by init/switchTab calls
   }
 }
 
@@ -736,6 +734,7 @@ function buildMap() {
 }
 
 function addVbmLayer() {
+  if (!_vbmMap) return;
   if (_vbmLayer) _vbmMap.removeLayer(_vbmLayer);
   _vbmLayer = L.geoJSON(geojson, {
     style: function(f) {
@@ -780,6 +779,7 @@ function addEarlyLayer() {
 }
 
 function styleMap() {
+  if (!_vbmMap) return;
   addVbmLayer();
 }
 
