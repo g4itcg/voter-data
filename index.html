@@ -1000,7 +1000,7 @@ function switchTab(tab) {
     {l:'Other', v:s.other||0, r:req.other||0, c:'other'}
   ].map(p => {
     const rate = p.r ? (p.v/p.r*100) : 0;
-    const retW = (p.v/maxReq*100).toFixed(1);
+    const retW = Math.min(p.v/maxReq*100, 100).toFixed(1);
     const reqW = (p.r/maxReq*100).toFixed(1);
     const isLead = voteAdv >= 0 ? p.c==='dem' : p.c==='rep';
     return `<div class="bar-row${isLead?' lead-row':''}">
