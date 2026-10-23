@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <style>
   :root { --blue: #0033A0; --blue-dark: #002080; --yellow: #F8D858; --teal: #58E0E0; --bg: #F2F3F8; --white: #FFFFFF; --card: #FFFFFF; --text: #1A1A2E; --text-light: #6E6E85; --red: #DE0100; --blue-dem: #4A90D9; --green: #28A745; --gray: #A0AEC0; --shadow: 0 2px 12px rgba(0,0,0,0.05); --radius: 14px; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -208,9 +210,10 @@
 
   <div class="section-card">
     <div class="map-wrap">
-      <svg id="countyMapSvg" viewBox="0 0 700 600" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;">
+      <svg id="countyMapSvg" viewBox="0 0 700 600" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;display:none;">
         <g id="countyGroup"></g>
       </svg>
+      <div id="vbmMap" style="height:480px;width:100%;max-width:700px;margin:0 auto;border-radius:var(--radius);overflow:hidden;"></div>
       <div class="tooltip" id="mapTooltip"></div>
       <div class="legend">
         <span>← Rep</span>
@@ -297,9 +300,10 @@
   <div class="section-card">
     <h2 style="padding-bottom:12px;">🏛️ Early Voting &amp; Election Day</h2>
     <div class="map-wrap">
-      <svg id="earlyMapSvg" viewBox="0 0 700 600" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;">
+      <svg id="earlyMapSvg" viewBox="0 0 700 600" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;display:none;">
         <g id="earlyGroup"></g>
       </svg>
+      <div id="earlyMap" style="height:480px;width:100%;max-width:700px;margin:0 auto;border-radius:var(--radius);overflow:hidden;"></div>
       <div class="tooltip" id="earlyTooltip"></div>
       <div class="legend">
         <span>Fewer</span>
@@ -350,8 +354,6 @@ const GEO_URL = 'https://raw.githubusercontent.com/g4itcg/voter-data/main/fl_cou
 const HISTORY_URL = 'https://raw.githubusercontent.com/g4itcg/voter-data/main/vbm_history.json';
 
 let data = null, geojson = null, history = null, activeTab = 'vbm_voted';
-const DEM_COLOR = '#4A90D9', REP_COLOR = '#DE0100';
-const SVG_W = 700, SVG_H = 600;
 
 function fmt(n) { return (n||0).toLocaleString(); }
 
@@ -721,180 +723,78 @@ function renderCards() {
   }
 }
 
+// ---- Leaflet-powered maps ----
+let _vbmMap = null, _earlyMap = null;
+let _vbmPolygons = [], _earlyPolygons = [];
+
 function buildMap() {
-  // Project GeoJSON to SVG paths using simple mercator
-  const allPts = [];
-  geojson.features.forEach(f => {
-    const geo = f.geometry;
-    if (geo.type === 'Polygon') geo.coordinates[0].forEach(c => allPts.push(c));
-    else if (geo.type === 'MultiPolygon') geo.coordinates.forEach(p => p[0].forEach(c => allPts.push(c)));
-  });
-  const lngs = allPts.map(c => c[0]), lats = allPts.map(c => c[1]);
-  const minLng = Math.min(...lngs), maxLng = Math.max(...lngs), minLat = Math.min(...lats), maxLat = Math.max(...lats);
-  const padding = 15;
-  const scale = Math.min((SVG_W - padding*2) / (maxLng - minLng), (SVG_H - padding*2) / (maxLat - minLat)) * 0.95;
+  try {
+    const base = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    // VBM Map
+    _vbmMap = L.map('vbmMap', {zoomControl: true, scrollWheelZoom: true, center: [28.5, -83], zoom: 6});
+    L.tileLayer(base, {maxZoom: 10, minZoom: 5}).addTo(_vbmMap);
+    _vbmPolygons = [];
+    const vbmGroup = L.layerGroup().addTo(_vbmMap);
+    geojson.features.forEach(f => addCountyPoly(vbmGroup, f, _vbmPolygons, 'vbm'));
+    // Early map
+    _earlyMap = L.map('earlyMap', {zoomControl: true, scrollWheelZoom: true, center: [28.5, -83], zoom: 6});
+    L.tileLayer(base, {maxZoom: 10, minZoom: 5}).addTo(_earlyMap);
+    _earlyPolygons = [];
+    const earlyGroup = L.layerGroup().addTo(_earlyMap);
+    geojson.features.forEach(f => addCountyPoly(earlyGroup, f, _earlyPolygons, 'early'));
+    // Initial style
+    styleMap(); styleEarlyMap();
+  } catch(e) { console.error('Leaflet build error:', e); }
+}
 
-  const paths = [];
-  geojson.features.forEach(f => {
-    const geo = f.geometry;
-    const polys = geo.type === 'Polygon' ? [geo.coordinates[0]] : geo.type === 'MultiPolygon' ? geo.coordinates.map(p => p[0]) : [];
-    polys.forEach(ring => {
-      const pts = ring.map(c => {
-        const x = (c[0] - minLng) * scale + padding + (SVG_W - (maxLng - minLng) * scale - padding*2) / 2;
-        const y = SVG_H - ((c[1] - minLat) * scale + padding);
-        return `${x},${y}`;
-      });
-      paths.push({name: f.properties.name || f.properties.NAME, d: pts.join(' ')});
-    });
-  });
-
-  const svg = document.getElementById('countyGroup');
-  const tip = document.getElementById('mapTooltip');
-  
-  paths.forEach(p => {
-    const el = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-    el.setAttribute('points', p.d);
-    el.setAttribute('data-county', p.name);
-    el.setAttribute('class', 'county');
-    el.style.stroke = '#555';
-    el.style.strokeWidth = '0.4';
-    el.style.transition = 'fill 0.3s';
-    el.addEventListener('mouseenter', e => {
-      const cd = data.by_county?.[p.name]?.[activeTab]||{};
-      const lead = (cd.dem||0) - (cd.rep||0);
-      const leadStr = lead >= 0 ? `Dem +${fmt(lead)}` : `Rep +${fmt(-lead)}`;
-      tip.style.display = 'block';
-      tip.style.left = '50%';
-      tip.style.top = '10px';
-      tip.style.transform = 'translateX(-50%)';
-      tip.innerHTML = `<b>${p.name}</b> &nbsp; Total ${fmt(cd.total)}<br>Dem ${fmt(cd.dem)} &nbsp; Rep ${fmt(cd.rep)} &nbsp; NPA ${fmt(cd.npa)} &nbsp; Other ${fmt(cd.other)}<br><b>${leadStr}</b>`;
-      el.style.strokeWidth = '1.5'; el.style.stroke = '#222';
-    });
-    el.addEventListener('mouseleave', e => {
-      tip.style.display = 'none';
-      el.style.strokeWidth = '0.4'; el.style.stroke = '#555';
-      el.classList.remove('tapped');
-    });
-    // Mobile: tap to toggle tooltip
-    el.addEventListener('click', function(e) {
-      e.stopPropagation();
-      const isOpen = this.classList.toggle('tapped');
-      if (isOpen) {
-        const cd = data.by_county?.[p.name]?.[activeTab]||{};
-        const lead = (cd.dem||0) - (cd.rep||0);
-        const leadStr = lead >= 0 ? `Dem +${fmt(lead)}` : `Rep +${fmt(-lead)}`;
-        tip.style.display = 'block';
-        tip.style.left = '50%';
-        tip.style.top = '10px';
-        tip.style.transform = 'translateX(-50%)';
-        tip.innerHTML = `<b>${p.name}</b> &nbsp; Total ${fmt(cd.total)}<br>Dem ${fmt(cd.dem)} &nbsp; Rep ${fmt(cd.rep)} &nbsp; NPA ${fmt(cd.npa)} &nbsp; Other ${fmt(cd.other)}<br><b>${leadStr}</b>`;
-      } else {
-        this.style.strokeWidth = '0.4'; this.style.stroke = '#555';
-        tip.style.display = 'none';
+function addCountyPoly(group, feature, polyList, type) {
+  const geo = feature.geometry;
+  const name = feature.properties.name;
+  const add = (coords) => {
+    const pts = coords.map(c => [c[1], c[0]]);  // Leaflet uses [lat, lng]
+    const poly = L.polygon(pts, {color: '#999', weight: 0.6, fillColor: '#EEE', fillOpacity: 0.85}).addTo(group);
+    poly._county = name;
+    poly._feature = feature;
+    polyList.push(poly);
+    // Bind hover popup
+    const tipId = (type === 'vbm' ? 'vtip' : 'etip') + name.replace(/[^a-zA-Z]/g,'');
+    poly.bind(`<div id="${tipId}" style="font-size:12px;min-width:190px;"><b>${name}</b><br>Hover for data</div>`);
+    poly.on('mouseover', () => {
+      const d = data.by_county?.[name]?.[type === 'vbm' ? activeTab : earlyTab]||{};
+      const el = document.getElementById(tipId);
+      if (el) {
+        if (type === 'vbm') {
+          const lead = (d.dem||0) - (d.rep||0);
+          el.innerHTML = `Total ${fmt(d.total)}<br>Dem ${fmt(d.dem)} · Rep ${fmt(d.rep)} · NPA ${fmt(d.npa)} · Oth ${fmt(d.other)}<br>${lead>=0?'Dem+':'Rep+'}${fmt(Math.abs(lead))}`;
+        } else {
+          el.innerHTML = `Early ${fmt(d.total||0)}<br>Dem ${fmt(d.dem||0)} · Rep ${fmt(d.rep||0)} · NPA ${fmt(d.npa||0)} · Oth ${fmt(d.other||0)}`;
+        }
       }
     });
-    svg.appendChild(el);
-  });
-  // Tap outside closes tooltip
-  document.addEventListener('click', function(e) {
-    if (!e.target.closest('.map-wrap')) {
-      document.querySelectorAll('#countyGroup polygon.tapped').forEach(p => { p.classList.remove('tapped'); });
-      tip.style.display = 'none';
-    }
-  });
+    poly.on('mouseout', () => {});
+  };
+  if (geo.type === 'Polygon') add(geo.coordinates[0]);
+  else if (geo.type === 'MultiPolygon') geo.coordinates.forEach(p => add(p[0]));
+}
 
-  // ---- Build the second map (Early Voting / Election Day) ----
-  const earlySvg = document.getElementById('earlyGroup');
-  const earlyTip = document.getElementById('earlyTooltip');
-  paths.forEach(p => {
-    const el = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-    el.setAttribute('points', p.d);
-    el.setAttribute('data-county', p.name);
-    el.setAttribute('class', 'county');
-    el.style.stroke = '#555';
-    el.style.strokeWidth = '0.4';
-    el.style.transition = 'fill 0.3s';
-    el.addEventListener('mouseenter', e => {
-      const cd = data.by_county?.[p.name]?.[earlyTab]||{};
-      earlyTip.style.display = 'block';
-      earlyTip.style.left = '50%';
-      earlyTip.style.top = '10px';
-      earlyTip.style.transform = 'translateX(-50%)';
-      earlyTip.innerHTML = `<b>${p.name}</b> &nbsp; Early ${fmt(cd.total||0)}<br>Dem ${fmt(cd.dem||0)} &nbsp; Rep ${fmt(cd.rep||0)} &nbsp; NPA ${fmt(cd.npa||0)} &nbsp; Other ${fmt(cd.other||0)}`;
-      el.style.strokeWidth = '1.5'; el.style.stroke = '#222';
-    });
-    el.addEventListener('mouseleave', e => {
-      earlyTip.style.display = 'none';
-      el.style.strokeWidth = '0.4'; el.style.stroke = '#555';
-      el.classList.remove('tapped');
-    });
-    // Mobile: tap to toggle
-    el.addEventListener('click', function(e) {
-      e.stopPropagation();
-      const isOpen = this.classList.toggle('tapped');
-      if (isOpen) {
-        const cd = data.by_county?.[p.name]?.[earlyTab]||{};
-        earlyTip.style.display = 'block';
-        earlyTip.style.left = '50%';
-        earlyTip.style.top = '10px';
-        earlyTip.style.transform = 'translateX(-50%)';
-        earlyTip.innerHTML = `<b>${p.name}</b> &nbsp; Early ${fmt(cd.total||0)}<br>Dem ${fmt(cd.dem||0)} &nbsp; Rep ${fmt(cd.rep||0)} &nbsp; NPA ${fmt(cd.npa||0)} &nbsp; Other ${fmt(cd.other||0)}`;
-      } else {
-        earlyTip.style.display = 'none';
-      }
-    });
-    earlySvg.appendChild(el);
+function styleMap() {
+  _vbmPolygons.forEach(poly => {
+    const d = data.by_county?.[poly._county]?.[activeTab]||{};
+    const total = d.total||0;
+    const demLead = total > 0 ? ((d.dem||0)-(d.rep||0))/total : null;
+    poly.setStyle({fillColor: getColor(demLead), fillOpacity: 0.85});
   });
-  document.addEventListener('click', function(e) {
-    if (!e.target.closest('.map-wrap')) {
-      document.querySelectorAll('#earlyGroup polygon.tapped').forEach(p => { p.classList.remove('tapped'); });
-      earlyTip.style.display = 'none';
-    }
-  });
-  styleEarlyMap();
+}
 
-  // Add county name labels at polygon centroids
-  const labelFontSize = Math.max(5, Math.min(8, scale * 0.04));
-  // Pre-computed centroids (lng, lat) for each county name
-  const labels = [
-    {n:'Alachua',l:-82.293, t:29.674},{n:'Baker',l:-82.336, t:30.327},{n:'Bay',l:-85.570, t:30.251},
-    {n:'Bradford',l:-82.168, t:29.947},{n:'Brevard',l:-80.685, t:28.311},{n:'Broward',l:-80.460, t:26.245},
-    {n:'Calhoun',l:-85.205, t:30.411},{n:'Charlotte',l:-81.961, t:26.900},{n:'Citrus',l:-82.522, t:28.874},
-    {n:'Clay',l:-81.774, t:29.986},{n:'Collier',l:-81.391, t:26.119},{n:'Columbia',l:-82.709, t:30.231},
-    {n:'DeSoto',l:-81.828, t:27.165},{n:'Dixie',l:-83.177, t:29.585},{n:'Duval',l:-81.679, t:30.341},
-    {n:'Escambia',l:-87.381, t:30.618},{n:'Flagler',l:-81.281, t:29.453},{n:'Franklin',l:-84.857, t:29.832},
-    {n:'Gadsden',l:-84.633, t:30.573},{n:'Gilchrist',l:-82.799, t:29.722},{n:'Glades',l:-81.105, t:26.978},
-    {n:'Gulf',l:-85.237, t:29.903},{n:'Hamilton',l:-82.968, t:30.489},{n:'Hardee',l:-81.832, t:27.472},
-    {n:'Hendry',l:-81.300, t:26.550},{n:'Hernando',l:-82.433, t:28.556},{n:'Highlands',l:-81.317, t:27.326},
-    {n:'Hillsborough',l:-82.358, t:27.902},{n:'Holmes',l:-85.800, t:30.867},{n:'Indian River',l:-80.482, t:27.673},
-    {n:'Jackson',l:-85.204, t:30.786},{n:'Jefferson',l:-83.887, t:30.442},{n:'Lafayette',l:-83.185, t:29.993},
-    {n:'Lake',l:-81.730, t:28.770},{n:'Lee',l:-81.893, t:26.583},{n:'Leon',l:-84.281, t:30.461},
-    {n:'Levy',l:-82.815, t:29.322},{n:'Liberty',l:-84.963, t:30.232},{n:'Madison',l:-83.452, t:30.483},
-    {n:'Manatee',l:-82.498, t:27.482},{n:'Marion',l:-82.009, t:29.234},{n:'Martin',l:-80.444, t:27.079},
-    {n:'Miami-Dade',l:-80.379, t:25.617},{n:'Monroe',l:-81.081, t:25.303},{n:'Nassau',l:-81.684, t:30.581},
-    {n:'Okaloosa',l:-86.580, t:30.641},{n:'Okeechobee',l:-80.821, t:27.440},{n:'Orange',l:-81.398, t:28.577},
-    {n:'Osceola',l:-81.211, t:28.085},{n:'Palm Beach',l:-80.445, t:26.642},{n:'Pasco',l:-82.370, t:28.336},
-    {n:'Pinellas',l:-82.747, t:27.919},{n:'Polk',l:-81.690, t:27.950},{n:'Putnam',l:-81.755, t:29.602},
-    {n:'Santa Rosa',l:-86.969, t:30.595},{n:'Sarasota',l:-82.310, t:27.186},{n:'Seminole',l:-81.231, t:28.694},
-    {n:'St. Johns',l:-81.414, t:29.892},{n:'St. Lucie',l:-80.407, t:27.365},{n:'Sumter',l:-82.085, t:28.672},
-    {n:'Suwannee',l:-82.945, t:30.211},{n:'Taylor',l:-83.598, t:30.021},{n:'Union',l:-82.382, t:30.049},
-    {n:'Volusia',l:-81.186, t:29.021},{n:'Wakulla',l:-84.298, t:30.147},{n:'Walton',l:-86.148, t:30.615},
-    {n:'Washington',l:-85.676, t:30.645}
-  ];
-  labels.forEach(lb => {
-    const lx = (lb.l - minLng) * scale + padding + (SVG_W - (maxLng - minLng) * scale - padding*2) / 2;
-    const ly = SVG_H - ((lb.t - minLat) * scale + padding);
-    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    text.setAttribute('x', lx);
-    text.setAttribute('y', ly);
-    text.setAttribute('text-anchor', 'middle');
-    text.setAttribute('dominant-baseline', 'central');
-    text.setAttribute('font-size', `${labelFontSize}px`);
-    text.setAttribute('fill', '#333');
-    text.setAttribute('font-weight', '500');
-    text.setAttribute('pointer-events', 'none');
-    text.textContent = lb.n;
-    svg.appendChild(text);
+function styleEarlyMap() {
+  let maxVal = 0;
+  Object.values(data.by_county||{}).forEach(c => {
+    const t = c[earlyTab]?.total || 0;
+    if (t > maxVal) maxVal = t;
+  });
+  _earlyPolygons.forEach(poly => {
+    const d = data.by_county?.[poly._county]?.[earlyTab]||{};
+    poly.setStyle({fillColor: getEarlyColor(d.total||0, maxVal), fillOpacity: 0.85});
   });
 }
 
@@ -922,32 +822,6 @@ function getEarlyColor(val, maxVal) {
 }
 
 let earlyTab = 'early_voted';  // which dataset the early map shows
-
-function styleMap() {
-  const paths = document.querySelectorAll('#countyGroup polygon');
-  paths.forEach(el => {
-    const name = el.getAttribute('data-county');
-    const d = data.by_county?.[name]?.[activeTab]||{};
-    const total = d.total||0;
-    const demLead = total > 0 ? ((d.dem||0)-(d.rep||0))/total : null;
-    el.style.fill = getColor(demLead);
-  });
-}
-
-function styleEarlyMap() {
-  const paths = document.querySelectorAll('#earlyGroup polygon');
-  // Max votes for intensity scaling
-  let maxVal = 0;
-  Object.values(data.by_county||{}).forEach(c => {
-    const t = c[earlyTab]?.total || 0;
-    if (t > maxVal) maxVal = t;
-  });
-  paths.forEach(el => {
-    const name = el.getAttribute('data-county');
-    const d = data.by_county?.[name]?.[earlyTab]||{};
-    el.style.fill = getEarlyColor(d.total||0, maxVal);
-  });
-}
 
 function switchEarlyTab(tab) {
   earlyTab = tab;
