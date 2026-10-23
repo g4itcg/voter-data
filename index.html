@@ -564,7 +564,7 @@ function renderMarginTrend() {
             onmouseover="document.getElementById('mt${i}').style.opacity=1; document.getElementById('marginTooltip').style.display='block'; 
               var d=new Date(history[${i+1}].date+'T00:00:00'); 
               document.getElementById('marginTooltip').textContent=d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' · that day: '+(${p.m}>=0?'D+':'R+')+fmt(Math.abs(${p.m}));"
-            onmousemove="var r=this.getBoundingClientRect(); var svg=document.getElementById('marginTrendSvg'); var sr=svg.getBoundingClientRect(); var t=document.getElementById('marginTooltip'); t.style.left=((event.clientX-sr.left)/sr.width*100)+'%'; t.style.top='6px';"
+            onmousemove="var r=this.getBoundingClientRect(); var svg=document.getElementById('marginTrendSvg'); var sr=svg.getBoundingClientRect(); var t=document.getElementById('marginTooltip'); var xPct=(event.clientX-sr.left)/sr.width*100; t.style.left=(xPct>65?(xPct-26)+'%':xPct+'%'); t.style.top='6px';"
             onmouseout="document.getElementById('mt${i}').style.opacity=0; document.getElementById('marginTooltip').style.display='none';"/>`;
     // visible dot (hidden, with id for hover reveal)
     out += `<circle id="mt${i}" cx="${px}" cy="${py}" r="3" fill="${p.m>=0?'#4A90D9':'#DE0100'}" style="opacity:0;pointer-events:none;transition:opacity .15s;"/>`;
