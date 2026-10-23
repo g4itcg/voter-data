@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root { --blue: #0033A0; --blue-dark: #002080; --yellow: #F8D858; --teal: #58E0E0; --bg: #F5F5F5; --white: #FFFFFF; --text: #333333; --text-light: #666666; --red: #DE0100; --blue-dem: #4A90D9; --green: #28A745; --gray: #A0AEC0; --shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  :root { --blue: #0033A0; --blue-dark: #002080; --yellow: #F8D858; --teal: #58E0E0; --bg: #F2F3F8; --white: #FFFFFF; --card: #FFFFFF; --text: #1A1A2E; --text-light: #6E6E85; --red: #DE0100; --blue-dem: #4A90D9; --green: #28A745; --gray: #A0AEC0; --shadow: 0 2px 12px rgba(0,0,0,0.05); --radius: 14px; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
   .header { background: var(--blue); color: white; padding: 20px 24px 0; text-align: center; }
@@ -26,19 +26,16 @@
   .brand-strip .s-teal { background: #58E0E0; }
   .container { max-width: 1200px; margin: 0 auto; padding: 20px 16px; }
 
-  .cards-grid { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
-  .cards-row { display: flex; gap: 14px; }
-  .cards-row .card { flex: 1; min-width: 0; }
-  .card { background: var(--white); border-radius: 12px; padding: 16px; box-shadow: var(--shadow); text-align: center; }
-  .card .label { font-size: 11px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
-  .card .value { font-size: 24px; font-weight: 700; margin-top: 4px; }
-  .card .value.dem { color: var(--blue-dem); } .card .value.rep { color: var(--red); } .card .value.npa { color: #2E9E9E; } .card .value.other { color: #B8860B; } .card .value.early { color: var(--teal); }
-  .card .value.total { color: var(--blue); }
-  .card .sub { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+    .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+    .card { background: var(--card); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); text-align: center; }
+    .card .label { font-size: 10px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 600; }
+    .card .value { font-size: 26px; font-weight: 700; margin-top: 4px; letter-spacing: -0.3px; }
+    .card .sub { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+    .card .value.total { color: var(--blue); }
 
-  .section-card { background: var(--white); border-radius: 12px; box-shadow: var(--shadow); margin-bottom: 20px; overflow: hidden; }
+  .section-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 24px; overflow: hidden; }
 
-  .margin-banner { display: flex; align-items: center; justify-content: center; gap: 16px; padding: 14px 20px; border-radius: 12px; margin-bottom: 20px; font-size: 14px; }
+  .margin-banner { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 20px; background: var(--card); font-size: 14px; }
   .margin-banner.dem { background: linear-gradient(135deg, #E3EDFB, #D0DFF5); color: var(--blue-dem); border: 1px solid var(--blue-dem); }
   .margin-banner.rep { background: linear-gradient(135deg, #FDE8E8, #F5D0D0); color: var(--red); border: 1px solid var(--red); }
   .margin-label { font-weight: 600; font-size: 12px; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; }
@@ -102,16 +99,13 @@
   .turnout-table td { font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
   .turnout-table td:first-child { font-weight: 700; font-size: 13px; color: var(--text); }
   .turnout-table tr:last-child td { background: #F0F2F5; font-weight: 700; }
-  /* Turnout by Party: center party numbers under their column headers */
-  #turnoutPctTable th, #turnoutPctTable td { text-align: center; }
-  #turnoutPctTable th:first-child, #turnoutPctTable td:first-child { text-align: left; }
 
   .main-tabs { display: flex; justify-content: center; border-bottom: 2px solid #E8E8E8; margin-bottom: 20px; gap: 0; }
   .main-tabs .tab { padding: 12px 28px; font-size: 14px; font-weight: 700; color: var(--text-light); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; user-select: none; }
   .main-tabs .tab:hover { color: var(--blue); }
   .main-tabs .tab.active { color: var(--blue); border-bottom-color: var(--blue); }
 
-  .status-bar { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-light); margin-bottom: 16px; padding: 8px 12px; background: white; border-radius: 8px; box-shadow: var(--shadow); }
+  .status-bar { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-light); margin-bottom: 20px; padding: 10px 16px; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); }
   .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
   .dot.live { background: var(--green); }
 
@@ -136,8 +130,7 @@
 
   @media (max-width: 768px) {
     .header h1 { font-size: 22px; }
-    .cards-row { flex-wrap: wrap; }
-    .cards-row .card { flex: 1 1 30%; min-width: 130px; }
+    .cards-grid { grid-template-columns: repeat(2, 1fr); }
     .tab { padding: 8px 12px; font-size: 12px; }
     .map-wrap svg { max-width: 100%; }
   }
@@ -172,11 +165,7 @@
     <span class="margin-detail" id="marginDetail"></span>
   </div>
 
-  <div class="cards-grid" id="cardsGrid">
-    <div class="cards-row" id="cardsRowVoting"></div>
-    <div class="cards-row" id="cardsRowVbm"></div>
-    <div class="cards-row" id="cardsRowParties"></div>
-  </div>
+  <div class="cards-grid" id="cardsGrid"></div>
 
   <!-- FreshTake-style: Statewide Turnout by Party with Numbers/Percent toggle -->
   <div class="section-card">
@@ -188,7 +177,7 @@
       </span>
     </h2>
     <div class="table-wrap" style="padding-top:8px;">
-      <table class="turnout-table" id="turnoutPctTable">
+      <table class="turnout-table">
         <thead><tr>
           <th style="width:24%">Category</th><th class="num" style="width:16%">Dem</th><th class="num" style="width:16%">Rep</th><th class="num" style="width:14%">NPA</th><th class="num" style="width:13%">Oth</th><th class="num" style="width:17%">Total</th>
         </tr></thead>
@@ -355,9 +344,9 @@
 </div>
 
 <script>
-const DATA_URL = 'https://g4itcg.github.io/voter-data/voter_data.json';
-const GEO_URL = 'https://g4itcg.github.io/voter-data/fl_counties.geojson';
-const HISTORY_URL = 'https://g4itcg.github.io/voter-data/vbm_history.json';
+const DATA_URL = 'https://raw.githubusercontent.com/g4itcg/voter-data/main/voter_data.json';
+const GEO_URL = 'https://raw.githubusercontent.com/g4itcg/voter-data/main/fl_counties.geojson';
+const HISTORY_URL = 'https://raw.githubusercontent.com/g4itcg/voter-data/main/vbm_history.json';
 
 let data = null, geojson = null, history = null, activeTab = 'vbm_voted';
 const DEM_COLOR = '#4A90D9', REP_COLOR = '#DE0100';
@@ -691,28 +680,17 @@ function toggleView(v) {
 
 function renderCards() {
   const sw = data.statewide;
-  const card = c => `<div class="card"><div class="label">${c.l}</div><div class="value ${c.c}">${c.v}</div><div class="sub">${c.s||''}</div></div>`;
-
-  // Row 1 — Voting methods, on their own line
-  document.getElementById('cardsRowVoting').innerHTML = [
+  document.getElementById('cardsGrid').innerHTML = [
     {l:'🗳️ Election Day', v:fmt(sw.election_day?.total), c:'total', s:'Nov 3, 2026'},
     {l:'Early In-Person', v:fmt(sw.early_voted?.total), c:'early', s:sw.early_voted?.total?'voted':'Not yet started'},
-  ].map(card).join('');
-
-  // Row 2 — Vote by Mail
-  document.getElementById('cardsRowVbm').innerHTML = [
     {l:'VBM Provided', v:fmt(sw.vbm_provided?.total), c:'total', s:`Dem ${fmt(sw.vbm_provided?.dem)} · Rep ${fmt(sw.vbm_provided?.rep)}`},
     {l:'VBM Returned', v:fmt(sw.vbm_voted?.total), c:'total', s:`${sw.vbm_return_rate||0}% return rate`},
     {l:'VBM Outstanding', v:fmt(sw.vbm_outstanding), c:'total', s:'awaiting return'},
-  ].map(card).join('');
-
-  // Row 3 — Party breakdown
-  document.getElementById('cardsRowParties').innerHTML = [
     {l:'Dem VBM', v:fmt(sw.vbm_voted?.dem), c:'dem'},
     {l:'Rep VBM', v:fmt(sw.vbm_voted?.rep), c:'rep'},
     {l:'NPA VBM', v:fmt(sw.vbm_voted?.npa), c:'npa'},
     {l:'Other VBM', v:fmt(sw.vbm_voted?.other), c:'other'},
-  ].map(card).join('');
+  ].map(c => `<div class="card"><div class="label">${c.l}</div><div class="value ${c.c}">${c.v}</div><div class="sub">${c.s||''}</div></div>`).join('');
   
   // Margin banner — use COMBINED totals (VBM + Early) when early votes exist
   const banner = document.getElementById('marginBanner');
@@ -1097,9 +1075,7 @@ setInterval(() => {
         document.getElementById('statusText').textContent = 'Updated: ' + fmtET(data.fetched_at) + ' (Updates every 10 min)';
       }
     })
-    .catch(() => {
-      document.getElementById('statusText').textContent = '⚠️ Refresh failed — check connection';
-    });
+    .catch(() => {});
 }, 15 * 60 * 1000);
 
 // LIVE badge reflects data freshness: green = fresh, yellow = waiting, red = stale
