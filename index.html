@@ -730,7 +730,7 @@ let _vbmLayer = null, _earlyLayer = null;
 function buildMap() {
   try {
     const base = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    _vbmMap = L.map('vbmMap', {zoomControl: true, scrollWheelZoom: true, center: [28.5, -83], zoom: 6});
+    _vbmMap = L.map('vbmMap', {zoomControl: true, scrollWheelZoom: true, center: [28.5, -83], zoom: 6, renderer: L.canvas()});
     L.tileLayer(base, {maxZoom: 10, minZoom: 5}).addTo(_vbmMap);
     addVbmLayer();
     // Early map is lazy-initialized in switchMain
@@ -830,7 +830,7 @@ function switchMain(which) {
       window._earlyInit = true;
       try {
         const base = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-        _earlyMap = L.map('earlyMap', {zoomControl: true, scrollWheelZoom: true, center: [28.5, -83], zoom: 6});
+        _earlyMap = L.map('earlyMap', {zoomControl: true, scrollWheelZoom: true, center: [28.5, -83], zoom: 6, renderer: L.canvas()});
         L.tileLayer(base, {maxZoom: 10, minZoom: 5}).addTo(_earlyMap);
         addEarlyLayer();
       } catch(e) { console.error('Early map init error:', e); }
