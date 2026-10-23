@@ -698,9 +698,10 @@ function renderCards() {
   const sw = data.statewide;
   const c = (l, v, cls, s) => `<div class="card"><div class="label">${l}</div><div class="value ${cls}">${v}</div><div class="sub">${s||''}</div></div>`;
   document.getElementById('cardsGrid').innerHTML =
-    `<div class="cards-row">${c('🗳️ Election Day', fmt(sw.election_day?.total), 'total', 'Nov 3, 2026')}${c('Early In-Person', fmt(sw.early_voted?.total), 'early', sw.early_voted?.total?'voted':'Not yet started')}</div>` +
+    `<div class="cards-row">${c('🗳️ Election Day', fmt(sw.election_day?.total), 'total', 'Nov 3, 2026')}${c('🏛️ Early In-Person', fmt(sw.early_voted?.total), 'early', sw.early_voted?.total?'voted':'Not yet started')}</div>` +
+    `<div class="cards-row">${c('Dem Early', fmt(sw.early_voted?.dem), 'dem', fmt(sw.early_voted?.total?(sw.early_voted.dem/sw.early_voted.total*100).toFixed(1):0)+'% of early')}${c('Rep Early', fmt(sw.early_voted?.rep), 'rep', fmt(sw.early_voted?.total?(sw.early_voted.rep/sw.early_voted.total*100).toFixed(1):0)+'% of early')}${c('NPA Early', fmt(sw.early_voted?.npa), 'npa', fmt(sw.early_voted?.total?(sw.early_voted.npa/sw.early_voted.total*100).toFixed(1):0)+'% of early')}</div>` +
     `<div class="cards-row">${c('VBM Provided', fmt(sw.vbm_provided?.total), 'total', 'Dem '+fmt(sw.vbm_provided?.dem)+' · Rep '+fmt(sw.vbm_provided?.rep))}${c('VBM Returned', fmt(sw.vbm_voted?.total), 'total', (sw.vbm_return_rate||0)+'% return rate')}${c('VBM Outstanding', fmt(sw.vbm_outstanding), 'total', 'awaiting return')}</div>` +
-    `<div class="cards-row">${c('Dem VBM', fmt(sw.vbm_voted?.dem), 'dem')}${c('Rep VBM', fmt(sw.vbm_voted?.rep), 'rep')}</div>` +
+    `<div class="cards-row">${c('Dem VBM', fmt(sw.vbm_voted?.dem), 'dem')}${c('Rep VBM', fmt(sw.vbm_voted?.rep), 'rep')}${c('Other Early', fmt(sw.early_voted?.other), 'other')}</div>` +
     `<div class="cards-row">${c('NPA VBM', fmt(sw.vbm_voted?.npa), 'npa')}${c('Other VBM', fmt(sw.vbm_voted?.other), 'other')}</div>`;
   const banner = document.getElementById('marginBanner');
   const vbm = data.statewide.vbm_voted||{};
