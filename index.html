@@ -736,14 +736,9 @@ function buildMap() {
     _vbmPolygons = [];
     const vbmGroup = L.layerGroup().addTo(_vbmMap);
     geojson.features.forEach(f => addCountyPoly(vbmGroup, f, _vbmPolygons, 'vbm'));
-    // Early map
-    _earlyMap = L.map('earlyMap', {zoomControl: true, scrollWheelZoom: true, center: [28.5, -83], zoom: 6});
-    L.tileLayer(base, {maxZoom: 10, minZoom: 5}).addTo(_earlyMap);
-    _earlyPolygons = [];
-    const earlyGroup = L.layerGroup().addTo(_earlyMap);
-    geojson.features.forEach(f => addCountyPoly(earlyGroup, f, _earlyPolygons, 'early'));
+    // Early map is lazy-initialized in switchMain (hidden at load, Leaflet needs visible container)
     // Initial style
-    styleMap(); styleEarlyMap();
+    styleMap();
   } catch(e) { console.error('Leaflet build error:', e); }
 }
 
@@ -834,6 +829,18 @@ function switchMain(which) {
   document.getElementById('mainVbm').style.display = which === 'vbm' ? 'block' : 'none';
   document.getElementById('mainEarly').style.display = which === 'early' ? 'block' : 'none';
   if (which === 'early') {
+    // Lazy-init early map if needed (hidden at page load → Leaflet won't render)
+    if (!window._earlyInit && typeof L !== 'undefined') {
+      window._earlyInit = true;
+      try {
+        const base = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        _earlyMap = L.map('earlyMap', {zoomControl: true, scrollWheelZoom: true, center: [28.5, -83], zoom: 6});
+        L.tileLayer(base, {maxZoom: 10, minZoom: 5}).addTo(_earlyMap);
+        _earlyPolygons = [];
+        const earlyGroup = L.layerGroup().addTo(_earlyMap);
+        geojson.features.forEach(f => addCountyPoly(earlyGroup, f, _earlyPolygons, 'early'));
+      } catch(e) { console.error('Early map init error:', e); }
+    }
     if (geojson) styleEarlyMap();
     renderEarlyTable();
   } else {
