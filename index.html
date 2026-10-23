@@ -297,6 +297,10 @@
 
   <div id="mainEarly" style="display:none;">
   <div class="section-card">
+    <h2>📊 Early Returns by Party</h2>
+    <div class="party-bars" id="earlyPartyBars"></div>
+  </div>
+  <div class="section-card">
     <h2 style="padding-bottom:12px;">🏛️ Early Voting &amp; Election Day</h2>
     <div class="map-wrap">
       <svg id="earlyMapSvg" viewBox="0 0 700 600" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;">
@@ -325,13 +329,24 @@
         <div class="table-controls">
           <input type="text" id="earlySearchInput" placeholder="Search county..." oninput="renderEarlyTable()">
           <select id="earlySortSelect" onchange="renderEarlyTable()">
-            <option value="total-desc">Early Votes ↓</option>
+            <option value="total-desc">Total ↓</option>
+            <option value="dem-desc">Dem ↓</option>
+            <option value="rep-desc">Rep ↓</option>
+            <option value="npa-desc">NPA ↓</option>
+            <option value="oth-desc">Oth ↓</option>
+            <option value="lead-desc">Lead ↓</option>
             <option value="alpha">A–Z</option>
           </select>
         </div>
         <table class="turnout-table">
           <thead><tr>
-            <th style="width:28%">County</th><th class="num">Early</th><th class="num">Election Day</th><th class="num">Total</th>
+            <th onclick="sortEarlyTable('alpha')" style="width:20%">County ↕</th>
+            <th class="num" onclick="sortEarlyTable('total-desc')">Total ↕</th>
+            <th class="num" onclick="sortEarlyTable('dem-desc')" style="color:var(--blue-dem);">Dem ↕</th>
+            <th class="num" onclick="sortEarlyTable('rep-desc')" style="color:var(--red);">Rep ↕</th>
+            <th class="num" onclick="sortEarlyTable('npa-desc')" style="color:#2E9E9E;font-weight:600;">NPA ↕</th>
+            <th class="num" onclick="sortEarlyTable('oth-desc')" style="color:#B8860B;">Oth ↕</th>
+            <th class="num" onclick="sortEarlyTable('lead-desc')">Lead ↕</th>
           </tr></thead>
           <tbody id="earlyTableBody"></tbody>
         </table>
@@ -946,6 +961,7 @@ function switchEarlyTab(tab) {
   earlyTab = tab;
   document.querySelectorAll('#earlyTabBar .tab').forEach(t => t.classList.toggle('active', t.dataset.tab===tab));
   if (geojson) styleEarlyMap();
+  renderEarlyPartyBars();
 }
 
 function switchMain(which) {
@@ -954,6 +970,7 @@ function switchMain(which) {
   document.getElementById('mainEarly').style.display = which === 'early' ? 'block' : 'none';
   if (which === 'early') {
     if (geojson) styleEarlyMap();
+    renderEarlyPartyBars();
     renderEarlyTable();
   } else {
     if (geojson) styleMap();
@@ -1052,6 +1069,68 @@ function renderTable() {
 }
 
 function sortTable(f) { document.getElementById('sortSelect').value = f; renderTable(); }
+
+// ---- Early Voting Party Bars & Table ----
+function renderEarlyPartyBars() {
+  const s = data.statewide.early_voted||{};
+  const total = s.total||1;
+  const maxV = Math.max(s.dem||0, s.rep||0, s.npa||0, s.other||0, 1);
+  const voteAdv = (s.dem||0) - (s.rep||0);
+  const rows = [
+    {l:'Democrat', v:s.dem||0, c:'dem'},
+    {l:'Republican', v:s.rep||0, c:'rep'},
+    {l:'NPA', v:s.npa||0, c:'npa'},
+    {l:'Other', v:s.other||0, c:'other'}
+  ].map(p => {
+    const pct = total > 0 ? (p.v/total*100).toFixed(0) : 0;
+    const barW = Math.min(p.v/maxV*100, 100).toFixed(1);
+    return `<div class="bar-row${voteAdv>=0&&p.c==='dem'||voteAdv<0&&p.c==='rep'?' lead-row':''}">
+      <div class="bar-label">${p.l}</div>
+      <div class="bar-track" style="position:relative;">
+        <div class="bar-fill ${p.c}" style="width:${barW}%"></div>
+      </div>
+      <div class="bar-value">${fmt(p.v)}</div>
+      <div class="bar-pct">${pct}%</div>
+    </div>`;
+  }).join('');
+  document.getElementById('earlyPartyBars').innerHTML = `
+    <div class="party-header">
+      <div class="party-title">Early In-Person (statewide)</div>
+      <div class="adv-badge" style="opacity:0.7;">${fmt(total)} total early votes</div>
+    </div>
+    <div class="party-sub">Share of early in-person votes by party</div>
+    ${rows}`;
+}
+
+function renderEarlyTable() {
+  const search = (document.getElementById('earlySearchInput').value||'').toLowerCase();
+  const sort = document.getElementById('earlySortSelect').value;
+  let counties = Object.entries(data.by_county||{}).map(([n,v]) => ({name:n, ...(v[earlyTab]||{})}));
+  if (search) counties = counties.filter(c => c.name.toLowerCase().includes(search));
+  counties.sort((a,b) => {
+    if (sort==='alpha') return a.name.localeCompare(b.name);
+    if (sort==='total-desc') return (b.total||0)-(a.total||0);
+    if (sort==='dem-desc') return (b.dem||0)-(a.dem||0);
+    if (sort==='rep-desc') return (b.rep||0)-(a.rep||0);
+    if (sort==='npa-desc') return (b.npa||0)-(a.npa||0);
+    if (sort==='oth-desc') return (b.other||0)-(a.other||0);
+    if (sort==='lead-desc') return ((b.dem||0)-(b.rep||0))-((a.dem||0)-(a.rep||0));
+    return 0;
+  });
+  document.getElementById('earlyTableBody').innerHTML = counties.map(c => {
+    const lead = (c.dem||0)-(c.rep||0);
+    return `<tr><td>${c.name}</td>
+      <td class="num">${fmt(c.total)}</td>
+      <td class="num" style="color:#4A90D9">${fmt(c.dem)}</td>
+      <td class="num" style="color:var(--red)">${fmt(c.rep)}</td>
+      <td class="num" style="color:#2E9E9E">${fmt(c.npa)}</td>
+      <td class="num" style="color:#B8860B">${fmt(c.other)}</td>
+      <td class="num dem-lead ${lead>=0?'pos':'neg'}">${lead>=0?'+':''}${fmt(lead)}</td></tr>`;
+  }).join('');
+  document.getElementById('tableCount').textContent = `Showing ${counties.length} of ${Object.keys(data.by_county||{}).length} counties`;
+}
+function sortEarlyTable(f) { document.getElementById('earlySortSelect').value = f; renderEarlyTable(); }
+
 init();
 
 // Auto-refresh every 15 minutes to keep early voting & VBM data current
