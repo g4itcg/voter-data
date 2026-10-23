@@ -725,72 +725,68 @@ function renderCards() {
 
 // ---- Leaflet-powered maps ----
 let _vbmMap = null, _earlyMap = null;
-let _vbmPolygons = [], _earlyPolygons = [];
+let _vbmLayer = null, _earlyLayer = null;
 
 function buildMap() {
   try {
     const base = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    // VBM Map
     _vbmMap = L.map('vbmMap', {zoomControl: true, scrollWheelZoom: true, center: [28.5, -83], zoom: 6});
     L.tileLayer(base, {maxZoom: 10, minZoom: 5}).addTo(_vbmMap);
-    _vbmPolygons = [];
-    const vbmGroup = L.layerGroup().addTo(_vbmMap);
-    geojson.features.forEach(f => addCountyPoly(vbmGroup, f, _vbmPolygons, 'vbm'));
-    // Early map is lazy-initialized in switchMain (hidden at load, Leaflet needs visible container)
-    // Initial style
-    styleMap();
+    addVbmLayer();
+    // Early map is lazy-initialized in switchMain
   } catch(e) { console.error('Leaflet build error:', e); }
 }
 
-function addCountyPoly(group, feature, polyList, type) {
-  const geo = feature.geometry;
-  const name = feature.properties.name;
-  const add = (coords) => {
-    const pts = coords.map(c => [c[1], c[0]]);  // Leaflet uses [lat, lng]
-    const poly = L.polygon(pts, {color: '#666', weight: 1.2, fillColor: '#DFDFDF', fillOpacity: 0.75}).addTo(group);
-    poly._county = name;
-    poly._feature = feature;
-    polyList.push(poly);
-    // Bind hover popup
-    const tipId = (type === 'vbm' ? 'vtip' : 'etip') + name.replace(/[^a-zA-Z]/g,'');
-    poly.bind(`<div id="${tipId}" style="font-size:12px;min-width:190px;"><b>${name}</b><br>Hover for data</div>`);
-    poly.on('mouseover', () => {
-      const d = data.by_county?.[name]?.[type === 'vbm' ? activeTab : earlyTab]||{};
-      const el = document.getElementById(tipId);
-      if (el) {
-        if (type === 'vbm') {
-          const lead = (d.dem||0) - (d.rep||0);
-          el.innerHTML = `Total ${fmt(d.total)}<br>Dem ${fmt(d.dem)} · Rep ${fmt(d.rep)} · NPA ${fmt(d.npa)} · Oth ${fmt(d.other)}<br>${lead>=0?'Dem+':'Rep+'}${fmt(Math.abs(lead))}`;
-        } else {
-          el.innerHTML = `Early ${fmt(d.total||0)}<br>Dem ${fmt(d.dem||0)} · Rep ${fmt(d.rep||0)} · NPA ${fmt(d.npa||0)} · Oth ${fmt(d.other||0)}`;
-        }
-      }
-    });
-    poly.on('mouseout', () => {});
-  };
-  if (geo.type === 'Polygon') add(geo.coordinates[0]);
-  else if (geo.type === 'MultiPolygon') geo.coordinates.forEach(p => add(p[0]));
+function addVbmLayer() {
+  if (_vbmLayer) _vbmMap.removeLayer(_vbmLayer);
+  _vbmLayer = L.geoJSON(geojson, {
+    style: function(f) {
+      const name = f.properties.name;
+      const d = data.by_county?.[name]?.[activeTab]||{};
+      const total = d.total||0;
+      const demLead = total > 0 ? ((d.dem||0)-(d.rep||0))/total : null;
+      return {fillColor: getColor(demLead), fillOpacity: 0.8, color: '#555', weight: 0.8};
+    },
+    onEachFeature: function(f, layer) {
+      const name = f.properties.name;
+      layer.bind(`<div style="font-size:12px;min-width:170px;"><b>${name}</b><br><span id="gTip${name.replace(/[^a-z]/gi,'')}">hover</span></div>`);
+      layer.on('mouseover', function() {
+        const d = data.by_county?.[name]?.[activeTab]||{};
+        const lead = (d.dem||0)-(d.rep||0);
+        const el = document.getElementById('gTip'+name.replace(/[^a-z]/gi,''));
+        if (el) el.innerHTML = `Total ${fmt(d.total)}<br>Dem ${fmt(d.dem)} · Rep ${fmt(d.rep)} · NPA ${fmt(d.npa)} · Oth ${fmt(d.other)}<br>${lead>=0?'Dem+':'Rep+'}${fmt(Math.abs(lead))}`;
+      });
+    }
+  }).addTo(_vbmMap);
+}
+
+function addEarlyLayer() {
+  if (_earlyLayer) _earlyMap.removeLayer(_earlyLayer);
+  let maxVal = 0;
+  Object.values(data.by_county||{}).forEach(c => { const t = c[earlyTab]?.total||0; if (t>maxVal) maxVal=t; });
+  _earlyLayer = L.geoJSON(geojson, {
+    style: function(f) {
+      const d = data.by_county?.[f.properties.name]?.[earlyTab]||{};
+      return {fillColor: getEarlyColor(d.total||0, maxVal), fillOpacity: 0.8, color: '#555', weight: 0.8};
+    },
+    onEachFeature: function(f, layer) {
+      const name = f.properties.name;
+      layer.bind(`<div style="font-size:12px;min-width:170px;"><b>${name}</b><br><span id="eTip${name.replace(/[^a-z]/gi,'')}">hover</span></div>`);
+      layer.on('mouseover', function() {
+        const d = data.by_county?.[name]?.[earlyTab]||{};
+        const el = document.getElementById('eTip'+name.replace(/[^a-z]/gi,''));
+        if (el) el.innerHTML = `Early ${fmt(d.total||0)}<br>Dem ${fmt(d.dem||0)} · Rep ${fmt(d.rep||0)} · NPA ${fmt(d.npa||0)} · Oth ${fmt(d.other||0)}`;
+      });
+    }
+  }).addTo(_earlyMap);
 }
 
 function styleMap() {
-  _vbmPolygons.forEach(poly => {
-    const d = data.by_county?.[poly._county]?.[activeTab]||{};
-    const total = d.total||0;
-    const demLead = total > 0 ? ((d.dem||0)-(d.rep||0))/total : null;
-    poly.setStyle({fillColor: getColor(demLead), fillOpacity: 0.8});
-  });
+  addVbmLayer();
 }
 
 function styleEarlyMap() {
-  let maxVal = 0;
-  Object.values(data.by_county||{}).forEach(c => {
-    const t = c[earlyTab]?.total || 0;
-    if (t > maxVal) maxVal = t;
-  });
-  _earlyPolygons.forEach(poly => {
-    const d = data.by_county?.[poly._county]?.[earlyTab]||{};
-    poly.setStyle({fillColor: getEarlyColor(d.total||0, maxVal), fillOpacity: 0.85});
-  });
+  if (_earlyMap) addEarlyLayer();
 }
 
 function getColor(val) {
@@ -836,9 +832,7 @@ function switchMain(which) {
         const base = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
         _earlyMap = L.map('earlyMap', {zoomControl: true, scrollWheelZoom: true, center: [28.5, -83], zoom: 6});
         L.tileLayer(base, {maxZoom: 10, minZoom: 5}).addTo(_earlyMap);
-        _earlyPolygons = [];
-        const earlyGroup = L.layerGroup().addTo(_earlyMap);
-        geojson.features.forEach(f => addCountyPoly(earlyGroup, f, _earlyPolygons, 'early'));
+        addEarlyLayer();
       } catch(e) { console.error('Early map init error:', e); }
     }
     if (geojson) styleEarlyMap();
