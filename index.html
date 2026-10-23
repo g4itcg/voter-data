@@ -724,9 +724,11 @@ let _vbmMap = null, _earlyMap = null;
 let _vbmLayer = null, _earlyLayer = null;
 
 function buildMap() {
+  if (!geojson || typeof L === 'undefined') return;
   try {
     const base = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     _vbmMap = L.map('vbmMap', {zoomControl: true, scrollWheelZoom: true, center: [28.5, -83], zoom: 6});
+    if (!_vbmMap) { console.log('Leaflet map creation deferred'); return; }
     L.tileLayer(base, {maxZoom: 10, minZoom: 5}).addTo(_vbmMap);
     addVbmLayer();
     // Early map is lazy-initialized in switchMain
