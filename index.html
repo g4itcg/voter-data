@@ -525,9 +525,7 @@ function renderMarginTrend() {
     }
   }
   
-  // Trend line
-  const pts = margins.map((p,i) => `${x(i)},${y(p.m)}`).join(' ');
-  out += `<polyline points="${pts}" fill="none" stroke="#333" stroke-width="2" stroke-linejoin="round"/>`;
+  // Trend line removed
   
   // Latest point label
   const last = margins[margins.length-1];
