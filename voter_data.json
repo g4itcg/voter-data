@@ -3,33 +3,33 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-10-24T21:00:37+00:00",
+  "fetched_at": "2026-10-24T21:10:37+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
-      "rep": 382654,
-      "dem": 484094,
-      "other": 32279,
-      "npa": 266232,
-      "total": 1165259
+      "rep": 381387,
+      "dem": 479476,
+      "other": 32113,
+      "npa": 264687,
+      "total": 1157663
     },
     "vbm_voted": {
-      "rep": 492678,
-      "dem": 589122,
-      "npa": 244583,
-      "other": 48598,
-      "total": 1374981
+      "rep": 492769,
+      "dem": 589245,
+      "npa": 244590,
+      "other": 48633,
+      "total": 1375237
     },
     "early_voted": {
-      "rep": 532137,
-      "dem": 436594,
-      "npa": 198188,
-      "other": 39166,
-      "total": 1206085,
+      "rep": 532810,
+      "dem": 437369,
+      "npa": 198588,
+      "other": 39225,
+      "total": 1207992,
       "_source": "FLVoiceNews/2026-10-24"
     },
     "vbm_outstanding": 0,
-    "vbm_return_rate": 118.0
+    "vbm_return_rate": 118.8
   },
   "by_county": {
     "Alachua": {
@@ -149,18 +149,18 @@
     },
     "Broward": {
       "vbm_provided": {
-        "rep": 19644,
-        "dem": 58522,
-        "other": 2487,
-        "npa": 26915,
-        "total": 107568
+        "rep": 18377,
+        "dem": 53904,
+        "other": 2321,
+        "npa": 25370,
+        "total": 99972
       },
       "vbm_voted": {
-        "rep": 15771,
-        "dem": 47579,
-        "other": 1483,
-        "npa": 15022,
-        "total": 79855
+        "rep": 16911,
+        "dem": 51614,
+        "other": 1639,
+        "npa": 16350,
+        "total": 86514
       },
       "early_voted": {
         "rep": 20953,
