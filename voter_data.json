@@ -3,33 +3,33 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-10-24T15:00:34+00:00",
+  "fetched_at": "2026-10-24T15:10:34+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
-      "rep": 383841,
-      "dem": 484917,
-      "other": 32350,
-      "npa": 266666,
-      "total": 1167774
+      "rep": 383824,
+      "dem": 484905,
+      "other": 32349,
+      "npa": 266636,
+      "total": 1167714
     },
     "vbm_voted": {
-      "rep": 477370,
-      "dem": 571369,
-      "npa": 243520,
-      "other": 39900,
-      "total": 1332159
+      "rep": 477762,
+      "dem": 571657,
+      "npa": 243546,
+      "other": 40068,
+      "total": 1333033
     },
     "early_voted": {
-      "rep": 469407,
-      "dem": 382286,
-      "npa": 171540,
-      "other": 35549,
-      "total": 1058782,
+      "rep": 471525,
+      "dem": 383864,
+      "npa": 172345,
+      "other": 35650,
+      "total": 1063384,
       "_source": "FLVoiceNews/2026-10-24"
     },
     "vbm_outstanding": 0,
-    "vbm_return_rate": 114.1
+    "vbm_return_rate": 114.2
   },
   "by_county": {
     "Alachua": {
@@ -379,25 +379,25 @@
     },
     "Escambia": {
       "vbm_provided": {
-        "rep": 6652,
-        "dem": 6766,
-        "other": 420,
-        "npa": 2698,
-        "total": 16536
+        "rep": 6635,
+        "dem": 6754,
+        "other": 419,
+        "npa": 2668,
+        "total": 16476
       },
       "vbm_voted": {
-        "rep": 4652,
-        "dem": 4279,
-        "other": 217,
-        "npa": 1467,
-        "total": 10615
+        "rep": 4694,
+        "dem": 4330,
+        "other": 220,
+        "npa": 1507,
+        "total": 10751
       },
       "early_voted": {
-        "rep": 7114,
-        "dem": 4339,
-        "other": 261,
-        "npa": 1576,
-        "total": 13290
+        "rep": 8884,
+        "dem": 5445,
+        "other": 334,
+        "npa": 1989,
+        "total": 16652
       }
     },
     "Flagler": {
