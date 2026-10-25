@@ -3,7 +3,7 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-10-25T19:30:48+00:00",
+  "fetched_at": "2026-10-25T19:40:48+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
@@ -14,18 +14,18 @@
       "total": 1099503
     },
     "vbm_voted": {
-      "rep": 499922,
-      "dem": 602825,
-      "npa": 245155,
-      "other": 53313,
-      "total": 1401215
+      "rep": 499927,
+      "dem": 602858,
+      "npa": 245156,
+      "other": 53330,
+      "total": 1401271
     },
     "early_voted": {
-      "rep": 588521,
-      "dem": 490847,
-      "npa": 225254,
-      "other": 42432,
-      "total": 1347054,
+      "rep": 589478,
+      "dem": 492067,
+      "npa": 225746,
+      "other": 42488,
+      "total": 1349779,
       "_source": "FLVoiceNews/2026-10-25"
     },
     "vbm_outstanding": 0,
