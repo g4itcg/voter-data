@@ -3,33 +3,33 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-10-28T18:32:07+00:00",
+  "fetched_at": "2026-10-28T18:40:35+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
       "rep": 285028,
       "dem": 338037,
-      "npa": 198532,
       "other": 24248,
+      "npa": 198532,
       "total": 845845
     },
     "vbm_voted": {
-      "rep": 588286,
-      "dem": 718833,
-      "npa": 251872,
-      "other": 107827,
-      "total": 1666818
+      "rep": 561166,
+      "dem": 685405,
+      "other": 38508,
+      "npa": 302097,
+      "total": 1587176
     },
     "early_voted": {
-      "rep": 927589,
-      "dem": 745651,
-      "npa": 362382,
-      "other": 61769,
-      "total": 2097391,
-      "_source": "FLVoiceNews/2026-10-28"
+      "rep": 853315,
+      "dem": 694421,
+      "other": 48140,
+      "npa": 341909,
+      "total": 1937785,
+      "_source": "state"
     },
     "vbm_outstanding": 0,
-    "vbm_return_rate": 197.1
+    "vbm_return_rate": 187.6
   },
   "by_county": {
     "Alachua": {
