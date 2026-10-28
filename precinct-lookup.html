@@ -176,7 +176,7 @@
   </div>
 
   <div class="quick-links">
-    <h3>🔍 Quick links by media market</h3>
+    <h3>🏛️ All Counties</h3>
     <div class="tags" id="quickLinks"></div>
   </div>
 
@@ -262,24 +262,22 @@ const select = document.getElementById('countySelect');
 COUNTIES.sort((a,b) => a.name.localeCompare(b.name)).forEach(c => {
   const opt = document.createElement('option');
   opt.value = c.url;
-  opt.textContent = `${c.name} (${c.market})`;
-  opt.dataset.market = c.market;
+  opt.textContent = c.name;
   opt.dataset.cname = c.name;
   select.appendChild(opt);
 });
 
-// Quick links by market
-const markets = [...new Set(COUNTIES.map(c => c.market))].sort();
+// Quick links: all counties alphabetically
 const ql = document.getElementById('quickLinks');
-markets.forEach(m => {
-  const counties = COUNTIES.filter(c => c.market === m).sort((a,b) => a.name.localeCompare(b.name));
+COUNTIES.slice().sort((a,b) => a.name.localeCompare(b.name)).forEach(c => {
   const a = document.createElement('a');
   a.href = '#';
-  a.textContent = `${m} (${counties.length})`;
+  a.textContent = c.name;
   a.onclick = (e) => {
     e.preventDefault();
-    const names = counties.map(c => c.name).join(', ');
-    alert(`Counties in ${m}:\n${names}\n\nSelect from the dropdown above.`);
+    select.value = c.url;
+    loadCounty();
+    document.getElementById('precinctFrame').scrollIntoView({ behavior: 'smooth' });
   };
   ql.appendChild(a);
 });
