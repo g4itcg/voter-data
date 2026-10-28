@@ -112,27 +112,6 @@
     margin-top: 20px;
   }
 
-  .quick-links {
-    background: var(--white);
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: var(--shadow);
-    margin-top: 20px;
-  }
-  .quick-links h3 { font-size: 14px; color: var(--blue); margin-bottom: 12px; }
-  .quick-links .tags { display: flex; flex-wrap: wrap; gap: 8px; }
-  .quick-links .tags a {
-    display: inline-block;
-    padding: 6px 14px;
-    background: #F0F2F5;
-    border-radius: 20px;
-    text-decoration: none;
-    color: var(--text);
-    font-size: 13px;
-    transition: background 0.2s;
-  }
-  .quick-links .tags a:hover { background: var(--blue); color: white; }
-
   .brand-footer {
     text-align: center;
     padding: 20px;
@@ -173,11 +152,6 @@
 
   <div class="disclaimer">
     ⚠️ DISCLAIMER: This is for informational purposes only. Always check your local Supervisor of Elections website for the most up-to-date information.
-  </div>
-
-  <div class="quick-links">
-    <h3>🏛️ All Counties</h3>
-    <div class="tags" id="quickLinks"></div>
   </div>
 
   <div class="brand-footer">
@@ -265,21 +239,6 @@ COUNTIES.sort((a,b) => a.name.localeCompare(b.name)).forEach(c => {
   opt.textContent = c.name;
   opt.dataset.cname = c.name;
   select.appendChild(opt);
-});
-
-// Quick links: all counties alphabetically
-const ql = document.getElementById('quickLinks');
-COUNTIES.slice().sort((a,b) => a.name.localeCompare(b.name)).forEach(c => {
-  const a = document.createElement('a');
-  a.href = '#';
-  a.textContent = c.name;
-  a.onclick = (e) => {
-    e.preventDefault();
-    select.value = c.url;
-    loadCounty();
-    document.getElementById('precinctFrame').scrollIntoView({ behavior: 'smooth' });
-  };
-  ql.appendChild(a);
 });
 
 function loadCounty() {
