@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find Your Precinct | BetterFL</title>
+<style>
+  :root {
+    --blue: #1A3A7A;
+    --blue-dark: #0F2A5A;
+    --yellow: #FFC107;
+    --bg: #F5F5F5;
+    --white: #FFFFFF;
+    --text: #333333;
+    --text-light: #666666;
+    --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .header {
+    background: var(--blue);
+    color: white;
+    padding: 20px 24px;
+    text-align: center;
+  }
+  .header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+  .header .subtitle { font-size: 14px; opacity: 0.85; margin-top: 4px; }
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px 16px; }
+
+  .search-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+  }
+  .search-card label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--blue);
+    margin-bottom: 8px;
+  }
+  .county-select {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 16px;
+    border: 2px solid #D0D0D0;
+    border-radius: 8px;
+    background: white;
+    color: var(--text);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .county-select:focus { outline: none; border-color: var(--blue); }
+
+  .precinct-frame {
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    display: none;
+  }
+  .precinct-frame.active { display: block; }
+  .precinct-frame iframe {
+    width: 100%;
+    height: 650px;
+    border: none;
+  }
+  .precinct-frame .frame-header {
+    padding: 16px 20px;
+    background: #F8F9FA;
+    border-bottom: 1px solid #E8E8E8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .frame-header .county-name { font-weight: 700; color: var(--blue); font-size: 16px; }
+  .frame-header .launch-btn {
+    background: var(--blue);
+    color: white;
+    padding: 6px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .frame-header .launch-btn:hover { background: var(--blue-dark); }
+
+  .disclaimer {
+    background: var(--yellow);
+    color: var(--blue-dark);
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .quick-links {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    margin-top: 20px;
+  }
+  .quick-links h3 { font-size: 14px; color: var(--blue); margin-bottom: 12px; }
+  .quick-links .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .quick-links .tags a {
+    display: inline-block;
+    padding: 6px 14px;
+    background: #F0F2F5;
+    border-radius: 20px;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 13px;
+    transition: background 0.2s;
+  }
+  .quick-links .tags a:hover { background: var(--blue); color: white; }
+
+  .brand-footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 24px;
+    font-size: 12px;
+    color: var(--text-light);
+  }
+  .brand-footer .logo-text { font-weight: 700; color: var(--blue); }
+
+  @media (max-width: 768px) {
+    .header h1 { font-size: 22px; }
+    .precinct-frame iframe { height: 500px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🗳️ Find Your Election Day Precinct</h1>
+  <div class="subtitle">Select your county to find your polling place for November 3, 2026</div>
+</div>
+
+<div class="container">
+  <div class="search-card">
+    <label for="countySelect">Select your county to find your polling place</label>
+    <select class="county-select" id="countySelect" onchange="loadCounty()">
+      <option value="">— Choose a county —</option>
+    </select>
+  </div>
+
+  <div class="precinct-frame" id="precinctFrame">
+    <div class="frame-header">
+      <span class="county-name" id="frameCounty"></span>
+      <a class="launch-btn" id="launchBtn" target="_blank" href="#">↗ Open on county site</a>
+    </div>
+    <iframe id="precinctIframe" sandbox="allow-scripts allow-forms allow-same-origin" loading="lazy"></iframe>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ DISCLAIMER: This is for informational purposes only. Always check your local Supervisor of Elections website for the most up-to-date information.
+  </div>
+
+  <div class="quick-links">
+    <h3>🔍 Quick links by media market</h3>
+    <div class="tags" id="quickLinks"></div>
+  </div>
+
+  <div class="brand-footer">
+    Powered by <span class="logo-text">FLORIDIANS FOR A BETTER FUTURE</span> ·
+    Data from <a href="https://dos.fl.gov/elections/for-voters/check-your-voter-status-and-polling-place/voter-precinct-lookup/" target="_blank" style="color:var(--blue);text-decoration:none;">Florida Division of Elections</a>
+  </div>
+</div>
+
+<script>
+const COUNTIES = [
+  { name: "Alachua", url: "https://www.votealachua.gov/207/Precinct-Voting", market: "Other" },
+  { name: "Baker", url: "https://votebakerfl.gov/precinct-finder/", market: "Jacksonville" },
+  { name: "Bay", url: "https://www.bayvotesfl.gov/voters/where-to-vote-in-person/", market: "Panama City" },
+  { name: "Bradford", url: "https://www.votebradfordfl.gov/voter/polling_locations.php", market: "Jacksonville" },
+  { name: "Brevard", url: "https://www.votebrevard.gov/Voter-Information/Find-Your-Precinct", market: "Orlando" },
+  { name: "Broward", url: "https://www.browardvotes.gov/Voter-Information/Precinct-Finder", market: "Miami-Ft Lauderdale" },
+  { name: "Calhoun", url: "https://www.votecalhoun.com/Voter-Information/Find-Your-Precinct", market: "Panama City" },
+  { name: "Charlotte", url: "https://www.soecharlottecountyfl.gov/Elections/Find-Your-Voting-Location", market: "Tampa" },
+  { name: "Citrus", url: "https://www.votecitrus.gov/230/Precinct-Finder", market: "Tampa" },
+  { name: "Clay", url: "https://www.clayelections.gov/Election-Information/Precinct-Finder", market: "Jacksonville" },
+  { name: "Collier", url: "https://www.colliervotes.gov/165/Find-My-Precinct", market: "Miami-Ft Lauderdale" },
+  { name: "Columbia", url: "https://www.votecolumbiafl.gov/voter_information/precincts_and_maps.php", market: "Jacksonville" },
+  { name: "DeSoto", url: "https://www.voterfocus.com/PrecinctFinder/addressSearch?county=des", market: "Tampa" },
+  { name: "Dixie", url: "https://dixievotes.gov/voter-resources/precinct-finder/", market: "Other" },
+  { name: "Duval", url: "https://www.duvalelections.gov/204/Polling-Location-Finder", market: "Jacksonville" },
+  { name: "Escambia", url: "https://escambiavotes.gov/where-to-vote", market: "Pensacola" },
+  { name: "Flagler", url: "https://www.flaglerelections.com/For-Voters/Find-Your-Precinct", market: "Orlando" },
+  { name: "Franklin", url: "https://www.votefranklinfl.gov/voter_information/precinct.php", market: "Panama City" },
+  { name: "Gadsden", url: "https://votegadsdenfl.gov/election-info/precinct-information/precinct-lookup/", market: "Tallahassee" },
+  { name: "Gilchrist", url: "https://www.votegilchrist.com/information_for_voters/precinct_finder.php", market: "Other" },
+  { name: "Glades", url: "https://voteglades.gov/voting-info/precinct-finder/", market: "Miami-Ft Lauderdale" },
+  { name: "Gulf", url: "https://www.votegulf.gov/list-of-precincts/", market: "Panama City" },
+  { name: "Hamilton", url: "https://www.hamiltonvotesfl.gov/voters/where-to-vote-in-person/", market: "Jacksonville" },
+  { name: "Hardee", url: "https://www.hardeecountyelections.com/Voter-Information/Find-My-Precinct", market: "Tampa" },
+  { name: "Hendry", url: "https://www.hendryelections.org/Polling-Place-Information/Precinct-Finder", market: "Miami-Ft Lauderdale" },
+  { name: "Hernando", url: "https://www.hernandovotes.gov/1205/Where-to-Vote", market: "Tampa" },
+  { name: "Highlands", url: "https://www.votehighlands.gov/where-do-i-vote", market: "Tampa" },
+  { name: "Hillsborough", url: "https://www.votehillsborough.gov/159/Voting-Precincts", market: "Tampa" },
+  { name: "Holmes", url: "https://holmeselectionsfl.gov/voter-information/where-to-vote/precinct-finder/", market: "Panama City" },
+  { name: "Indian River", url: "https://www.voteindianriver.com/Election-Information/Election-Day-Voting/Find-My-Precinct", market: "Miami-Ft Lauderdale" },
+  { name: "Jackson", url: "http://www.votejacksonfl.gov/Precinct-Finder", market: "Panama City" },
+  { name: "Jefferson", url: "https://www.jeffersonvotes.com/Voter-Information/Find-Your-Precinct", market: "Tallahassee" },
+  { name: "Lafayette", url: "https://www.lafayettevotes.net/Home/Where-Do-I-Vote", market: "Other" },
+  { name: "Lake", url: "https://www.lakevotes.gov/164/Find-My-Precinct", market: "Orlando" },
+  { name: "Lee", url: "https://www.lee.vote/245/Precincts-and-Polling-Places", market: "Miami-Ft Lauderdale" },
+  { name: "Leon", url: "https://www.leonvotes.gov/YourVoterinfo", market: "Tallahassee" },
+  { name: "Levy", url: "https://www.votelevy.gov/voters/where-to-vote-in-person/", market: "Other" },
+  { name: "Liberty", url: "https://libertycountyflsoe.gov/voter-information/voter-lookup/", market: "Panama City" },
+  { name: "Madison", url: "https://www.votemadison.com/where-to-vote-in-person/", market: "Tallahassee" },
+  { name: "Manatee", url: "https://www.votemanatee.com/Election-Information/Precinct-Finder-Sample-Ballots", market: "Tampa" },
+  { name: "Marion", url: "https://www.votemarion.gov/335/Find-My-Voting-Location", market: "Orlando" },
+  { name: "Martin", url: "https://www.voterfocus.com/VoterInformationLookup/voterSearch?county=MRT", market: "Miami-Ft Lauderdale" },
+  { name: "Miami-Dade", url: "https://www.miamidade.gov/global/service.page?Mduid_service=ser151187731708822", market: "Miami-Ft Lauderdale" },
+  { name: "Monroe", url: "https://www.votemonroeflkeys.gov/Where-to-Vote/Search", market: "Miami-Ft Lauderdale" },
+  { name: "Nassau", url: "https://www.votenassaufl.gov/where-do-i-vote", market: "Jacksonville" },
+  { name: "Okaloosa", url: "https://www.voteokaloosa.gov/voters/where-to-vote-in-person/", market: "Pensacola" },
+  { name: "Okeechobee", url: "https://www.voteokeechobee.gov/Election-Information/Find-Your-Precinct", market: "Miami-Ft Lauderdale" },
+  { name: "Orange", url: "https://www.ocfelections.gov/index.php/find-my-polling-place", market: "Orlando" },
+  { name: "Osceola", url: "https://www.voteosceola.gov/Voter-Information/Find-Your-Polling-Location", market: "Orlando" },
+  { name: "Palm Beach", url: "https://www.votepalmbeach.gov/Voters/Precinct-Finder", market: "Miami-Ft Lauderdale" },
+  { name: "Pasco", url: "https://www.pascovotes.gov/precincts/precinct_finder.php", market: "Tampa" },
+  { name: "Pinellas", url: "https://www.votepinellas.com/Election-Information/Find-Your-Precinct-Polling-Place", market: "Tampa" },
+  { name: "Polk", url: "https://www.polkelections.com/Voter-Services/Where-Do-I-Vote", market: "Tampa" },
+  { name: "Putnam", url: "https://www.voteputnamflorida.gov/election_information/precinct_finder.php", market: "Jacksonville" },
+  { name: "Santa Rosa", url: "https://votesantarosa.gov/election-information/list-of-precincts/", market: "Pensacola" },
+  { name: "Sarasota", url: "https://www.sarasotavotes.gov/Voter-Information/Precinct-Finder", market: "Tampa" },
+  { name: "Seminole", url: "https://www.voteseminole.gov/find-my-polling-place#PollingPlaceByAddress", market: "Orlando" },
+  { name: "St. Johns", url: "https://www.votesjc.gov/find-my-polling-place#gsc.tab=0", market: "Jacksonville" },
+  { name: "St. Lucie", url: "https://www.stlucievotes.gov/voter_information/find_my_precinct.php", market: "Miami-Ft Lauderdale" },
+  { name: "Sumter", url: "https://elections.sumtercountyfl.gov/204/Find-My-Elected-Officials-Where-do-I-vot", market: "Orlando" },
+  { name: "Suwannee", url: "https://www.suwanneevotes.com/Voter-Information/Precinct-Finder", market: "Jacksonville" },
+  { name: "Taylor", url: "https://www.taylorelectionsfl.gov/where-to-vote-in-person/", market: "Tallahassee" },
+  { name: "Union", url: "https://unionflvotes.com/voters/where-to-vote-in-person/", market: "Jacksonville" },
+  { name: "Volusia", url: "https://www.voterfocus.com/PrecinctFinder/addressSearch?county=VOL", market: "Orlando" },
+  { name: "Wakulla", url: "https://wakullavotes.gov/find-my-precinct/", market: "Tallahassee" },
+  { name: "Walton", url: "https://www.votewalton.com/Voting/Where-Do-I-Vote", market: "Pensacola" },
+  { name: "Washington", url: "https://wcsoe.gov/find-my-precinct/", market: "Panama City" }
+];
+
+// Populate dropdown
+const select = document.getElementById('countySelect');
+COUNTIES.sort((a,b) => a.name.localeCompare(b.name)).forEach(c => {
+  const opt = document.createElement('option');
+  opt.value = c.url;
+  opt.textContent = `${c.name} (${c.market})`;
+  opt.dataset.market = c.market;
+  opt.dataset.cname = c.name;
+  select.appendChild(opt);
+});
+
+// Quick links by market
+const markets = [...new Set(COUNTIES.map(c => c.market))].sort();
+const ql = document.getElementById('quickLinks');
+markets.forEach(m => {
+  const counties = COUNTIES.filter(c => c.market === m).sort((a,b) => a.name.localeCompare(b.name));
+  const a = document.createElement('a');
+  a.href = '#';
+  a.textContent = `${m} (${counties.length})`;
+  a.onclick = (e) => {
+    e.preventDefault();
+    const names = counties.map(c => c.name).join(', ');
+    alert(`Counties in ${m}:\n${names}\n\nSelect from the dropdown above.`);
+  };
+  ql.appendChild(a);
+});
+
+function loadCounty() {
+  const frame = document.getElementById('precinctFrame');
+  const iframe = document.getElementById('precinctIframe');
+  const idx = select.selectedIndex;
+  
+  if (idx <= 0) {
+    frame.classList.remove('active');
+    return;
+  }
+
+  const url = select.value;
+  const name = select.options[idx].dataset.cname;
+  
+  document.getElementById('frameCounty').textContent = name + ' County';
+  document.getElementById('launchBtn').href = url;
+  iframe.src = url;
+  frame.classList.add('active');
+}
+</script>
+</body>
+</html>
