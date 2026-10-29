@@ -3,7 +3,7 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-10-29T10:50:41+00:00",
+  "fetched_at": "2026-10-29T11:00:42+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
@@ -14,11 +14,11 @@
       "total": 845845
     },
     "vbm_voted": {
-      "rep": 594511,
-      "dem": 728016,
-      "npa": 323421,
+      "rep": 594538,
+      "dem": 728032,
+      "npa": 323431,
       "other": 41049,
-      "total": 1686997
+      "total": 1687050
     },
     "early_voted": {
       "rep": 972957,
@@ -29,7 +29,7 @@
       "_source": "FLVoiceNews/2026-10-29"
     },
     "vbm_outstanding": 0,
-    "vbm_return_rate": 199.4
+    "vbm_return_rate": 199.5
   },
   "by_county": {
     "Alachua": {
@@ -157,10 +157,10 @@
       },
       "vbm_voted": {
         "rep": 21436,
-        "dem": 68707,
-        "npa": 22257,
+        "dem": 68709,
+        "npa": 22258,
         "other": 2171,
-        "total": 114571
+        "total": 114574
       },
       "early_voted": {
         "rep": 44726,
@@ -1169,10 +1169,10 @@
       },
       "vbm_voted": {
         "rep": 32656,
-        "dem": 70205,
-        "npa": 25234,
+        "dem": 70206,
+        "npa": 25235,
         "other": 3545,
-        "total": 131640
+        "total": 131642
       },
       "early_voted": {
         "rep": 48510,
@@ -1329,11 +1329,11 @@
         "total": 18264
       },
       "vbm_voted": {
-        "rep": 11553,
-        "dem": 15434,
-        "npa": 7079,
+        "rep": 11558,
+        "dem": 15443,
+        "npa": 7084,
         "other": 884,
-        "total": 34950
+        "total": 34969
       },
       "early_voted": {
         "rep": 21633,
@@ -1398,11 +1398,11 @@
         "total": 10481
       },
       "vbm_voted": {
-        "rep": 12058,
-        "dem": 8374,
-        "npa": 4448,
+        "rep": 12080,
+        "dem": 8378,
+        "npa": 4451,
         "other": 635,
-        "total": 25515
+        "total": 25544
       },
       "early_voted": {
         "rep": 20549,
