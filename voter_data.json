@@ -3,7 +3,7 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-10-29T17:50:44+00:00",
+  "fetched_at": "2026-10-29T18:00:44+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
@@ -14,18 +14,18 @@
       "total": 752162
     },
     "vbm_voted": {
-      "rep": 615210,
-      "dem": 752147,
-      "npa": 336507,
-      "other": 42546,
-      "total": 1746410
+      "rep": 615222,
+      "dem": 752262,
+      "npa": 336571,
+      "other": 42549,
+      "total": 1746604
     },
     "early_voted": {
-      "rep": 1041261,
-      "dem": 834671,
-      "npa": 422947,
-      "other": 59602,
-      "total": 2358481,
+      "rep": 1041406,
+      "dem": 834916,
+      "npa": 423077,
+      "other": 59610,
+      "total": 2359009,
       "_source": "FLVoiceNews/2026-10-29"
     },
     "vbm_outstanding": 0,
@@ -156,18 +156,18 @@
         "total": 27973
       },
       "vbm_voted": {
-        "rep": 21934,
-        "dem": 70901,
-        "npa": 22979,
-        "other": 2233,
-        "total": 118047
+        "rep": 21946,
+        "dem": 71016,
+        "npa": 23043,
+        "other": 2236,
+        "total": 118241
       },
       "early_voted": {
-        "rep": 47719,
-        "dem": 106037,
-        "npa": 43014,
-        "other": 4417,
-        "total": 201187
+        "rep": 47821,
+        "dem": 106268,
+        "npa": 43120,
+        "other": 4421,
+        "total": 201630
       }
     },
     "Calhoun": {
@@ -348,10 +348,10 @@
       },
       "early_voted": {
         "rep": 1157,
-        "dem": 208,
-        "npa": 151,
+        "dem": 210,
+        "npa": 153,
         "other": 24,
-        "total": 1540
+        "total": 1544
       }
     },
     "Duval": {
@@ -508,11 +508,11 @@
         "total": 603
       },
       "early_voted": {
-        "rep": 387,
+        "rep": 389,
         "dem": 132,
         "npa": 64,
         "other": 8,
-        "total": 591
+        "total": 593
       }
     },
     "Gulf": {
@@ -991,11 +991,11 @@
         "total": 16509
       },
       "early_voted": {
-        "rep": 14365,
-        "dem": 5278,
-        "npa": 3705,
-        "other": 812,
-        "total": 24160
+        "rep": 14405,
+        "dem": 5290,
+        "npa": 3727,
+        "other": 816,
+        "total": 24238
       }
     },
     "Miami-Dade": {
@@ -1451,11 +1451,11 @@
         "total": 722
       },
       "early_voted": {
-        "rep": 1251,
+        "rep": 1252,
         "dem": 421,
         "npa": 82,
         "other": 20,
-        "total": 1774
+        "total": 1775
       }
     },
     "Union": {
