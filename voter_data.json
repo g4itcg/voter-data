@@ -3,7 +3,7 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-10-29T21:30:46+00:00",
+  "fetched_at": "2026-10-29T21:40:46+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
@@ -14,18 +14,18 @@
       "total": 752162
     },
     "vbm_voted": {
-      "rep": 621447,
-      "dem": 759963,
-      "npa": 340536,
-      "other": 43076,
-      "total": 1765022
+      "rep": 621472,
+      "dem": 759970,
+      "npa": 340541,
+      "other": 43077,
+      "total": 1765060
     },
     "early_voted": {
-      "rep": 1088762,
-      "dem": 870881,
-      "npa": 444029,
-      "other": 62698,
-      "total": 2466370,
+      "rep": 1088898,
+      "dem": 871210,
+      "npa": 444185,
+      "other": 62711,
+      "total": 2467004,
       "_source": "FLVoiceNews/2026-10-29"
     },
     "vbm_outstanding": 0,
@@ -156,18 +156,18 @@
         "total": 27973
       },
       "vbm_voted": {
-        "rep": 22736,
-        "dem": 72707,
-        "npa": 24005,
+        "rep": 22738,
+        "dem": 72714,
+        "npa": 24008,
         "other": 2350,
-        "total": 121798
+        "total": 121810
       },
       "early_voted": {
-        "rep": 49813,
-        "dem": 110409,
-        "npa": 45137,
-        "other": 4647,
-        "total": 210006
+        "rep": 49925,
+        "dem": 110694,
+        "npa": 45271,
+        "other": 4660,
+        "total": 210550
       }
     },
     "Calhoun": {
@@ -340,18 +340,18 @@
         "total": 443
       },
       "vbm_voted": {
-        "rep": 584,
+        "rep": 607,
         "dem": 199,
-        "npa": 86,
-        "other": 15,
-        "total": 884
+        "npa": 88,
+        "other": 16,
+        "total": 910
       },
       "early_voted": {
-        "rep": 1201,
+        "rep": 1205,
         "dem": 215,
         "npa": 160,
         "other": 24,
-        "total": 1600
+        "total": 1604
       }
     },
     "Duval": {
@@ -1152,11 +1152,11 @@
         "total": 27247
       },
       "early_voted": {
-        "rep": 12421,
-        "dem": 17359,
-        "npa": 9118,
+        "rep": 12441,
+        "dem": 17403,
+        "npa": 9140,
         "other": 958,
-        "total": 39856
+        "total": 39942
       }
     },
     "Palm Beach": {
