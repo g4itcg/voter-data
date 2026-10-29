@@ -3,7 +3,7 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-10-29T16:10:44+00:00",
+  "fetched_at": "2026-10-29T16:20:44+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
@@ -14,18 +14,18 @@
       "total": 753075
     },
     "vbm_voted": {
-      "rep": 609967,
-      "dem": 745751,
-      "npa": 333242,
-      "other": 42130,
-      "total": 1731090
+      "rep": 610008,
+      "dem": 745836,
+      "npa": 333264,
+      "other": 42137,
+      "total": 1731245
     },
     "early_voted": {
-      "rep": 1016963,
-      "dem": 818286,
-      "npa": 412937,
-      "other": 58119,
-      "total": 2306305,
+      "rep": 1017064,
+      "dem": 818402,
+      "npa": 413003,
+      "other": 58124,
+      "total": 2306593,
       "_source": "FLVoiceNews/2026-10-29"
     },
     "vbm_outstanding": 0,
@@ -156,18 +156,18 @@
         "total": 27973
       },
       "vbm_voted": {
-        "rep": 21666,
-        "dem": 69528,
-        "npa": 22513,
-        "other": 2193,
-        "total": 115900
+        "rep": 21688,
+        "dem": 69605,
+        "npa": 22529,
+        "other": 2196,
+        "total": 116018
       },
       "early_voted": {
-        "rep": 46732,
-        "dem": 104087,
-        "npa": 42039,
-        "other": 4326,
-        "total": 197184
+        "rep": 46781,
+        "dem": 104193,
+        "npa": 42095,
+        "other": 4327,
+        "total": 197396
       }
     },
     "Calhoun": {
@@ -347,11 +347,11 @@
         "total": 863
       },
       "early_voted": {
-        "rep": 1131,
+        "rep": 1136,
         "dem": 200,
         "npa": 146,
         "other": 23,
-        "total": 1500
+        "total": 1505
       }
     },
     "Duval": {
@@ -508,11 +508,11 @@
         "total": 603
       },
       "early_voted": {
-        "rep": 377,
-        "dem": 124,
-        "npa": 63,
+        "rep": 378,
+        "dem": 125,
+        "npa": 64,
         "other": 8,
-        "total": 572
+        "total": 575
       }
     },
     "Gulf": {
@@ -984,18 +984,18 @@
         "total": 5573
       },
       "vbm_voted": {
-        "rep": 7328,
-        "dem": 5958,
-        "npa": 2621,
-        "other": 512,
-        "total": 16419
+        "rep": 7347,
+        "dem": 5966,
+        "npa": 2627,
+        "other": 516,
+        "total": 16456
       },
       "early_voted": {
-        "rep": 13995,
-        "dem": 5181,
-        "npa": 3611,
-        "other": 789,
-        "total": 23576
+        "rep": 14032,
+        "dem": 5188,
+        "npa": 3620,
+        "other": 793,
+        "total": 23633
       }
     },
     "Miami-Dade": {
@@ -1451,11 +1451,11 @@
         "total": 722
       },
       "early_voted": {
-        "rep": 1191,
-        "dem": 403,
+        "rep": 1200,
+        "dem": 405,
         "npa": 82,
         "other": 17,
-        "total": 1693
+        "total": 1704
       }
     },
     "Union": {
