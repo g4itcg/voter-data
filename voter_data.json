@@ -3,7 +3,7 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-10-29T13:40:43+00:00",
+  "fetched_at": "2026-10-29T13:50:43+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
@@ -14,18 +14,18 @@
       "total": 753075
     },
     "vbm_voted": {
-      "rep": 600684,
-      "dem": 734946,
-      "npa": 327087,
-      "other": 41474,
-      "total": 1704191
+      "rep": 600707,
+      "dem": 734954,
+      "npa": 327095,
+      "other": 41475,
+      "total": 1704231
     },
     "early_voted": {
-      "rep": 982272,
-      "dem": 796327,
-      "npa": 398877,
-      "other": 56049,
-      "total": 2233525,
+      "rep": 982331,
+      "dem": 796397,
+      "npa": 398923,
+      "other": 56050,
+      "total": 2233701,
       "_source": "FLVoiceNews/2026-10-29"
     },
     "vbm_outstanding": 0,
@@ -163,11 +163,11 @@
         "total": 114592
       },
       "early_voted": {
-        "rep": 45308,
-        "dem": 101423,
-        "npa": 40677,
-        "other": 4188,
-        "total": 191596
+        "rep": 45336,
+        "dem": 101485,
+        "npa": 40716,
+        "other": 4189,
+        "total": 191726
       }
     },
     "Calhoun": {
@@ -347,11 +347,11 @@
         "total": 863
       },
       "early_voted": {
-        "rep": 1074,
+        "rep": 1079,
         "dem": 198,
-        "npa": 142,
+        "npa": 144,
         "other": 19,
-        "total": 1433
+        "total": 1440
       }
     },
     "Duval": {
@@ -984,18 +984,18 @@
         "total": 5573
       },
       "vbm_voted": {
-        "rep": 7115,
-        "dem": 5817,
-        "npa": 2541,
-        "other": 505,
-        "total": 15978
+        "rep": 7138,
+        "dem": 5825,
+        "npa": 2549,
+        "other": 506,
+        "total": 16018
       },
       "early_voted": {
-        "rep": 13512,
-        "dem": 5036,
-        "npa": 3482,
+        "rep": 13538,
+        "dem": 5044,
+        "npa": 3487,
         "other": 762,
-        "total": 22792
+        "total": 22831
       }
     },
     "Miami-Dade": {
