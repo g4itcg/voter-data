@@ -3,7 +3,7 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-10-29T21:10:46+00:00",
+  "fetched_at": "2026-10-29T21:20:46+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
@@ -21,11 +21,11 @@
       "total": 1764158
     },
     "early_voted": {
-      "rep": 1084951,
-      "dem": 867200,
-      "npa": 441996,
-      "other": 62388,
-      "total": 2456535,
+      "rep": 1085062,
+      "dem": 867434,
+      "npa": 442113,
+      "other": 62403,
+      "total": 2457012,
       "_source": "FLVoiceNews/2026-10-29"
     },
     "vbm_outstanding": 0,
@@ -163,11 +163,11 @@
         "total": 121798
       },
       "early_voted": {
-        "rep": 49649,
-        "dem": 110047,
-        "npa": 44950,
-        "other": 4623,
-        "total": 209269
+        "rep": 49758,
+        "dem": 110281,
+        "npa": 45066,
+        "other": 4638,
+        "total": 209743
       }
     },
     "Calhoun": {
@@ -347,11 +347,11 @@
         "total": 863
       },
       "early_voted": {
-        "rep": 1200,
+        "rep": 1201,
         "dem": 215,
-        "npa": 159,
+        "npa": 160,
         "other": 24,
-        "total": 1598
+        "total": 1600
       }
     },
     "Duval": {
@@ -991,11 +991,11 @@
         "total": 16511
       },
       "early_voted": {
-        "rep": 15058,
+        "rep": 15059,
         "dem": 5545,
         "npa": 3903,
         "other": 856,
-        "total": 25362
+        "total": 25363
       }
     },
     "Miami-Dade": {
