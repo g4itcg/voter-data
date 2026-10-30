@@ -3,7 +3,7 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-10-30T17:10:54+00:00",
+  "fetched_at": "2026-10-30T17:15:13+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
@@ -14,22 +14,22 @@
       "total": 673998
     },
     "vbm_voted": {
-      "rep": 640953,
-      "dem": 781946,
-      "npa": 353191,
-      "other": 44606,
-      "total": 1820696
+      "rep": 640965,
+      "dem": 782046,
+      "npa": 353228,
+      "other": 44607,
+      "total": 1820846
     },
     "early_voted": {
-      "rep": 1176274,
-      "dem": 936458,
-      "npa": 486939,
-      "other": 68519,
-      "total": 2668190,
+      "rep": 1176348,
+      "dem": 936573,
+      "npa": 487024,
+      "other": 68528,
+      "total": 2668473,
       "_source": "FLVoiceNews/2026-10-30"
     },
     "vbm_outstanding": 0,
-    "vbm_return_rate": 270.1
+    "vbm_return_rate": 270.2
   },
   "by_county": {
     "Alachua": {
@@ -156,18 +156,18 @@
         "total": 24379
       },
       "vbm_voted": {
-        "rep": 23261,
-        "dem": 74396,
-        "npa": 24646,
-        "other": 2410,
-        "total": 124713
+        "rep": 23273,
+        "dem": 74496,
+        "npa": 24683,
+        "other": 2411,
+        "total": 124863
       },
       "early_voted": {
-        "rep": 54191,
-        "dem": 119378,
-        "npa": 50038,
-        "other": 5126,
-        "total": 228733
+        "rep": 54255,
+        "dem": 119492,
+        "npa": 50122,
+        "other": 5134,
+        "total": 229003
       }
     },
     "Calhoun": {
@@ -347,11 +347,11 @@
         "total": 910
       },
       "early_voted": {
-        "rep": 1317,
-        "dem": 229,
+        "rep": 1325,
+        "dem": 230,
         "npa": 171,
-        "other": 27,
-        "total": 1744
+        "other": 28,
+        "total": 1754
       }
     },
     "Duval": {
@@ -508,11 +508,11 @@
         "total": 614
       },
       "early_voted": {
-        "rep": 463,
+        "rep": 465,
         "dem": 149,
-        "npa": 74,
+        "npa": 75,
         "other": 9,
-        "total": 695
+        "total": 698
       }
     },
     "Gulf": {
