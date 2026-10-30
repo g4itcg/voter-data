@@ -3,7 +3,7 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-10-30T12:40:52+00:00",
+  "fetched_at": "2026-10-30T12:50:52+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
@@ -21,11 +21,11 @@
       "total": 1777014
     },
     "early_voted": {
-      "rep": 1106795,
-      "dem": 890904,
-      "npa": 455731,
-      "other": 64177,
-      "total": 2517607,
+      "rep": 1106838,
+      "dem": 890976,
+      "npa": 455770,
+      "other": 64180,
+      "total": 2517764,
       "_source": "FLVoiceNews/2026-10-30"
     },
     "vbm_outstanding": 0,
@@ -163,11 +163,11 @@
         "total": 122177
       },
       "early_voted": {
-        "rep": 51184,
-        "dem": 113958,
-        "npa": 46989,
-        "other": 4830,
-        "total": 216961
+        "rep": 51213,
+        "dem": 114029,
+        "npa": 47025,
+        "other": 4832,
+        "total": 217099
       }
     },
     "Calhoun": {
@@ -347,11 +347,11 @@
         "total": 910
       },
       "early_voted": {
-        "rep": 1216,
+        "rep": 1219,
         "dem": 215,
-        "npa": 160,
-        "other": 24,
-        "total": 1615
+        "npa": 162,
+        "other": 25,
+        "total": 1621
       }
     },
     "Duval": {
@@ -508,11 +508,11 @@
         "total": 614
       },
       "early_voted": {
-        "rep": 408,
+        "rep": 411,
         "dem": 139,
         "npa": 70,
         "other": 8,
-        "total": 625
+        "total": 628
       }
     },
     "Gulf": {
@@ -1451,11 +1451,11 @@
         "total": 764
       },
       "early_voted": {
-        "rep": 1367,
-        "dem": 463,
-        "npa": 89,
+        "rep": 1375,
+        "dem": 464,
+        "npa": 90,
         "other": 20,
-        "total": 1939
+        "total": 1949
       }
     },
     "Union": {
