@@ -3,7 +3,7 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-10-29T23:50:47+00:00",
+  "fetched_at": "2026-10-30T00:00:47+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
@@ -14,19 +14,19 @@
       "total": 752162
     },
     "vbm_voted": {
-      "rep": 622320,
-      "dem": 761145,
-      "npa": 340967,
-      "other": 43148,
-      "total": 1767580
+      "rep": 622333,
+      "dem": 761199,
+      "npa": 340983,
+      "other": 43151,
+      "total": 1767666
     },
     "early_voted": {
-      "rep": 1099084,
-      "dem": 884428,
-      "npa": 451502,
-      "other": 63605,
-      "total": 2498619,
-      "_source": "FLVoiceNews/2026-10-29"
+      "rep": 1099095,
+      "dem": 884482,
+      "npa": 451529,
+      "other": 63609,
+      "total": 2498715,
+      "_source": "FLVoiceNews/2026-10-30"
     },
     "vbm_outstanding": 0,
     "vbm_return_rate": 235.0
@@ -156,18 +156,18 @@
         "total": 27973
       },
       "vbm_voted": {
-        "rep": 22769,
-        "dem": 72810,
-        "npa": 24057,
+        "rep": 22771,
+        "dem": 72819,
+        "npa": 24061,
         "other": 2356,
-        "total": 121992
+        "total": 122007
       },
       "early_voted": {
         "rep": 50773,
-        "dem": 113071,
+        "dem": 113074,
         "npa": 46449,
         "other": 4772,
-        "total": 215065
+        "total": 215068
       }
     },
     "Calhoun": {
@@ -386,11 +386,11 @@
         "total": 12050
       },
       "vbm_voted": {
-        "rep": 7125,
-        "dem": 6825,
-        "npa": 2292,
+        "rep": 7126,
+        "dem": 6826,
+        "npa": 2293,
         "other": 337,
-        "total": 16579
+        "total": 16582
       },
       "early_voted": {
         "rep": 18267,
@@ -1083,11 +1083,11 @@
         "total": 8476
       },
       "early_voted": {
-        "rep": 18045,
+        "rep": 18048,
         "dem": 5183,
         "npa": 3459,
         "other": 592,
-        "total": 27279
+        "total": 27282
       }
     },
     "Okeechobee": {
@@ -1123,17 +1123,17 @@
       },
       "vbm_voted": {
         "rep": 23562,
-        "dem": 44445,
+        "dem": 44446,
         "npa": 19017,
-        "other": 2103,
-        "total": 89127
+        "other": 2104,
+        "total": 89129
       },
       "early_voted": {
-        "rep": 41766,
-        "dem": 76946,
-        "npa": 32627,
-        "other": 3970,
-        "total": 155309
+        "rep": 41773,
+        "dem": 76990,
+        "npa": 32649,
+        "other": 3974,
+        "total": 155386
       }
     },
     "Osceola": {
@@ -1152,11 +1152,11 @@
         "total": 27247
       },
       "early_voted": {
-        "rep": 12634,
-        "dem": 17736,
-        "npa": 9363,
+        "rep": 12635,
+        "dem": 17743,
+        "npa": 9368,
         "other": 985,
-        "total": 40718
+        "total": 40731
       }
     },
     "Palm Beach": {
@@ -1168,11 +1168,11 @@
         "total": 65509
       },
       "vbm_voted": {
-        "rep": 33731,
-        "dem": 71846,
-        "npa": 26175,
-        "other": 3657,
-        "total": 135409
+        "rep": 33741,
+        "dem": 71889,
+        "npa": 26186,
+        "other": 3659,
+        "total": 135475
       },
       "early_voted": {
         "rep": 54562,
