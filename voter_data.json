@@ -3,7 +3,7 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-10-31T21:20:08+00:00",
+  "fetched_at": "2026-10-31T21:30:08+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
@@ -14,22 +14,22 @@
       "total": 602752
     },
     "vbm_voted": {
-      "rep": 667293,
-      "dem": 813639,
-      "npa": 371129,
-      "other": 46723,
-      "total": 1898784
+      "rep": 667351,
+      "dem": 813723,
+      "npa": 371184,
+      "other": 46729,
+      "total": 1898987
     },
     "early_voted": {
-      "rep": 1417337,
-      "dem": 1115979,
-      "npa": 605035,
-      "other": 84121,
-      "total": 3222472,
+      "rep": 1418638,
+      "dem": 1117173,
+      "npa": 605844,
+      "other": 84211,
+      "total": 3225866,
       "_source": "FLVoiceNews/2026-10-31"
     },
     "vbm_outstanding": 0,
-    "vbm_return_rate": 315.0
+    "vbm_return_rate": 315.1
   },
   "by_county": {
     "Alachua": {
@@ -42,17 +42,17 @@
       },
       "vbm_voted": {
         "rep": 4617,
-        "dem": 12986,
+        "dem": 12988,
         "npa": 3425,
         "other": 459,
-        "total": 21487
+        "total": 21489
       },
       "early_voted": {
-        "rep": 11582,
-        "dem": 23312,
-        "npa": 7637,
-        "other": 990,
-        "total": 43521
+        "rep": 11589,
+        "dem": 23342,
+        "npa": 7652,
+        "other": 992,
+        "total": 43575
       }
     },
     "Baker": {
@@ -94,11 +94,11 @@
         "total": 10084
       },
       "early_voted": {
-        "rep": 22721,
-        "dem": 6999,
-        "npa": 4256,
-        "other": 900,
-        "total": 34876
+        "rep": 22753,
+        "dem": 7012,
+        "npa": 4264,
+        "other": 903,
+        "total": 34932
       }
     },
     "Bradford": {
@@ -117,11 +117,11 @@
         "total": 954
       },
       "early_voted": {
-        "rep": 2310,
-        "dem": 821,
+        "rep": 2312,
+        "dem": 822,
         "npa": 252,
         "other": 69,
-        "total": 3452
+        "total": 3455
       }
     },
     "Brevard": {
@@ -156,18 +156,18 @@
         "total": 21001
       },
       "vbm_voted": {
-        "rep": 25295,
-        "dem": 80417,
-        "npa": 27678,
+        "rep": 25299,
+        "dem": 80425,
+        "npa": 27684,
         "other": 2679,
-        "total": 136069
+        "total": 136087
       },
       "early_voted": {
-        "rep": 65138,
-        "dem": 141663,
-        "npa": 62435,
-        "other": 6277,
-        "total": 275513
+        "rep": 65263,
+        "dem": 141919,
+        "npa": 62598,
+        "other": 6294,
+        "total": 276074
       }
     },
     "Calhoun": {
@@ -186,11 +186,11 @@
         "total": 532
       },
       "early_voted": {
-        "rep": 1272,
+        "rep": 1273,
         "dem": 325,
         "npa": 103,
         "other": 9,
-        "total": 1709
+        "total": 1710
       }
     },
     "Charlotte": {
@@ -202,18 +202,18 @@
         "total": 5921
       },
       "vbm_voted": {
-        "rep": 13298,
+        "rep": 13299,
         "dem": 9540,
         "npa": 5732,
         "other": 1083,
-        "total": 29653
+        "total": 29654
       },
       "early_voted": {
-        "rep": 24891,
-        "dem": 7244,
-        "npa": 6805,
-        "other": 1385,
-        "total": 40325
+        "rep": 24910,
+        "dem": 7247,
+        "npa": 6811,
+        "other": 1386,
+        "total": 40354
       }
     },
     "Citrus": {
@@ -232,11 +232,11 @@
         "total": 18570
       },
       "early_voted": {
-        "rep": 18610,
-        "dem": 4721,
-        "npa": 3907,
-        "other": 859,
-        "total": 28097
+        "rep": 18648,
+        "dem": 4730,
+        "npa": 3917,
+        "other": 860,
+        "total": 28155
       }
     },
     "Clay": {
@@ -278,11 +278,11 @@
         "total": 49797
       },
       "early_voted": {
-        "rep": 39804,
-        "dem": 13980,
-        "npa": 11669,
+        "rep": 39842,
+        "dem": 14001,
+        "npa": 11681,
         "other": 1598,
-        "total": 67051
+        "total": 67122
       }
     },
     "Columbia": {
@@ -301,11 +301,11 @@
         "total": 3533
       },
       "early_voted": {
-        "rep": 6981,
-        "dem": 2671,
+        "rep": 6992,
+        "dem": 2673,
         "npa": 975,
         "other": 164,
-        "total": 10791
+        "total": 10804
       }
     },
     "DeSoto": {
@@ -347,11 +347,11 @@
         "total": 949
       },
       "early_voted": {
-        "rep": 1556,
+        "rep": 1558,
         "dem": 260,
         "npa": 187,
         "other": 32,
-        "total": 2035
+        "total": 2037
       }
     },
     "Duval": {
@@ -462,11 +462,11 @@
         "total": 2499
       },
       "early_voted": {
-        "rep": 1609,
-        "dem": 4680,
-        "npa": 512,
+        "rep": 1610,
+        "dem": 4688,
+        "npa": 513,
         "other": 68,
-        "total": 6869
+        "total": 6879
       }
     },
     "Gilchrist": {
@@ -485,11 +485,11 @@
         "total": 1040
       },
       "early_voted": {
-        "rep": 1820,
+        "rep": 1825,
         "dem": 310,
         "npa": 209,
         "other": 67,
-        "total": 2406
+        "total": 2411
       }
     },
     "Glades": {
@@ -600,11 +600,11 @@
         "total": 1178
       },
       "early_voted": {
-        "rep": 2497,
+        "rep": 2500,
         "dem": 1680,
         "npa": 579,
         "other": 78,
-        "total": 4834
+        "total": 4837
       }
     },
     "Hernando": {
@@ -669,11 +669,11 @@
         "total": 131382
       },
       "early_voted": {
-        "rep": 72730,
-        "dem": 77028,
-        "npa": 39932,
-        "other": 5055,
-        "total": 194745
+        "rep": 72808,
+        "dem": 77121,
+        "npa": 39984,
+        "other": 5063,
+        "total": 194976
       }
     },
     "Holmes": {
@@ -738,11 +738,11 @@
         "total": 2280
       },
       "early_voted": {
-        "rep": 4189,
-        "dem": 1896,
+        "rep": 4194,
+        "dem": 1897,
         "npa": 351,
         "other": 82,
-        "total": 6518
+        "total": 6524
       }
     },
     "Jefferson": {
@@ -830,11 +830,11 @@
         "total": 118583
       },
       "early_voted": {
-        "rep": 58986,
-        "dem": 24558,
-        "npa": 21361,
-        "other": 2949,
-        "total": 107854
+        "rep": 59053,
+        "dem": 24613,
+        "npa": 21404,
+        "other": 2957,
+        "total": 108027
       }
     },
     "Leon": {
@@ -846,18 +846,18 @@
         "total": 9354
       },
       "vbm_voted": {
-        "rep": 6390,
-        "dem": 15646,
-        "npa": 3545,
-        "other": 436,
-        "total": 26017
+        "rep": 6392,
+        "dem": 15663,
+        "npa": 3549,
+        "other": 437,
+        "total": 26041
       },
       "early_voted": {
-        "rep": 12878,
-        "dem": 24848,
-        "npa": 7051,
-        "other": 1021,
-        "total": 45798
+        "rep": 12890,
+        "dem": 24881,
+        "npa": 7064,
+        "other": 1022,
+        "total": 45857
       }
     },
     "Levy": {
@@ -945,11 +945,11 @@
         "total": 48077
       },
       "early_voted": {
-        "rep": 36725,
-        "dem": 15898,
-        "npa": 11562,
-        "other": 1769,
-        "total": 65954
+        "rep": 36774,
+        "dem": 15916,
+        "npa": 11571,
+        "other": 1770,
+        "total": 66031
       }
     },
     "Marion": {
@@ -1014,11 +1014,11 @@
         "total": 171845
       },
       "early_voted": {
-        "rep": 117668,
-        "dem": 109332,
-        "npa": 75308,
-        "other": 6189,
-        "total": 308497
+        "rep": 117911,
+        "dem": 109521,
+        "npa": 75477,
+        "other": 6201,
+        "total": 309110
       }
     },
     "Monroe": {
@@ -1060,11 +1060,11 @@
         "total": 8242
       },
       "early_voted": {
-        "rep": 16626,
-        "dem": 4665,
-        "npa": 3443,
-        "other": 800,
-        "total": 25534
+        "rep": 16646,
+        "dem": 4668,
+        "npa": 3449,
+        "other": 801,
+        "total": 25564
       }
     },
     "Okaloosa": {
@@ -1076,18 +1076,18 @@
         "total": 5211
       },
       "vbm_voted": {
-        "rep": 4664,
-        "dem": 3125,
-        "npa": 1633,
+        "rep": 4677,
+        "dem": 3130,
+        "npa": 1635,
         "other": 241,
-        "total": 9663
+        "total": 9683
       },
       "early_voted": {
-        "rep": 22544,
-        "dem": 6390,
-        "npa": 4628,
-        "other": 778,
-        "total": 34340
+        "rep": 22563,
+        "dem": 6398,
+        "npa": 4631,
+        "other": 779,
+        "total": 34371
       }
     },
     "Okeechobee": {
@@ -1106,11 +1106,11 @@
         "total": 1560
       },
       "early_voted": {
-        "rep": 2772,
-        "dem": 957,
-        "npa": 410,
-        "other": 102,
-        "total": 4241
+        "rep": 2775,
+        "dem": 959,
+        "npa": 411,
+        "other": 103,
+        "total": 4248
       }
     },
     "Orange": {
@@ -1122,18 +1122,18 @@
         "total": 35485
       },
       "vbm_voted": {
-        "rep": 25253,
-        "dem": 47665,
-        "npa": 20716,
-        "other": 2314,
-        "total": 95948
+        "rep": 25279,
+        "dem": 47705,
+        "npa": 20748,
+        "other": 2317,
+        "total": 96049
       },
       "early_voted": {
-        "rep": 52945,
-        "dem": 95501,
-        "npa": 42855,
-        "other": 5153,
-        "total": 196454
+        "rep": 53016,
+        "dem": 95628,
+        "npa": 42912,
+        "other": 5158,
+        "total": 196714
       }
     },
     "Osceola": {
@@ -1152,11 +1152,11 @@
         "total": 28955
       },
       "early_voted": {
-        "rep": 16348,
-        "dem": 22551,
-        "npa": 12763,
-        "other": 1371,
-        "total": 53033
+        "rep": 16355,
+        "dem": 22580,
+        "npa": 12778,
+        "other": 1375,
+        "total": 53088
       }
     },
     "Palm Beach": {
@@ -1175,11 +1175,11 @@
         "total": 147301
       },
       "early_voted": {
-        "rep": 69322,
-        "dem": 79384,
-        "npa": 42841,
-        "other": 6315,
-        "total": 197862
+        "rep": 69396,
+        "dem": 79480,
+        "npa": 42891,
+        "other": 6319,
+        "total": 198086
       }
     },
     "Pasco": {
@@ -1193,16 +1193,16 @@
       "vbm_voted": {
         "rep": 17308,
         "dem": 20048,
-        "npa": 10395,
+        "npa": 10396,
         "other": 1455,
-        "total": 49206
+        "total": 49207
       },
       "early_voted": {
-        "rep": 43003,
-        "dem": 25730,
-        "npa": 17805,
-        "other": 2834,
-        "total": 89372
+        "rep": 43068,
+        "dem": 25776,
+        "npa": 17833,
+        "other": 2837,
+        "total": 89514
       }
     },
     "Pinellas": {
@@ -1221,11 +1221,11 @@
         "total": 166187
       },
       "early_voted": {
-        "rep": 33128,
-        "dem": 27580,
-        "npa": 16104,
-        "other": 2361,
-        "total": 79173
+        "rep": 33171,
+        "dem": 27602,
+        "npa": 16126,
+        "other": 2364,
+        "total": 79263
       }
     },
     "Polk": {
@@ -1267,11 +1267,11 @@
         "total": 3203
       },
       "early_voted": {
-        "rep": 6802,
-        "dem": 2882,
-        "npa": 1079,
+        "rep": 6803,
+        "dem": 2883,
+        "npa": 1080,
         "other": 202,
-        "total": 10965
+        "total": 10968
       }
     },
     "Santa Rosa": {
@@ -1290,11 +1290,11 @@
         "total": 6964
       },
       "early_voted": {
-        "rep": 22491,
-        "dem": 5839,
-        "npa": 4030,
+        "rep": 22534,
+        "dem": 5847,
+        "npa": 4037,
         "other": 748,
-        "total": 33108
+        "total": 33166
       }
     },
     "Sarasota": {
@@ -1313,11 +1313,11 @@
         "total": 74068
       },
       "early_voted": {
-        "rep": 39860,
-        "dem": 16777,
-        "npa": 13476,
-        "other": 2050,
-        "total": 72163
+        "rep": 39891,
+        "dem": 16788,
+        "npa": 13493,
+        "other": 2052,
+        "total": 72224
       }
     },
     "Seminole": {
@@ -1336,11 +1336,11 @@
         "total": 39455
       },
       "early_voted": {
-        "rep": 30697,
-        "dem": 29541,
-        "npa": 17318,
-        "other": 2328,
-        "total": 79884
+        "rep": 30737,
+        "dem": 29578,
+        "npa": 17351,
+        "other": 2332,
+        "total": 79998
       }
     },
     "St. Johns": {
@@ -1352,18 +1352,18 @@
         "total": 7323
       },
       "vbm_voted": {
-        "rep": 8448,
-        "dem": 8484,
-        "npa": 3852,
-        "other": 514,
-        "total": 21298
+        "rep": 8454,
+        "dem": 8495,
+        "npa": 3860,
+        "other": 515,
+        "total": 21324
       },
       "early_voted": {
-        "rep": 43964,
-        "dem": 17673,
-        "npa": 12357,
-        "other": 1695,
-        "total": 75689
+        "rep": 44023,
+        "dem": 17693,
+        "npa": 12375,
+        "other": 1697,
+        "total": 75788
       }
     },
     "St. Lucie": {
@@ -1405,11 +1405,11 @@
         "total": 28013
       },
       "early_voted": {
-        "rep": 30213,
+        "rep": 30237,
         "dem": 5805,
-        "npa": 5934,
-        "other": 1076,
-        "total": 43028
+        "npa": 5940,
+        "other": 1077,
+        "total": 43059
       }
     },
     "Suwannee": {
@@ -1474,11 +1474,11 @@
         "total": 332
       },
       "early_voted": {
-        "rep": 1332,
-        "dem": 304,
+        "rep": 1333,
+        "dem": 306,
         "npa": 81,
         "other": 23,
-        "total": 1740
+        "total": 1743
       }
     },
     "Volusia": {
@@ -1490,18 +1490,18 @@
         "total": 18297
       },
       "vbm_voted": {
-        "rep": 22639,
-        "dem": 23708,
-        "npa": 11909,
-        "other": 1836,
-        "total": 60092
+        "rep": 22642,
+        "dem": 23709,
+        "npa": 11911,
+        "other": 1837,
+        "total": 60099
       },
       "early_voted": {
-        "rep": 45774,
-        "dem": 27543,
-        "npa": 17656,
-        "other": 2957,
-        "total": 93930
+        "rep": 45822,
+        "dem": 27593,
+        "npa": 17698,
+        "other": 2962,
+        "total": 94075
       }
     },
     "Wakulla": {
@@ -1536,18 +1536,18 @@
         "total": 1751
       },
       "vbm_voted": {
-        "rep": 2287,
+        "rep": 2290,
         "dem": 1093,
         "npa": 526,
         "other": 109,
-        "total": 4015
+        "total": 4018
       },
       "early_voted": {
-        "rep": 11222,
+        "rep": 11234,
         "dem": 1975,
-        "npa": 1612,
+        "npa": 1614,
         "other": 315,
-        "total": 15124
+        "total": 15138
       }
     },
     "Washington": {
@@ -1566,11 +1566,11 @@
         "total": 944
       },
       "early_voted": {
-        "rep": 2338,
+        "rep": 2340,
         "dem": 590,
         "npa": 232,
         "other": 28,
-        "total": 3188
+        "total": 3190
       }
     },
     "Desoto": {
