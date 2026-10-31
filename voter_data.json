@@ -3,7 +3,7 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-10-31T11:00:03+00:00",
+  "fetched_at": "2026-10-31T11:10:03+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
@@ -14,18 +14,18 @@
       "total": 673998
     },
     "vbm_voted": {
-      "rep": 649070,
-      "dem": 792573,
-      "npa": 358706,
+      "rep": 649071,
+      "dem": 792581,
+      "npa": 358709,
       "other": 45269,
-      "total": 1845618
+      "total": 1845630
     },
     "early_voted": {
-      "rep": 1267109,
-      "dem": 1007408,
-      "npa": 532162,
-      "other": 74631,
-      "total": 2881310,
+      "rep": 1267275,
+      "dem": 1007608,
+      "npa": 532279,
+      "other": 74642,
+      "total": 2881804,
       "_source": "FLVoiceNews/2026-10-31"
     },
     "vbm_outstanding": 0,
@@ -163,11 +163,11 @@
         "total": 129452
       },
       "early_voted": {
-        "rep": 58184,
-        "dem": 128109,
-        "npa": 54720,
-        "other": 5588,
-        "total": 246601
+        "rep": 58232,
+        "dem": 128218,
+        "npa": 54773,
+        "other": 5589,
+        "total": 246812
       }
     },
     "Calhoun": {
@@ -709,10 +709,10 @@
       },
       "vbm_voted": {
         "rep": 9274,
-        "dem": 7497,
+        "dem": 7498,
         "npa": 3716,
         "other": 700,
-        "total": 21187
+        "total": 21188
       },
       "early_voted": {
         "rep": 17126,
@@ -922,11 +922,11 @@
         "total": 664
       },
       "early_voted": {
-        "rep": 1679,
+        "rep": 1681,
         "dem": 1227,
         "npa": 237,
         "other": 22,
-        "total": 3165
+        "total": 3167
       }
     },
     "Manatee": {
@@ -1168,18 +1168,18 @@
         "total": 59764
       },
       "vbm_voted": {
-        "rep": 36208,
-        "dem": 76218,
-        "npa": 28456,
+        "rep": 36209,
+        "dem": 76225,
+        "npa": 28459,
         "other": 3925,
-        "total": 144807
+        "total": 144818
       },
       "early_voted": {
-        "rep": 62112,
-        "dem": 72096,
-        "npa": 37877,
-        "other": 5686,
-        "total": 177771
+        "rep": 62157,
+        "dem": 72145,
+        "npa": 37909,
+        "other": 5692,
+        "total": 177903
       }
     },
     "Pasco": {
@@ -1198,11 +1198,11 @@
         "total": 47577
       },
       "early_voted": {
-        "rep": 37745,
-        "dem": 22693,
-        "npa": 15325,
-        "other": 2456,
-        "total": 78219
+        "rep": 37796,
+        "dem": 22715,
+        "npa": 15343,
+        "other": 2459,
+        "total": 78313
       }
     },
     "Pinellas": {
@@ -1221,11 +1221,11 @@
         "total": 159861
       },
       "early_voted": {
-        "rep": 29373,
-        "dem": 24578,
-        "npa": 14132,
-        "other": 2097,
-        "total": 70180
+        "rep": 29393,
+        "dem": 24598,
+        "npa": 14146,
+        "other": 2098,
+        "total": 70235
       }
     },
     "Polk": {
