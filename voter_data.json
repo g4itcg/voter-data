@@ -3,7 +3,7 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-10-31T00:00:57+00:00",
+  "fetched_at": "2026-10-31T00:10:57+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
@@ -14,18 +14,18 @@
       "total": 673998
     },
     "vbm_voted": {
-      "rep": 648530,
-      "dem": 791327,
-      "npa": 358087,
-      "other": 45191,
-      "total": 1843135
+      "rep": 648603,
+      "dem": 791480,
+      "npa": 358174,
+      "other": 45199,
+      "total": 1843456
     },
     "early_voted": {
-      "rep": 1267106,
-      "dem": 1007391,
-      "npa": 532157,
+      "rep": 1267108,
+      "dem": 1007408,
+      "npa": 532162,
       "other": 74631,
-      "total": 2881285,
+      "total": 2881309,
       "_source": "FLVoiceNews/2026-10-31"
     },
     "vbm_outstanding": 0,
@@ -156,11 +156,11 @@
         "total": 24379
       },
       "vbm_voted": {
-        "rep": 24129,
-        "dem": 76773,
-        "npa": 25885,
-        "other": 2526,
-        "total": 129313
+        "rep": 24132,
+        "dem": 76793,
+        "npa": 25894,
+        "other": 2527,
+        "total": 129346
       },
       "early_voted": {
         "rep": 58184,
@@ -1122,18 +1122,18 @@
         "total": 39205
       },
       "vbm_voted": {
-        "rep": 24518,
-        "dem": 46188,
-        "npa": 19925,
+        "rep": 24521,
+        "dem": 46197,
+        "npa": 19929,
         "other": 2228,
-        "total": 92859
+        "total": 92875
       },
       "early_voted": {
-        "rep": 48019,
-        "dem": 87252,
-        "npa": 38304,
+        "rep": 48021,
+        "dem": 87269,
+        "npa": 38309,
         "other": 4623,
-        "total": 178198
+        "total": 178222
       }
     },
     "Osceola": {
@@ -1168,11 +1168,11 @@
         "total": 59764
       },
       "vbm_voted": {
-        "rep": 35699,
-        "dem": 75102,
-        "npa": 27880,
-        "other": 3853,
-        "total": 142534
+        "rep": 35766,
+        "dem": 75226,
+        "npa": 27954,
+        "other": 3860,
+        "total": 142806
       },
       "early_voted": {
         "rep": 62112,
