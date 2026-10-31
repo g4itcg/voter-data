@@ -3,7 +3,7 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-10-31T23:20:09+00:00",
+  "fetched_at": "2026-10-31T23:30:09+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
@@ -14,22 +14,22 @@
       "total": 602752
     },
     "vbm_voted": {
-      "rep": 667899,
-      "dem": 814441,
-      "npa": 371547,
-      "other": 46781,
-      "total": 1900668
+      "rep": 667953,
+      "dem": 814619,
+      "npa": 371607,
+      "other": 46788,
+      "total": 1900967
     },
     "early_voted": {
-      "rep": 1426244,
-      "dem": 1125496,
-      "npa": 611312,
-      "other": 84867,
-      "total": 3247919,
+      "rep": 1426296,
+      "dem": 1125575,
+      "npa": 611367,
+      "other": 84873,
+      "total": 3248111,
       "_source": "FLVoiceNews/2026-10-31"
     },
     "vbm_outstanding": 0,
-    "vbm_return_rate": 315.3
+    "vbm_return_rate": 315.4
   },
   "by_county": {
     "Alachua": {
@@ -157,10 +157,10 @@
       },
       "vbm_voted": {
         "rep": 25345,
-        "dem": 80529,
+        "dem": 80531,
         "npa": 27750,
         "other": 2682,
-        "total": 136306
+        "total": 136308
       },
       "early_voted": {
         "rep": 65943,
@@ -386,11 +386,11 @@
         "total": 10190
       },
       "vbm_voted": {
-        "rep": 7909,
+        "rep": 7911,
         "dem": 7675,
         "npa": 2531,
         "other": 371,
-        "total": 18486
+        "total": 18488
       },
       "early_voted": {
         "rep": 23538,
@@ -846,11 +846,11 @@
         "total": 9354
       },
       "vbm_voted": {
-        "rep": 6403,
-        "dem": 15679,
-        "npa": 3554,
-        "other": 437,
-        "total": 26073
+        "rep": 6406,
+        "dem": 15703,
+        "npa": 3558,
+        "other": 438,
+        "total": 26105
       },
       "early_voted": {
         "rep": 12925,
@@ -1014,11 +1014,11 @@
         "total": 171845
       },
       "early_voted": {
-        "rep": 119714,
-        "dem": 110945,
-        "npa": 76809,
-        "other": 6328,
-        "total": 313796
+        "rep": 119736,
+        "dem": 110963,
+        "npa": 76826,
+        "other": 6331,
+        "total": 313856
       }
     },
     "Monroe": {
@@ -1083,11 +1083,11 @@
         "total": 9683
       },
       "early_voted": {
-        "rep": 22723,
-        "dem": 6463,
-        "npa": 4684,
+        "rep": 22733,
+        "dem": 6470,
+        "npa": 4686,
         "other": 784,
-        "total": 34654
+        "total": 34673
       }
     },
     "Okeechobee": {
@@ -1122,18 +1122,18 @@
         "total": 35485
       },
       "vbm_voted": {
-        "rep": 25299,
-        "dem": 47738,
-        "npa": 20776,
+        "rep": 25304,
+        "dem": 47741,
+        "npa": 20779,
         "other": 2321,
-        "total": 96134
+        "total": 96145
       },
       "early_voted": {
-        "rep": 53452,
-        "dem": 96540,
-        "npa": 43444,
-        "other": 5217,
-        "total": 198653
+        "rep": 53465,
+        "dem": 96576,
+        "npa": 43473,
+        "other": 5220,
+        "total": 198734
       }
     },
     "Osceola": {
@@ -1152,11 +1152,11 @@
         "total": 28955
       },
       "early_voted": {
-        "rep": 16516,
-        "dem": 22812,
-        "npa": 12962,
+        "rep": 16523,
+        "dem": 22829,
+        "npa": 12969,
         "other": 1391,
-        "total": 53681
+        "total": 53712
       }
     },
     "Palm Beach": {
@@ -1168,11 +1168,11 @@
         "total": 51849
       },
       "vbm_voted": {
-        "rep": 37008,
-        "dem": 77117,
-        "npa": 29147,
-        "other": 4033,
-        "total": 147305
+        "rep": 37052,
+        "dem": 77266,
+        "npa": 29200,
+        "other": 4039,
+        "total": 147557
       },
       "early_voted": {
         "rep": 69846,
@@ -1544,10 +1544,10 @@
       },
       "early_voted": {
         "rep": 11234,
-        "dem": 1975,
+        "dem": 1976,
         "npa": 1614,
         "other": 315,
-        "total": 15138
+        "total": 15139
       }
     },
     "Washington": {
