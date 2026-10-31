@@ -3,7 +3,7 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-10-31T21:40:08+00:00",
+  "fetched_at": "2026-10-31T21:50:08+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
@@ -14,18 +14,18 @@
       "total": 602752
     },
     "vbm_voted": {
-      "rep": 667469,
-      "dem": 813806,
-      "npa": 371236,
+      "rep": 667480,
+      "dem": 813817,
+      "npa": 371240,
       "other": 46740,
-      "total": 1899251
+      "total": 1899277
     },
     "early_voted": {
-      "rep": 1420305,
-      "dem": 1118765,
-      "npa": 606875,
-      "other": 84331,
-      "total": 3230276,
+      "rep": 1420530,
+      "dem": 1119145,
+      "npa": 607105,
+      "other": 84354,
+      "total": 3231134,
       "_source": "FLVoiceNews/2026-10-31"
     },
     "vbm_outstanding": 0,
@@ -156,18 +156,18 @@
         "total": 21001
       },
       "vbm_voted": {
-        "rep": 25302,
-        "dem": 80427,
-        "npa": 27686,
+        "rep": 25312,
+        "dem": 80437,
+        "npa": 27689,
         "other": 2679,
-        "total": 136094
+        "total": 136117
       },
       "early_voted": {
-        "rep": 65383,
-        "dem": 142145,
-        "npa": 62752,
-        "other": 6302,
-        "total": 276582
+        "rep": 65461,
+        "dem": 142383,
+        "npa": 62869,
+        "other": 6318,
+        "total": 277031
       }
     },
     "Calhoun": {
@@ -209,11 +209,11 @@
         "total": 29654
       },
       "early_voted": {
-        "rep": 24925,
-        "dem": 7257,
-        "npa": 6816,
+        "rep": 24939,
+        "dem": 7269,
+        "npa": 6826,
         "other": 1387,
-        "total": 40385
+        "total": 40421
       }
     },
     "Citrus": {
@@ -347,11 +347,11 @@
         "total": 978
       },
       "early_voted": {
-        "rep": 1558,
+        "rep": 1561,
         "dem": 260,
         "npa": 188,
         "other": 32,
-        "total": 2038
+        "total": 2041
       }
     },
     "Duval": {
@@ -486,10 +486,10 @@
       },
       "early_voted": {
         "rep": 1826,
-        "dem": 311,
+        "dem": 312,
         "npa": 209,
         "other": 67,
-        "total": 2413
+        "total": 2414
       }
     },
     "Glades": {
@@ -594,17 +594,17 @@
       },
       "vbm_voted": {
         "rep": 571,
-        "dem": 451,
-        "npa": 127,
+        "dem": 452,
+        "npa": 128,
         "other": 34,
-        "total": 1183
+        "total": 1185
       },
       "early_voted": {
-        "rep": 2502,
-        "dem": 1685,
-        "npa": 579,
+        "rep": 2506,
+        "dem": 1686,
+        "npa": 580,
         "other": 78,
-        "total": 4844
+        "total": 4850
       }
     },
     "Hernando": {
@@ -738,11 +738,11 @@
         "total": 2280
       },
       "early_voted": {
-        "rep": 4205,
-        "dem": 1901,
-        "npa": 351,
+        "rep": 4213,
+        "dem": 1904,
+        "npa": 352,
         "other": 82,
-        "total": 6539
+        "total": 6551
       }
     },
     "Jefferson": {
@@ -830,11 +830,11 @@
         "total": 118583
       },
       "early_voted": {
-        "rep": 59126,
-        "dem": 24658,
-        "npa": 21445,
-        "other": 2964,
-        "total": 108193
+        "rep": 59191,
+        "dem": 24715,
+        "npa": 21482,
+        "other": 2967,
+        "total": 108355
       }
     },
     "Leon": {
@@ -1152,11 +1152,11 @@
         "total": 28955
       },
       "early_voted": {
-        "rep": 16382,
-        "dem": 22601,
-        "npa": 12805,
-        "other": 1376,
-        "total": 53164
+        "rep": 16402,
+        "dem": 22629,
+        "npa": 12831,
+        "other": 1378,
+        "total": 53240
       }
     },
     "Palm Beach": {
@@ -1329,18 +1329,18 @@
         "total": 12672
       },
       "vbm_voted": {
-        "rep": 12985,
+        "rep": 12986,
         "dem": 17290,
         "npa": 8162,
         "other": 1018,
-        "total": 39455
+        "total": 39456
       },
       "early_voted": {
-        "rep": 30782,
-        "dem": 29628,
-        "npa": 17383,
-        "other": 2336,
-        "total": 80129
+        "rep": 30815,
+        "dem": 29668,
+        "npa": 17421,
+        "other": 2338,
+        "total": 80242
       }
     },
     "St. Johns": {
