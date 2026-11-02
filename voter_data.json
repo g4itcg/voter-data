@@ -3,15 +3,15 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-11-02T21:10:28+00:00",
+  "fetched_at": "2026-11-02T21:11:25+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
-      "rep": 172326,
-      "dem": 202515,
-      "npa": 124499,
-      "other": 15610,
-      "total": 514950
+      "rep": 867541,
+      "dem": 1054523,
+      "npa": 519367,
+      "other": 64735,
+      "total": 2506166
     },
     "vbm_voted": {
       "rep": 695215,
@@ -28,8 +28,8 @@
       "total": 3467805,
       "_source": "FLVoiceNews/2026-11-02"
     },
-    "vbm_outstanding": 0,
-    "vbm_return_rate": 386.7
+    "vbm_outstanding": 514950,
+    "vbm_return_rate": 79.5
   },
   "by_county": {
     "Alachua": {
@@ -317,17 +317,17 @@
         "total": 242
       },
       "vbm_voted": {
-        "rep": 573,
-        "dem": 415,
-        "other": 25,
+        "rep": 581,
+        "dem": 424,
         "npa": 216,
-        "total": 1229
+        "other": 25,
+        "total": 1246
       },
       "early_voted": {
         "rep": 2155,
         "dem": 1196,
-        "other": 76,
         "npa": 497,
+        "other": 76,
         "total": 3924
       }
     },
@@ -1571,22 +1571,6 @@
         "npa": 232,
         "other": 28,
         "total": 3190
-      }
-    },
-    "Desoto": {
-      "vbm_voted": {
-        "rep": 581,
-        "dem": 424,
-        "npa": 216,
-        "other": 25,
-        "total": 1246
-      },
-      "early_voted": {
-        "rep": 2155,
-        "dem": 1196,
-        "npa": 497,
-        "other": 76,
-        "total": 3924
       }
     }
   },
