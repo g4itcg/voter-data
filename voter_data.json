@@ -3,7 +3,7 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-11-02T00:50:20+00:00",
+  "fetched_at": "2026-11-02T01:00:20+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
@@ -14,18 +14,18 @@
       "total": 550106
     },
     "vbm_voted": {
-      "rep": 677870,
-      "dem": 830739,
+      "rep": 677872,
+      "dem": 830745,
       "npa": 381107,
-      "other": 47694,
-      "total": 1937410
+      "other": 47695,
+      "total": 1937419
     },
     "early_voted": {
-      "rep": 1497643,
-      "dem": 1210624,
-      "npa": 668080,
-      "other": 91013,
-      "total": 3467360,
+      "rep": 1497712,
+      "dem": 1210713,
+      "npa": 668153,
+      "other": 91024,
+      "total": 3467602,
       "_source": "FLVoiceNews/2026-11-02"
     },
     "vbm_outstanding": 0,
@@ -1014,11 +1014,11 @@
         "total": 182836
       },
       "early_voted": {
-        "rep": 134099,
-        "dem": 123926,
-        "npa": 88719,
-        "other": 7250,
-        "total": 353994
+        "rep": 134137,
+        "dem": 123957,
+        "npa": 88753,
+        "other": 7256,
+        "total": 354103
       }
     },
     "Monroe": {
@@ -1129,11 +1129,11 @@
         "total": 98490
       },
       "early_voted": {
-        "rep": 59876,
-        "dem": 107366,
-        "npa": 50175,
-        "other": 6012,
-        "total": 223429
+        "rep": 59900,
+        "dem": 107416,
+        "npa": 50213,
+        "other": 6016,
+        "total": 223545
       }
     },
     "Osceola": {
@@ -1152,11 +1152,11 @@
         "total": 29509
       },
       "early_voted": {
-        "rep": 18225,
-        "dem": 25272,
-        "npa": 14806,
-        "other": 1557,
-        "total": 59860
+        "rep": 18231,
+        "dem": 25280,
+        "npa": 14807,
+        "other": 1558,
+        "total": 59876
       }
     },
     "Palm Beach": {
@@ -1168,11 +1168,11 @@
         "total": 48414
       },
       "vbm_voted": {
-        "rep": 37516,
-        "dem": 78418,
+        "rep": 37518,
+        "dem": 78424,
         "npa": 29791,
-        "other": 4105,
-        "total": 149830
+        "other": 4106,
+        "total": 149839
       },
       "early_voted": {
         "rep": 77525,
@@ -1336,11 +1336,11 @@
         "total": 40461
       },
       "early_voted": {
-        "rep": 34229,
+        "rep": 34230,
         "dem": 33105,
         "npa": 20017,
         "other": 2620,
-        "total": 89971
+        "total": 89972
       }
     },
     "St. Johns": {
