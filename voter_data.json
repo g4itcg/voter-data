@@ -3,7 +3,7 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-11-02T01:10:20+00:00",
+  "fetched_at": "2026-11-02T01:20:20+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
@@ -14,18 +14,18 @@
       "total": 550106
     },
     "vbm_voted": {
-      "rep": 677875,
-      "dem": 830749,
-      "npa": 381110,
-      "other": 47696,
-      "total": 1937430
+      "rep": 677940,
+      "dem": 830832,
+      "npa": 381166,
+      "other": 47704,
+      "total": 1937642
     },
     "early_voted": {
-      "rep": 1497752,
-      "dem": 1210762,
-      "npa": 668192,
-      "other": 91025,
-      "total": 3467731,
+      "rep": 1497767,
+      "dem": 1210789,
+      "npa": 668214,
+      "other": 91026,
+      "total": 3467796,
       "_source": "FLVoiceNews/2026-11-02"
     },
     "vbm_outstanding": 0,
@@ -1014,11 +1014,11 @@
         "total": 182836
       },
       "early_voted": {
-        "rep": 134169,
-        "dem": 123988,
-        "npa": 88779,
-        "other": 7257,
-        "total": 354193
+        "rep": 134181,
+        "dem": 124009,
+        "npa": 88796,
+        "other": 7258,
+        "total": 354244
       }
     },
     "Monroe": {
@@ -1122,18 +1122,18 @@
         "total": 31520
       },
       "vbm_voted": {
-        "rep": 25782,
-        "dem": 48880,
-        "npa": 21427,
-        "other": 2401,
-        "total": 98490
+        "rep": 25784,
+        "dem": 48884,
+        "npa": 21433,
+        "other": 2402,
+        "total": 98503
       },
       "early_voted": {
-        "rep": 59908,
-        "dem": 107434,
-        "npa": 50225,
+        "rep": 59911,
+        "dem": 107440,
+        "npa": 50230,
         "other": 6016,
-        "total": 223583
+        "total": 223597
       }
     },
     "Osceola": {
@@ -1168,11 +1168,11 @@
         "total": 48414
       },
       "vbm_voted": {
-        "rep": 37521,
-        "dem": 78428,
-        "npa": 29794,
-        "other": 4107,
-        "total": 149850
+        "rep": 37584,
+        "dem": 78507,
+        "npa": 29844,
+        "other": 4114,
+        "total": 150049
       },
       "early_voted": {
         "rep": 77525,
