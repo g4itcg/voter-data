@@ -3,33 +3,33 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-11-03T12:51:46+00:00",
+  "fetched_at": "2026-11-03T12:52:18+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
-      "rep": 851110,
-      "dem": 1035149,
-      "npa": 506790,
-      "other": 63384,
-      "total": 2456433
+      "rep": 871199,
+      "dem": 1059608,
+      "npa": 522445,
+      "other": 65064,
+      "total": 2518316
     },
     "vbm_voted": {
-      "rep": 678784,
-      "dem": 832634,
-      "other": 47774,
-      "npa": 382291,
-      "total": 1941483
+      "rep": 698873,
+      "dem": 857093,
+      "npa": 397946,
+      "other": 49454,
+      "total": 2003366
     },
     "early_voted": {
-      "rep": 1497472,
-      "dem": 1210445,
-      "other": 90996,
-      "npa": 668396,
-      "total": 3467309,
-      "_source": "state"
+      "rep": 1497770,
+      "dem": 1210801,
+      "npa": 668221,
+      "other": 91014,
+      "total": 3467806,
+      "_source": "FLVoiceNews/2026-11-03"
     },
     "vbm_outstanding": 514950,
-    "vbm_return_rate": 79.0
+    "vbm_return_rate": 79.6
   },
   "by_county": {
     "Alachua": {
@@ -154,25 +154,25 @@
     },
     "Broward": {
       "vbm_provided": {
-        "rep": 3541,
-        "dem": 8189,
-        "npa": 4165,
-        "other": 376,
-        "total": 16271
+        "rep": 31250,
+        "dem": 95910,
+        "npa": 35782,
+        "other": 3377,
+        "total": 166319
       },
       "vbm_voted": {
-        "rep": 0,
-        "dem": 0,
-        "npa": 0,
-        "other": 0,
-        "total": 0
+        "rep": 27709,
+        "dem": 87721,
+        "npa": 31617,
+        "other": 3001,
+        "total": 150048
       },
       "early_voted": {
-        "rep": 73940,
-        "dem": 159278,
-        "other": 7248,
-        "npa": 73647,
-        "total": 314113
+        "rep": 74057,
+        "dem": 159450,
+        "npa": 73353,
+        "other": 7251,
+        "total": 314111
       },
       "vbm_outstanding": 16271
     },
