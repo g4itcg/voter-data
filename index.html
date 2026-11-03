@@ -660,7 +660,7 @@ function renderTurnout() {
   const mail = { dem: vbm.dem||0, rep: vbm.rep||0, npa: vbm.npa||0, oth: vbm.other||0, total: vbm.total||0 };
   const early = { dem: ev.dem||0, rep: ev.rep||0, npa: ev.npa||0, oth: ev.other||0, total: ev.total||0 };
   
-  const ed = sw.election_day || { dem:0, rep:0, npa:0, other:0, total:0 };
+  const ed = data.statewide.election_day || { dem:0, rep:0, npa:0, other:0, total:0 };
   const edRow = { dem: ed.dem||0, rep: ed.rep||0, npa: ed.npa||0, oth: ed.other||0, total: ed.total||0 };
   
   const rows = [
@@ -711,10 +711,11 @@ function renderCards() {
   const banner = document.getElementById('marginBanner');
   const vbm = data.statewide.vbm_voted||{};
   const ev = data.statewide.early_voted||{};
+  const ed = data.statewide.election_day||{};
   const combined = {
-    dem: (vbm.dem||0) + (ev.dem||0),
-    rep: (vbm.rep||0) + (ev.rep||0),
-    total: (vbm.total||0) + (ev.total||0)
+    dem: (vbm.dem||0) + (ev.dem||0) + (ed.dem||0),
+    rep: (vbm.rep||0) + (ev.rep||0) + (ed.rep||0),
+    total: (vbm.total||0) + (ev.total||0) + (ed.total||0)
   };
   const s = combined;
   if (s.total) {
@@ -728,7 +729,7 @@ function renderCards() {
     banner.className = isDem ? 'margin-banner dem' : 'margin-banner rep';
     banner.style.display = 'flex';
     document.getElementById('marginValue').textContent = isDem ? `D +${marginPct.toFixed(1)}%` : `R +${Math.abs(marginPct).toFixed(1)}%`;
-    document.getElementById('marginDetail').textContent = `${isDem ? 'D+' : 'R+'}${fmt(Math.abs(margin))} votes (Mail + Early)`;
+    document.getElementById('marginDetail').textContent = `${isDem ? 'D+' : 'R+'}${fmt(Math.abs(margin))} votes (Mail + Early + ED)`;
     // Also update the returns-by-party section
     if (typeof renderPartyBars === 'function') renderPartyBars();
     else if (typeof switchTab === 'function') switchTab(activeTab);
@@ -922,17 +923,17 @@ function getColor(val) {
   }
 }
 
-// Early voting heat map: color by total votes (blue intensity) since
-// party splits aren't available from county sources yet
-function getEarlyColor(val, maxVal) {
-  if (!val || !maxVal) return '#EEE';
-  const t = Math.max(0, Math.min(1, val / maxVal));
-  if (t < 0.05) return '#EEE';
-  // Blue scale: light → deep blue
-  const r = Math.round(220 - t * 190);
-  const g = Math.round(235 - t * 175);
-  const b = 255;
-  return `rgb(${r},${g},${b})`;
+// Early/Election Day heat map: color by party margin (blue = Dem lead, red = Rep lead, darker = bigger lead)
+function getEarlyColor(d, maxVal) {
+  const dem = d.dem || 0, rep = d.rep || 0, total = (d.total || 0);
+  if (!total) return '#EEE';
+  const lead = (dem - rep) / total;  // +1 = all Dem, -1 = all Rep
+  const t = Math.max(-1, Math.min(1, lead));
+  if (t > 0) {
+    const s = t; return `rgb(${Math.round(255-s*255)},${Math.round(255-s*255)},255)`;
+  } else {
+    const s = -t; return `rgb(255,${Math.round(255-s*255)},${Math.round(255-s*255)})`;
+  }
 }
 
 let earlyTab = 'early_voted';  // which dataset the early map shows
@@ -950,7 +951,7 @@ function styleMap() {
 
 function styleEarlyMap() {
   const paths = document.querySelectorAll('#earlyGroup polygon');
-  // Max votes for intensity scaling
+  // Max votes for intensity scaling (kept for parity)
   let maxVal = 0;
   Object.values(data.by_county||{}).forEach(c => {
     const t = c[earlyTab]?.total || 0;
@@ -959,7 +960,7 @@ function styleEarlyMap() {
   paths.forEach(el => {
     const name = el.getAttribute('data-county');
     const d = data.by_county?.[name]?.[earlyTab]||{};
-    el.style.fill = getEarlyColor(d.total||0, maxVal);
+    el.style.fill = getEarlyColor(d, maxVal);
   });
 }
 
