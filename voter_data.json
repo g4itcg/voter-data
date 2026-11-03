@@ -3,22 +3,22 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-11-03T16:00:36+00:00",
+  "fetched_at": "2026-11-03T16:10:36+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
-      "rep": 859722,
-      "dem": 1045896,
-      "npa": 513997,
-      "other": 64194,
-      "total": 2483809
+      "rep": 859806,
+      "dem": 1046173,
+      "npa": 514163,
+      "other": 64217,
+      "total": 2484359
     },
     "vbm_voted": {
-      "rep": 703911,
-      "dem": 861858,
-      "npa": 401561,
-      "other": 49883,
-      "total": 2017213
+      "rep": 704060,
+      "dem": 862141,
+      "npa": 401731,
+      "other": 49906,
+      "total": 2017838
     },
     "early_voted": {
       "rep": 1497769,
@@ -28,7 +28,7 @@
       "total": 3467805,
       "_source": "FLVoiceNews/2026-11-03"
     },
-    "vbm_outstanding": 466596,
+    "vbm_outstanding": 466521,
     "vbm_return_rate": 81.2
   },
   "by_county": {
@@ -154,18 +154,18 @@
     },
     "Broward": {
       "vbm_provided": {
-        "rep": 30755,
-        "dem": 94261,
-        "npa": 35112,
-        "other": 3332,
-        "total": 163460
+        "rep": 30881,
+        "dem": 94531,
+        "npa": 35275,
+        "other": 3352,
+        "total": 164039
       },
       "vbm_voted": {
-        "rep": 27710,
-        "dem": 87726,
-        "npa": 31622,
-        "other": 3003,
-        "total": 150061
+        "rep": 27836,
+        "dem": 87996,
+        "npa": 31785,
+        "other": 3023,
+        "total": 150640
       },
       "early_voted": {
         "rep": 74057,
@@ -346,11 +346,11 @@
     },
     "Dixie": {
       "vbm_provided": {
-        "rep": 941,
-        "dem": 296,
-        "npa": 127,
+        "rep": 876,
+        "dem": 290,
+        "npa": 123,
         "other": 23,
-        "total": 1387
+        "total": 1312
       },
       "vbm_voted": {
         "rep": 716,
@@ -366,22 +366,22 @@
         "other": 33,
         "total": 2049
       },
-      "vbm_outstanding": 334
+      "vbm_outstanding": 259
     },
     "Duval": {
       "vbm_provided": {
         "rep": 16446,
-        "dem": 24634,
+        "dem": 24635,
         "npa": 8491,
         "other": 1271,
-        "total": 50842
+        "total": 50843
       },
       "vbm_voted": {
         "rep": 12816,
-        "dem": 18736,
+        "dem": 18737,
         "npa": 6014,
         "other": 890,
-        "total": 38456
+        "total": 38457
       },
       "early_voted": {
         "rep": 70248,
@@ -467,17 +467,17 @@
     "Gadsden": {
       "vbm_provided": {
         "rep": 486,
-        "dem": 2566,
+        "dem": 2567,
         "npa": 212,
         "other": 29,
-        "total": 3293
+        "total": 3294
       },
       "vbm_voted": {
         "rep": 402,
-        "dem": 2097,
+        "dem": 2098,
         "npa": 162,
         "other": 18,
-        "total": 2679
+        "total": 2680
       },
       "early_voted": {
         "rep": 1713,
@@ -1018,18 +1018,18 @@
     },
     "Martin": {
       "vbm_provided": {
-        "rep": 9540,
-        "dem": 7722,
-        "npa": 3588,
-        "other": 717,
-        "total": 21567
+        "rep": 9563,
+        "dem": 7733,
+        "npa": 3595,
+        "other": 720,
+        "total": 21611
       },
       "vbm_voted": {
-        "rep": 8225,
-        "dem": 6551,
-        "npa": 2994,
-        "other": 578,
-        "total": 18348
+        "rep": 8248,
+        "dem": 6562,
+        "npa": 3001,
+        "other": 581,
+        "total": 18392
       },
       "early_voted": {
         "rep": 19947,
