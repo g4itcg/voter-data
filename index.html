@@ -660,14 +660,20 @@ function renderTurnout() {
   const mail = { dem: vbm.dem||0, rep: vbm.rep||0, npa: vbm.npa||0, oth: vbm.other||0, total: vbm.total||0 };
   const early = { dem: ev.dem||0, rep: ev.rep||0, npa: ev.npa||0, oth: ev.other||0, total: ev.total||0 };
   
+  const ed = sw.election_day || { dem:0, rep:0, npa:0, other:0, total:0 };
+  const edRow = { dem: ed.dem||0, rep: ed.rep||0, npa: ed.npa||0, oth: ed.other||0, total: ed.total||0 };
+  
   const rows = [
     { label: 'Registered', d: regs },
     { label: 'Mail voted', d: mail },
     { label: 'Early in-person', d: early },
+    { label: 'Election Day', d: edRow },
     { label: 'Total voted', d: {
-        dem: mail.dem + early.dem, rep: mail.rep + early.rep,
-        npa: mail.npa + early.npa, oth: mail.oth + early.oth,
-        total: mail.total + early.total } }
+        dem: mail.dem + early.dem + edRow.dem,
+        rep: mail.rep + early.rep + edRow.rep,
+        npa: mail.npa + early.npa + edRow.npa,
+        oth: mail.oth + early.oth + edRow.oth,
+        total: mail.total + early.total + edRow.total } }
   ];
   
   document.getElementById('turnoutBody').innerHTML = rows.map(r => {
