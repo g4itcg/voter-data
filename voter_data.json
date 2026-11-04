@@ -3,22 +3,22 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-11-04T20:40:48+00:00",
+  "fetched_at": "2026-11-04T20:50:48+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
-      "rep": 855053,
-      "dem": 1043296,
-      "npa": 511874,
+      "rep": 855056,
+      "dem": 1043299,
+      "npa": 511875,
       "other": 63956,
-      "total": 2474179
+      "total": 2474186
     },
     "vbm_voted": {
-      "rep": 724323,
-      "dem": 884338,
-      "npa": 416910,
+      "rep": 724326,
+      "dem": 884341,
+      "npa": 416911,
       "other": 51718,
-      "total": 2077289
+      "total": 2077296
     },
     "early_voted": {
       "rep": 1497767,
@@ -29,11 +29,11 @@
       "_source": "FLVoiceNews/2026-11-04"
     },
     "election_day": {
-      "rep": 1340150,
-      "dem": 740000,
-      "npa": 613071,
-      "other": 89907,
-      "total": 2783128
+      "rep": 1340464,
+      "dem": 740478,
+      "npa": 613432,
+      "other": 89980,
+      "total": 2784354
     },
     "vbm_outstanding": 396890,
     "vbm_return_rate": 84.0
@@ -559,9 +559,9 @@
       },
       "election_day": {
         "rep": 10131,
-        "dem": 3380,
+        "dem": 3381,
         "npa": 3393,
-        "other": 665,
+        "other": 664,
         "total": 17569
       },
       "vbm_outstanding": 2415
@@ -899,11 +899,11 @@
         "total": 216747
       },
       "election_day": {
-        "rep": 64145,
-        "dem": 48232,
-        "npa": 40024,
-        "other": 5419,
-        "total": 157820
+        "rep": 64456,
+        "dem": 48706,
+        "npa": 40385,
+        "other": 5492,
+        "total": 159039
       },
       "vbm_outstanding": 27573
     },
@@ -1519,11 +1519,11 @@
         "total": 223599
       },
       "election_day": {
-        "rep": 47422,
-        "dem": 52749,
-        "npa": 38952,
-        "other": 5293,
-        "total": 144416
+        "rep": 47421,
+        "dem": 52750,
+        "npa": 38953,
+        "other": 5294,
+        "total": 144418
       },
       "vbm_outstanding": 23932
     },
@@ -1674,11 +1674,11 @@
         "total": 86292
       },
       "election_day": {
-        "rep": 58639,
-        "dem": 30716,
+        "rep": 58642,
+        "dem": 30718,
         "npa": 23926,
         "other": 3880,
-        "total": 117161
+        "total": 117166
       },
       "vbm_outstanding": 10983
     },
@@ -1769,9 +1769,9 @@
       "election_day": {
         "rep": 40812,
         "dem": 11280,
-        "npa": 13506,
+        "npa": 13507,
         "other": 2274,
-        "total": 67872
+        "total": 67873
       },
       "vbm_outstanding": 12042
     },
@@ -1840,17 +1840,17 @@
     "St. Lucie": {
       "vbm_provided": {
         "rep": 12955,
-        "dem": 18669,
-        "npa": 8145,
+        "dem": 18671,
+        "npa": 8146,
         "other": 1271,
-        "total": 41040
+        "total": 41043
       },
       "vbm_voted": {
         "rep": 11129,
-        "dem": 16053,
-        "npa": 6769,
+        "dem": 16055,
+        "npa": 6770,
         "other": 1046,
-        "total": 34997
+        "total": 35000
       },
       "early_voted": {
         "rep": 26558,
@@ -1860,28 +1860,28 @@
         "total": 64787
       },
       "election_day": {
-        "rep": 18993,
+        "rep": 18994,
         "dem": 11505,
         "npa": 8298,
         "other": 1554,
-        "total": 40350
+        "total": 40351
       },
       "vbm_outstanding": 6043
     },
     "Sumter": {
       "vbm_provided": {
-        "rep": 16708,
-        "dem": 11063,
+        "rep": 16711,
+        "dem": 11064,
         "npa": 6401,
         "other": 916,
-        "total": 35088
+        "total": 35092
       },
       "vbm_voted": {
-        "rep": 13845,
-        "dem": 9286,
+        "rep": 13848,
+        "dem": 9287,
         "npa": 5235,
         "other": 731,
-        "total": 29097
+        "total": 29101
       },
       "early_voted": {
         "rep": 30269,
@@ -2017,9 +2017,9 @@
       "election_day": {
         "rep": 40827,
         "dem": 18176,
-        "npa": 18036,
+        "npa": 18034,
         "other": 3010,
-        "total": 80049
+        "total": 80047
       },
       "vbm_outstanding": 12727
     },
