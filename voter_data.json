@@ -3,22 +3,22 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-11-04T19:20:47+00:00",
+  "fetched_at": "2026-11-04T19:30:47+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
-      "rep": 855021,
-      "dem": 1043228,
-      "npa": 511837,
+      "rep": 855026,
+      "dem": 1043238,
+      "npa": 511843,
       "other": 63944,
-      "total": 2474030
+      "total": 2474051
     },
     "vbm_voted": {
-      "rep": 724291,
-      "dem": 884270,
-      "npa": 416873,
+      "rep": 724296,
+      "dem": 884280,
+      "npa": 416879,
       "other": 51706,
-      "total": 2077140
+      "total": 2077161
     },
     "early_voted": {
       "rep": 1497767,
@@ -29,11 +29,11 @@
       "_source": "FLVoiceNews/2026-11-04"
     },
     "election_day": {
-      "rep": 1340114,
-      "dem": 739983,
-      "npa": 613055,
+      "rep": 1340117,
+      "dem": 739986,
+      "npa": 613058,
       "other": 89916,
-      "total": 2783068
+      "total": 2783077
     },
     "vbm_outstanding": 396890,
     "vbm_return_rate": 84.0
@@ -103,18 +103,18 @@
     },
     "Bay": {
       "vbm_provided": {
-        "rep": 7228,
+        "rep": 7231,
         "dem": 4294,
-        "npa": 2226,
+        "npa": 2227,
         "other": 387,
-        "total": 14135
+        "total": 14139
       },
       "vbm_voted": {
-        "rep": 5835,
+        "rep": 5838,
         "dem": 3528,
-        "npa": 1646,
+        "npa": 1647,
         "other": 277,
-        "total": 11286
+        "total": 11290
       },
       "early_voted": {
         "rep": 23000,
@@ -165,18 +165,18 @@
     },
     "Brevard": {
       "vbm_provided": {
-        "rep": 29507,
+        "rep": 29508,
         "dem": 30422,
         "npa": 15145,
         "other": 2281,
-        "total": 77355
+        "total": 77356
       },
       "vbm_voted": {
-        "rep": 24627,
+        "rep": 24628,
         "dem": 24750,
         "npa": 12289,
         "other": 1816,
-        "total": 63482
+        "total": 63483
       },
       "early_voted": {
         "rep": 59044,
@@ -507,17 +507,17 @@
     "Escambia": {
       "vbm_provided": {
         "rep": 11403,
-        "dem": 11151,
-        "npa": 4242,
+        "dem": 11153,
+        "npa": 4243,
         "other": 641,
-        "total": 27437
+        "total": 27440
       },
       "vbm_voted": {
         "rep": 9282,
-        "dem": 8962,
-        "npa": 3127,
+        "dem": 8964,
+        "npa": 3128,
         "other": 472,
-        "total": 21843
+        "total": 21846
       },
       "early_voted": {
         "rep": 23538,
@@ -1437,17 +1437,17 @@
     "Okaloosa": {
       "vbm_provided": {
         "rep": 6898,
-        "dem": 4570,
+        "dem": 4571,
         "npa": 2793,
         "other": 372,
-        "total": 14633
+        "total": 14634
       },
       "vbm_voted": {
         "rep": 5289,
-        "dem": 3566,
+        "dem": 3567,
         "npa": 1929,
         "other": 271,
-        "total": 11055
+        "total": 11056
       },
       "early_voted": {
         "rep": 22748,
@@ -1519,11 +1519,11 @@
         "total": 223600
       },
       "election_day": {
-        "rep": 47416,
-        "dem": 52739,
+        "rep": 47418,
+        "dem": 52742,
         "npa": 38945,
         "other": 5291,
-        "total": 144391
+        "total": 144396
       },
       "vbm_outstanding": 23932
     },
@@ -1623,17 +1623,17 @@
     "Pinellas": {
       "vbm_provided": {
         "rep": 77193,
-        "dem": 88151,
+        "dem": 88152,
         "npa": 46007,
         "other": 5531,
-        "total": 216882
+        "total": 216883
       },
       "vbm_voted": {
         "rep": 66028,
-        "dem": 75983,
+        "dem": 75984,
         "npa": 37899,
         "other": 4473,
-        "total": 184383
+        "total": 184384
       },
       "early_voted": {
         "rep": 36775,
@@ -1767,11 +1767,11 @@
         "total": 78682
       },
       "election_day": {
-        "rep": 40811,
+        "rep": 40812,
         "dem": 11278,
         "npa": 13506,
         "other": 2274,
-        "total": 67869
+        "total": 67870
       },
       "vbm_outstanding": 12042
     },
@@ -1994,18 +1994,18 @@
     },
     "Volusia": {
       "vbm_provided": {
-        "rep": 28488,
-        "dem": 29835,
-        "npa": 15949,
+        "rep": 28489,
+        "dem": 29841,
+        "npa": 15953,
         "other": 2407,
-        "total": 76679
+        "total": 76690
       },
       "vbm_voted": {
-        "rep": 24019,
-        "dem": 25029,
-        "npa": 12944,
+        "rep": 24020,
+        "dem": 25035,
+        "npa": 12948,
         "other": 1960,
-        "total": 63952
+        "total": 63963
       },
       "early_voted": {
         "rep": 45973,
@@ -2017,9 +2017,9 @@
       "election_day": {
         "rep": 40825,
         "dem": 18177,
-        "npa": 18035,
+        "npa": 18038,
         "other": 3010,
-        "total": 80047
+        "total": 80050
       },
       "vbm_outstanding": 12727
     },
