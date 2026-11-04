@@ -7,7 +7,7 @@ DATA_SRC = "/opt/data/voter_data.json"
 TOKEN_FILE = os.path.expanduser("~/.github_token")
 
 def run(cmd, cwd=REPO_DIR):
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=30, cwd=cwd)
+    result = subprocess.run(cmd, capture_output=True, text=True, timeout=90, cwd=cwd)
     if result.returncode != 0:
         print(f"  ⚠️  {cmd[0]} exited {result.returncode}: {result.stderr.strip()}")
     return result
@@ -59,26 +59,38 @@ run(["git", "commit", "--author", "Jarvis <jarvis.green.net@gmail.com>",
      "-m", f"Auto-update {__import__('datetime').datetime.now().strftime('%b %d %H:%M')} ET"],
     REPO_DIR)
 
-# 6. Push with retry on race (concurrent push from another cron instance)
+# 6. Push with retry: fetch before each attempt, rebase on race, exponential backoff.
+#    Multiple cron jobs push to this repo in the same minute (voter data, FL
+#    comparison, national comparison). "cannot lock ref" / "[rejected]" mean a
+#    sibling push landed first — rebase ours on top and retry.
 import time
+RACE_PATTERNS = ("cannot lock ref", "fetch first", "[rejected]", "non-fast-forward")
 MAX_ATTEMPTS = 5
+backoff = [8, 11, 14, 17, 20]  # seconds, exponential-ish
+
+push_result = None
 for attempt in range(1, MAX_ATTEMPTS + 1):
-    # Fetch latest remote refs before push to avoid stale expected-SHA rejection
-    run(["git", "fetch", "origin"], REPO_DIR)
+    # Refresh the tracking ref so push (and the lease check) compares against live remote
+    run(["git", "fetch", "origin", "main"], REPO_DIR)
+    # If a sibling pushed since our commit, rebase ours on top of it.
+    # rebase.autoStash keeps this working when the working tree has unstaged
+    # edits (e.g. push_to_github.py itself changed) — a plain pull --rebase
+    # aborts with "cannot pull with rebase: You have unstaged changes".
+    run(["git", "-c", "rebase.autoStash=true", "pull", "--rebase", "origin", "main"], REPO_DIR)
     push_result = run(["git", "push", "origin", "main"], REPO_DIR)
     if push_result.returncode == 0:
         print("✅ Pushed to GitHub successfully")
         sys.exit(0)
-    # Race condition — remote has new commits (concurrent cron jobs); rebase and retry
-    if "cannot lock ref" in push_result.stderr or "fetch first" in push_result.stderr or "[rejected]" in push_result.stderr:
-        wait = 5 + attempt * 3  # backoff: 8s, 11s, 14s, 17s, 20s
-        print(f"⚠️  Remote has diverged (race), rebasing (attempt {attempt}/{MAX_ATTEMPTS}), retrying in {wait}s...")
-        run(["git", "pull", "--rebase", "origin", "main"], REPO_DIR)
-        time.sleep(wait)
+    err = (push_result.stderr or "") + (push_result.stdout or "")
+    if attempt < MAX_ATTEMPTS and any(p in err for p in RACE_PATTERNS):
+        print(f"  ⚠️  Race detected (attempt {attempt}/{MAX_ATTEMPTS}), backing off {backoff[attempt - 1]}s and retrying...")
+        time.sleep(backoff[attempt - 1])
     else:
-        # Non-race failure; bail
-        print("❌ Push failed")
-        sys.exit(1)
+        break
 
-print("❌ Push failed after retries")
+# Never force-push here. A sibling cron job (FL/national comparison refresh) shares
+# this repo; after a fresh fetch the lease check passes against the sibling's new
+# HEAD, so --force-with-lease would silently discard its commit. Leave our commits
+# local — the next 10-min run rebases and retries.
+print("❌ Push failed after all retries — commits kept locally, next run will retry")
 sys.exit(1)
