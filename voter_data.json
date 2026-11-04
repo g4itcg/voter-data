@@ -3,22 +3,22 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-11-04T22:40:48+00:00",
+  "fetched_at": "2026-11-04T22:50:49+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
-      "rep": 855095,
-      "dem": 1043390,
-      "npa": 511921,
+      "rep": 855098,
+      "dem": 1043396,
+      "npa": 511923,
       "other": 63959,
-      "total": 2474365
+      "total": 2474376
     },
     "vbm_voted": {
-      "rep": 724365,
-      "dem": 884432,
-      "npa": 416957,
+      "rep": 724368,
+      "dem": 884438,
+      "npa": 416959,
       "other": 51721,
-      "total": 2077475
+      "total": 2077486
     },
     "early_voted": {
       "rep": 1497767,
@@ -29,11 +29,11 @@
       "_source": "FLVoiceNews/2026-11-04"
     },
     "election_day": {
-      "rep": 1340485,
-      "dem": 740535,
+      "rep": 1340486,
+      "dem": 740536,
       "npa": 613461,
       "other": 89950,
-      "total": 2784431
+      "total": 2784433
     },
     "vbm_outstanding": 396890,
     "vbm_return_rate": 84.0
@@ -217,11 +217,11 @@
         "total": 314109
       },
       "election_day": {
-        "rep": 57871,
-        "dem": 76888,
+        "rep": 57872,
+        "dem": 76889,
         "npa": 56682,
         "other": 5536,
-        "total": 196977
+        "total": 196979
       },
       "vbm_outstanding": 9292
     },
@@ -878,18 +878,18 @@
     },
     "Hillsborough": {
       "vbm_provided": {
-        "rep": 55463,
-        "dem": 75329,
-        "npa": 36412,
+        "rep": 55466,
+        "dem": 75334,
+        "npa": 36414,
         "other": 4343,
-        "total": 171547
+        "total": 171557
       },
       "vbm_voted": {
-        "rep": 46584,
-        "dem": 63949,
-        "npa": 29951,
+        "rep": 46587,
+        "dem": 63954,
+        "npa": 29953,
         "other": 3490,
-        "total": 143974
+        "total": 143984
       },
       "early_voted": {
         "rep": 79817,
@@ -1778,17 +1778,17 @@
     "Seminole": {
       "vbm_provided": {
         "rep": 16303,
-        "dem": 22205,
+        "dem": 22206,
         "npa": 11146,
         "other": 1349,
-        "total": 51003
+        "total": 51004
       },
       "vbm_voted": {
         "rep": 13982,
-        "dem": 18685,
+        "dem": 18686,
         "npa": 9119,
         "other": 1111,
-        "total": 42897
+        "total": 42898
       },
       "early_voted": {
         "rep": 34230,
