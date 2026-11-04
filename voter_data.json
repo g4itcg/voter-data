@@ -3,15 +3,15 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-11-04T23:40:49+00:00",
+  "fetched_at": "2026-11-04T23:50:49+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
-      "rep": 855101,
-      "dem": 1043399,
-      "npa": 511929,
-      "other": 63959,
-      "total": 2474388
+      "rep": 853841,
+      "dem": 1041383,
+      "npa": 510575,
+      "other": 63773,
+      "total": 2469572
     },
     "vbm_voted": {
       "rep": 724371,
@@ -30,13 +30,13 @@
     },
     "election_day": {
       "rep": 1340489,
-      "dem": 740539,
-      "npa": 613463,
-      "other": 89943,
-      "total": 2784434
+      "dem": 740540,
+      "npa": 613464,
+      "other": 89939,
+      "total": 2784432
     },
-    "vbm_outstanding": 396890,
-    "vbm_return_rate": 84.0
+    "vbm_outstanding": 392074,
+    "vbm_return_rate": 84.1
   },
   "by_county": {
     "Alachua": {
@@ -1560,11 +1560,11 @@
     },
     "Palm Beach": {
       "vbm_provided": {
-        "rep": 51810,
-        "dem": 102275,
-        "npa": 42429,
-        "other": 5882,
-        "total": 202396
+        "rep": 50550,
+        "dem": 100259,
+        "npa": 41075,
+        "other": 5696,
+        "total": 197580
       },
       "vbm_voted": {
         "rep": 40453,
@@ -1587,7 +1587,7 @@
         "other": 7196,
         "total": 194047
       },
-      "vbm_outstanding": 41604
+      "vbm_outstanding": 36788
     },
     "Pasco": {
       "vbm_provided": {
@@ -1675,10 +1675,10 @@
       },
       "election_day": {
         "rep": 58649,
-        "dem": 30738,
-        "npa": 23934,
-        "other": 3846,
-        "total": 117167
+        "dem": 30739,
+        "npa": 23935,
+        "other": 3842,
+        "total": 117165
       },
       "vbm_outstanding": 10983
     },
