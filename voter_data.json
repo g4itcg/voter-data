@@ -3,22 +3,22 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-11-04T22:20:48+00:00",
+  "fetched_at": "2026-11-04T22:30:48+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
       "rep": 855093,
-      "dem": 1043384,
+      "dem": 1043386,
       "npa": 511918,
       "other": 63959,
-      "total": 2474354
+      "total": 2474356
     },
     "vbm_voted": {
       "rep": 724363,
-      "dem": 884426,
+      "dem": 884428,
       "npa": 416954,
       "other": 51721,
-      "total": 2077464
+      "total": 2077466
     },
     "early_voted": {
       "rep": 1497767,
@@ -29,11 +29,11 @@
       "_source": "FLVoiceNews/2026-11-04"
     },
     "election_day": {
-      "rep": 1340473,
-      "dem": 740527,
-      "npa": 613446,
-      "other": 89954,
-      "total": 2784400
+      "rep": 1340474,
+      "dem": 740529,
+      "npa": 613448,
+      "other": 89951,
+      "total": 2784402
     },
     "vbm_outstanding": 396890,
     "vbm_return_rate": 84.0
@@ -1519,11 +1519,11 @@
         "total": 223599
       },
       "election_day": {
-        "rep": 47429,
-        "dem": 52766,
+        "rep": 47430,
+        "dem": 52768,
         "npa": 38961,
         "other": 5294,
-        "total": 144450
+        "total": 144453
       },
       "vbm_outstanding": 23932
     },
@@ -1676,9 +1676,9 @@
       "election_day": {
         "rep": 58645,
         "dem": 30734,
-        "npa": 23929,
-        "other": 3857,
-        "total": 117165
+        "npa": 23931,
+        "other": 3854,
+        "total": 117164
       },
       "vbm_outstanding": 10983
     },
@@ -1778,17 +1778,17 @@
     "Seminole": {
       "vbm_provided": {
         "rep": 16303,
-        "dem": 22203,
+        "dem": 22205,
         "npa": 11146,
         "other": 1349,
-        "total": 51001
+        "total": 51003
       },
       "vbm_voted": {
         "rep": 13982,
-        "dem": 18683,
+        "dem": 18685,
         "npa": 9119,
         "other": 1111,
-        "total": 42895
+        "total": 42897
       },
       "early_voted": {
         "rep": 34230,
