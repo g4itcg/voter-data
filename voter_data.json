@@ -3,22 +3,22 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-11-04T18:00:47+00:00",
+  "fetched_at": "2026-11-04T18:10:47+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
-      "rep": 854994,
-      "dem": 1043190,
-      "npa": 511809,
+      "rep": 854997,
+      "dem": 1043198,
+      "npa": 511810,
       "other": 63943,
-      "total": 2473936
+      "total": 2473948
     },
     "vbm_voted": {
-      "rep": 724264,
-      "dem": 884232,
-      "npa": 416845,
+      "rep": 724267,
+      "dem": 884240,
+      "npa": 416846,
       "other": 51705,
-      "total": 2077046
+      "total": 2077058
     },
     "early_voted": {
       "rep": 1497767,
@@ -29,11 +29,11 @@
       "_source": "FLVoiceNews/2026-11-04"
     },
     "election_day": {
-      "rep": 1340063,
-      "dem": 739941,
-      "npa": 613009,
-      "other": 89932,
-      "total": 2782945
+      "rep": 1340064,
+      "dem": 739945,
+      "npa": 613012,
+      "other": 89927,
+      "total": 2782948
     },
     "vbm_outstanding": 396890,
     "vbm_return_rate": 84.0
@@ -476,17 +476,17 @@
     "Duval": {
       "vbm_provided": {
         "rep": 16162,
-        "dem": 24244,
+        "dem": 24242,
         "npa": 8328,
         "other": 1247,
-        "total": 49981
+        "total": 49979
       },
       "vbm_voted": {
         "rep": 13563,
-        "dem": 19849,
+        "dem": 19847,
         "npa": 6554,
         "other": 964,
-        "total": 40930
+        "total": 40928
       },
       "early_voted": {
         "rep": 70248,
@@ -506,18 +506,18 @@
     },
     "Escambia": {
       "vbm_provided": {
-        "rep": 11398,
-        "dem": 11140,
+        "rep": 11399,
+        "dem": 11146,
         "npa": 4239,
         "other": 641,
-        "total": 27418
+        "total": 27425
       },
       "vbm_voted": {
-        "rep": 9277,
-        "dem": 8951,
+        "rep": 9278,
+        "dem": 8957,
         "npa": 3124,
         "other": 472,
-        "total": 21824
+        "total": 21831
       },
       "early_voted": {
         "rep": 23538,
@@ -558,11 +558,11 @@
         "total": 30606
       },
       "election_day": {
-        "rep": 10125,
+        "rep": 10126,
         "dem": 3378,
         "npa": 3388,
         "other": 681,
-        "total": 17572
+        "total": 17573
       },
       "vbm_outstanding": 2415
     },
@@ -1365,10 +1365,10 @@
       },
       "election_day": {
         "rep": 84629,
-        "dem": 79114,
+        "dem": 79115,
         "npa": 74079,
         "other": 6127,
-        "total": 243949
+        "total": 243950
       },
       "vbm_outstanding": 56798
     },
@@ -1436,18 +1436,18 @@
     },
     "Okaloosa": {
       "vbm_provided": {
-        "rep": 6893,
+        "rep": 6894,
         "dem": 4569,
-        "npa": 2787,
+        "npa": 2788,
         "other": 372,
-        "total": 14621
+        "total": 14623
       },
       "vbm_voted": {
-        "rep": 5284,
+        "rep": 5285,
         "dem": 3565,
-        "npa": 1923,
+        "npa": 1924,
         "other": 271,
-        "total": 11043
+        "total": 11045
       },
       "early_voted": {
         "rep": 22748,
@@ -1560,18 +1560,18 @@
     },
     "Palm Beach": {
       "vbm_provided": {
-        "rep": 51801,
-        "dem": 102259,
+        "rep": 51802,
+        "dem": 102263,
         "npa": 42417,
         "other": 5882,
-        "total": 202359
+        "total": 202364
       },
       "vbm_voted": {
-        "rep": 40444,
-        "dem": 83089,
+        "rep": 40445,
+        "dem": 83093,
         "npa": 32743,
         "other": 4479,
-        "total": 160755
+        "total": 160760
       },
       "early_voted": {
         "rep": 77524,
@@ -1644,9 +1644,9 @@
       },
       "election_day": {
         "rep": 61038,
-        "dem": 36517,
+        "dem": 36518,
         "npa": 30498,
-        "other": 4730,
+        "other": 4729,
         "total": 132783
       },
       "vbm_outstanding": 32499
@@ -1675,10 +1675,10 @@
       },
       "election_day": {
         "rep": 58633,
-        "dem": 30710,
-        "npa": 23921,
-        "other": 3890,
-        "total": 117154
+        "dem": 30712,
+        "npa": 23924,
+        "other": 3886,
+        "total": 117155
       },
       "vbm_outstanding": 10983
     },
