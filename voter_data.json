@@ -3,22 +3,22 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-11-05T12:30:54+00:00",
+  "fetched_at": "2026-11-05T12:40:54+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
-      "rep": 853847,
+      "rep": 853848,
       "dem": 1041391,
       "npa": 510578,
       "other": 63773,
-      "total": 2469589
+      "total": 2469590
     },
     "vbm_voted": {
-      "rep": 724377,
+      "rep": 724378,
       "dem": 884449,
       "npa": 416968,
       "other": 51721,
-      "total": 2077515
+      "total": 2077516
     },
     "early_voted": {
       "rep": 1497767,
@@ -29,11 +29,11 @@
       "_source": "FLVoiceNews/2026-11-05"
     },
     "election_day": {
-      "rep": 1340514,
+      "rep": 1340516,
       "dem": 740577,
-      "npa": 613490,
+      "npa": 613491,
       "other": 89795,
-      "total": 2784376
+      "total": 2784379
     },
     "vbm_outstanding": 392074,
     "vbm_return_rate": 84.1
@@ -878,18 +878,18 @@
     },
     "Hillsborough": {
       "vbm_provided": {
-        "rep": 55467,
+        "rep": 55468,
         "dem": 75337,
         "npa": 36420,
         "other": 4343,
-        "total": 171567
+        "total": 171568
       },
       "vbm_voted": {
-        "rep": 46588,
+        "rep": 46589,
         "dem": 63957,
         "npa": 29959,
         "other": 3490,
-        "total": 143994
+        "total": 143995
       },
       "early_voted": {
         "rep": 79817,
@@ -1674,11 +1674,11 @@
         "total": 86292
       },
       "election_day": {
-        "rep": 58672,
+        "rep": 58674,
         "dem": 30769,
-        "npa": 23959,
+        "npa": 23960,
         "other": 3698,
-        "total": 117098
+        "total": 117101
       },
       "vbm_outstanding": 10983
     },
