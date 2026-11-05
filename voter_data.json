@@ -3,22 +3,22 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-11-05T15:40:55+00:00",
+  "fetched_at": "2026-11-05T15:50:55+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
-      "rep": 853592,
-      "dem": 1040994,
-      "npa": 510343,
+      "rep": 853594,
+      "dem": 1041000,
+      "npa": 510345,
       "other": 63751,
-      "total": 2468680
+      "total": 2468690
     },
     "vbm_voted": {
-      "rep": 724433,
-      "dem": 884518,
-      "npa": 417026,
+      "rep": 724435,
+      "dem": 884524,
+      "npa": 417028,
       "other": 51727,
-      "total": 2077704
+      "total": 2077714
     },
     "early_voted": {
       "rep": 1497766,
@@ -30,8 +30,8 @@
     },
     "election_day": {
       "rep": 1340666,
-      "dem": 740617,
-      "npa": 613553,
+      "dem": 740616,
+      "npa": 613554,
       "other": 89794,
       "total": 2784630
     },
@@ -41,18 +41,18 @@
   "by_county": {
     "Alachua": {
       "vbm_provided": {
-        "rep": 5970,
-        "dem": 16604,
+        "rep": 5971,
+        "dem": 16606,
         "npa": 4822,
         "other": 663,
-        "total": 28059
+        "total": 28062
       },
       "vbm_voted": {
-        "rep": 5078,
-        "dem": 14261,
+        "rep": 5079,
+        "dem": 14263,
         "npa": 3950,
         "other": 524,
-        "total": 23813
+        "total": 23816
       },
       "early_voted": {
         "rep": 12762,
@@ -167,16 +167,16 @@
       "vbm_provided": {
         "rep": 29505,
         "dem": 30425,
-        "npa": 15138,
+        "npa": 15139,
         "other": 2279,
-        "total": 77347
+        "total": 77348
       },
       "vbm_voted": {
         "rep": 24629,
         "dem": 24756,
-        "npa": 12293,
+        "npa": 12294,
         "other": 1816,
-        "total": 63494
+        "total": 63495
       },
       "early_voted": {
         "rep": 59044,
@@ -506,18 +506,18 @@
     },
     "Escambia": {
       "vbm_provided": {
-        "rep": 11386,
-        "dem": 11140,
+        "rep": 11387,
+        "dem": 11142,
         "npa": 4226,
         "other": 639,
-        "total": 27391
+        "total": 27394
       },
       "vbm_voted": {
-        "rep": 9296,
-        "dem": 8975,
+        "rep": 9297,
+        "dem": 8977,
         "npa": 3134,
         "other": 472,
-        "total": 21877
+        "total": 21880
       },
       "early_voted": {
         "rep": 23538,
@@ -1561,17 +1561,17 @@
     "Palm Beach": {
       "vbm_provided": {
         "rep": 50516,
-        "dem": 100189,
+        "dem": 100191,
         "npa": 41029,
         "other": 5694,
-        "total": 197428
+        "total": 197430
       },
       "vbm_voted": {
         "rep": 40455,
-        "dem": 83104,
+        "dem": 83106,
         "npa": 32757,
         "other": 4479,
-        "total": 160795
+        "total": 160797
       },
       "early_voted": {
         "rep": 77524,
@@ -1593,16 +1593,16 @@
       "vbm_provided": {
         "rep": 21228,
         "dem": 24755,
-        "npa": 13595,
+        "npa": 13596,
         "other": 1930,
-        "total": 61508
+        "total": 61509
       },
       "vbm_voted": {
         "rep": 18394,
         "dem": 21207,
-        "npa": 11245,
+        "npa": 11246,
         "other": 1556,
-        "total": 52402
+        "total": 52403
       },
       "early_voted": {
         "rep": 43439,
@@ -1675,10 +1675,10 @@
       },
       "election_day": {
         "rep": 58678,
-        "dem": 30777,
+        "dem": 30776,
         "npa": 23966,
         "other": 3689,
-        "total": 117110
+        "total": 117109
       },
       "vbm_outstanding": 10983
     },
@@ -1769,9 +1769,9 @@
       "election_day": {
         "rep": 40930,
         "dem": 11303,
-        "npa": 13549,
+        "npa": 13550,
         "other": 2280,
-        "total": 68062
+        "total": 68063
       },
       "vbm_outstanding": 12036
     },
