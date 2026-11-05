@@ -3,22 +3,22 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-11-05T17:00:56+00:00",
+  "fetched_at": "2026-11-05T17:10:56+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
-      "rep": 853617,
-      "dem": 1041030,
-      "npa": 510379,
+      "rep": 853619,
+      "dem": 1041037,
+      "npa": 510382,
       "other": 63753,
-      "total": 2468779
+      "total": 2468791
     },
     "vbm_voted": {
-      "rep": 724460,
-      "dem": 884555,
-      "npa": 417062,
+      "rep": 724462,
+      "dem": 884562,
+      "npa": 417065,
       "other": 51729,
-      "total": 2077806
+      "total": 2077818
     },
     "early_voted": {
       "rep": 1497766,
@@ -29,11 +29,11 @@
       "_source": "FLVoiceNews/2026-11-05"
     },
     "election_day": {
-      "rep": 1340680,
-      "dem": 740643,
-      "npa": 613569,
+      "rep": 1340746,
+      "dem": 740670,
+      "npa": 613572,
       "other": 89794,
-      "total": 2784686
+      "total": 2784782
     },
     "vbm_outstanding": 390973,
     "vbm_return_rate": 84.2
@@ -413,18 +413,18 @@
     },
     "DeSoto": {
       "vbm_provided": {
-        "rep": 679,
+        "rep": 680,
         "dem": 512,
         "npa": 260,
         "other": 29,
-        "total": 1480
+        "total": 1481
       },
       "vbm_voted": {
-        "rep": 611,
+        "rep": 612,
         "dem": 442,
         "npa": 229,
         "other": 25,
-        "total": 1307
+        "total": 1308
       },
       "early_voted": {
         "rep": 2155,
@@ -600,17 +600,17 @@
     "Gadsden": {
       "vbm_provided": {
         "rep": 481,
-        "dem": 2547,
+        "dem": 2546,
         "npa": 210,
         "other": 29,
-        "total": 3267
+        "total": 3266
       },
       "vbm_voted": {
         "rep": 411,
-        "dem": 2156,
+        "dem": 2155,
         "npa": 166,
         "other": 20,
-        "total": 2753
+        "total": 2752
       },
       "early_voted": {
         "rep": 1713,
@@ -992,11 +992,11 @@
         "total": 6583
       },
       "election_day": {
-        "rep": 4323,
-        "dem": 1749,
-        "npa": 446,
+        "rep": 4389,
+        "dem": 1776,
+        "npa": 449,
         "other": 96,
-        "total": 6614
+        "total": 6710
       },
       "vbm_outstanding": 422
     },
@@ -1344,17 +1344,17 @@
     "Miami-Dade": {
       "vbm_provided": {
         "rep": 74421,
-        "dem": 106268,
-        "npa": 67584,
+        "dem": 106270,
+        "npa": 67586,
         "other": 5066,
-        "total": 253339
+        "total": 253343
       },
       "vbm_voted": {
         "rep": 58547,
-        "dem": 83528,
-        "npa": 50807,
+        "dem": 83530,
+        "npa": 50809,
         "other": 3761,
-        "total": 196643
+        "total": 196647
       },
       "early_voted": {
         "rep": 134180,
@@ -1499,17 +1499,17 @@
     "Orange": {
       "vbm_provided": {
         "rep": 32976,
-        "dem": 62631,
+        "dem": 62632,
         "npa": 29585,
         "other": 3381,
-        "total": 128573
+        "total": 128574
       },
       "vbm_voted": {
         "rep": 27416,
-        "dem": 51575,
+        "dem": 51576,
         "npa": 23119,
         "other": 2562,
-        "total": 104672
+        "total": 104673
       },
       "early_voted": {
         "rep": 59911,
@@ -1994,18 +1994,18 @@
     },
     "Volusia": {
       "vbm_provided": {
-        "rep": 28504,
-        "dem": 29858,
-        "npa": 15969,
+        "rep": 28505,
+        "dem": 29863,
+        "npa": 15970,
         "other": 2410,
-        "total": 76741
+        "total": 76748
       },
       "vbm_voted": {
-        "rep": 24035,
-        "dem": 25052,
-        "npa": 12964,
+        "rep": 24036,
+        "dem": 25057,
+        "npa": 12965,
         "other": 1963,
-        "total": 64014
+        "total": 64021
       },
       "early_voted": {
         "rep": 45973,
