@@ -3,22 +3,22 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-11-05T14:10:54+00:00",
+  "fetched_at": "2026-11-05T14:20:54+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
       "rep": 853565,
-      "dem": 1040951,
+      "dem": 1040952,
       "npa": 510310,
       "other": 63749,
-      "total": 2468575
+      "total": 2468576
     },
     "vbm_voted": {
       "rep": 724406,
-      "dem": 884475,
+      "dem": 884476,
       "npa": 416993,
       "other": 51725,
-      "total": 2077599
+      "total": 2077600
     },
     "early_voted": {
       "rep": 1497766,
@@ -30,10 +30,10 @@
     },
     "election_day": {
       "rep": 1340522,
-      "dem": 740581,
+      "dem": 740582,
       "npa": 613494,
-      "other": 89789,
-      "total": 2784386
+      "other": 89786,
+      "total": 2784384
     },
     "vbm_outstanding": 390976,
     "vbm_return_rate": 84.2
@@ -1344,17 +1344,17 @@
     "Miami-Dade": {
       "vbm_provided": {
         "rep": 74415,
-        "dem": 106260,
+        "dem": 106261,
         "npa": 67572,
         "other": 5065,
-        "total": 253312
+        "total": 253313
       },
       "vbm_voted": {
         "rep": 58541,
-        "dem": 83520,
+        "dem": 83521,
         "npa": 50795,
         "other": 3760,
-        "total": 196616
+        "total": 196617
       },
       "early_voted": {
         "rep": 134180,
@@ -1675,10 +1675,10 @@
       },
       "election_day": {
         "rep": 58676,
-        "dem": 30773,
-        "npa": 23962,
-        "other": 3694,
-        "total": 117105
+        "dem": 30774,
+        "npa": 23963,
+        "other": 3691,
+        "total": 117104
       },
       "vbm_outstanding": 10983
     },
@@ -2017,9 +2017,9 @@
       "election_day": {
         "rep": 40824,
         "dem": 18175,
-        "npa": 18033,
+        "npa": 18032,
         "other": 3010,
-        "total": 80042
+        "total": 80041
       },
       "vbm_outstanding": 12727
     },
