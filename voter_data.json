@@ -3,22 +3,22 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-11-05T00:30:49+00:00",
+  "fetched_at": "2026-11-05T00:40:49+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
       "rep": 853843,
-      "dem": 1041388,
+      "dem": 1041385,
       "npa": 510577,
       "other": 63773,
-      "total": 2469581
+      "total": 2469578
     },
     "vbm_voted": {
       "rep": 724373,
-      "dem": 884446,
+      "dem": 884443,
       "npa": 416967,
       "other": 51721,
-      "total": 2077507
+      "total": 2077504
     },
     "early_voted": {
       "rep": 1497767,
@@ -30,10 +30,10 @@
     },
     "election_day": {
       "rep": 1340491,
-      "dem": 740546,
+      "dem": 740545,
       "npa": 613466,
-      "other": 89919,
-      "total": 2784422
+      "other": 89921,
+      "total": 2784423
     },
     "vbm_outstanding": 392074,
     "vbm_return_rate": 84.1
@@ -507,17 +507,17 @@
     "Escambia": {
       "vbm_provided": {
         "rep": 11413,
-        "dem": 11160,
+        "dem": 11157,
         "npa": 4247,
         "other": 641,
-        "total": 27461
+        "total": 27458
       },
       "vbm_voted": {
         "rep": 9292,
-        "dem": 8971,
+        "dem": 8968,
         "npa": 3132,
         "other": 472,
-        "total": 21867
+        "total": 21864
       },
       "early_voted": {
         "rep": 23538,
@@ -1675,10 +1675,10 @@
       },
       "election_day": {
         "rep": 58651,
-        "dem": 30745,
+        "dem": 30744,
         "npa": 23937,
-        "other": 3822,
-        "total": 117155
+        "other": 3824,
+        "total": 117156
       },
       "vbm_outstanding": 10983
     },
