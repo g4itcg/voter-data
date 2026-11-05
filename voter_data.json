@@ -3,37 +3,37 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-11-05T20:00:57+00:00",
+  "fetched_at": "2026-11-05T20:10:57+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
-      "rep": 853688,
-      "dem": 1041173,
-      "npa": 510477,
+      "rep": 853694,
+      "dem": 1041180,
+      "npa": 510483,
       "other": 63761,
-      "total": 2469099
+      "total": 2469118
     },
     "vbm_voted": {
-      "rep": 724531,
-      "dem": 884698,
-      "npa": 417160,
+      "rep": 724537,
+      "dem": 884705,
+      "npa": 417166,
       "other": 51737,
-      "total": 2078126
+      "total": 2078145
     },
     "early_voted": {
       "rep": 1497765,
-      "dem": 1210805,
+      "dem": 1210804,
       "npa": 668218,
       "other": 91014,
-      "total": 3467802,
+      "total": 3467801,
       "_source": "FLVoiceNews/2026-11-05"
     },
     "election_day": {
-      "rep": 1340832,
-      "dem": 740725,
-      "npa": 613625,
-      "other": 89798,
-      "total": 2784980
+      "rep": 1340833,
+      "dem": 740729,
+      "npa": 613626,
+      "other": 89799,
+      "total": 2784987
     },
     "vbm_outstanding": 390973,
     "vbm_return_rate": 84.2
@@ -124,11 +124,11 @@
         "total": 35348
       },
       "election_day": {
-        "rep": 15495,
+        "rep": 15494,
         "dem": 3922,
         "npa": 3778,
         "other": 809,
-        "total": 24004
+        "total": 24003
       },
       "vbm_outstanding": 2849
     },
@@ -320,18 +320,18 @@
     },
     "Clay": {
       "vbm_provided": {
-        "rep": 8251,
+        "rep": 8253,
         "dem": 5742,
         "npa": 3160,
         "other": 494,
-        "total": 17647
+        "total": 17649
       },
       "vbm_voted": {
-        "rep": 6962,
+        "rep": 6964,
         "dem": 4625,
         "npa": 2501,
         "other": 384,
-        "total": 14472
+        "total": 14474
       },
       "early_voted": {
         "rep": 26606,
@@ -351,18 +351,18 @@
     },
     "Collier": {
       "vbm_provided": {
-        "rep": 31969,
+        "rep": 31970,
         "dem": 16078,
         "npa": 11998,
         "other": 1537,
-        "total": 61582
+        "total": 61583
       },
       "vbm_voted": {
-        "rep": 27848,
+        "rep": 27849,
         "dem": 13995,
         "npa": 10199,
         "other": 1326,
-        "total": 53368
+        "total": 53369
       },
       "early_voted": {
         "rep": 39924,
@@ -508,16 +508,16 @@
       "vbm_provided": {
         "rep": 11398,
         "dem": 11151,
-        "npa": 4237,
+        "npa": 4238,
         "other": 640,
-        "total": 27426
+        "total": 27427
       },
       "vbm_voted": {
         "rep": 9308,
         "dem": 8986,
-        "npa": 3145,
+        "npa": 3146,
         "other": 473,
-        "total": 21912
+        "total": 21913
       },
       "early_voted": {
         "rep": 23538,
@@ -899,11 +899,11 @@
         "total": 216747
       },
       "election_day": {
-        "rep": 64479,
-        "dem": 48731,
-        "npa": 40407,
-        "other": 5498,
-        "total": 159115
+        "rep": 64481,
+        "dem": 48735,
+        "npa": 40408,
+        "other": 5499,
+        "total": 159123
       },
       "vbm_outstanding": 27573
     },
@@ -1127,17 +1127,17 @@
     "Leon": {
       "vbm_provided": {
         "rep": 8740,
-        "dem": 21333,
+        "dem": 21334,
         "npa": 5386,
         "other": 682,
-        "total": 36141
+        "total": 36142
       },
       "vbm_voted": {
         "rep": 7298,
-        "dem": 18160,
+        "dem": 18161,
         "npa": 4380,
         "other": 534,
-        "total": 30372
+        "total": 30373
       },
       "early_voted": {
         "rep": 14196,
@@ -1405,18 +1405,18 @@
     },
     "Nassau": {
       "vbm_provided": {
-        "rep": 5045,
-        "dem": 3359,
-        "npa": 1948,
+        "rep": 5046,
+        "dem": 3362,
+        "npa": 1953,
         "other": 371,
-        "total": 10723
+        "total": 10732
       },
       "vbm_voted": {
-        "rep": 4256,
-        "dem": 2782,
-        "npa": 1591,
+        "rep": 4257,
+        "dem": 2785,
+        "npa": 1596,
         "other": 313,
-        "total": 8942
+        "total": 8951
       },
       "early_voted": {
         "rep": 16689,
@@ -1498,25 +1498,25 @@
     },
     "Orange": {
       "vbm_provided": {
-        "rep": 32979,
-        "dem": 62635,
+        "rep": 32980,
+        "dem": 62636,
         "npa": 29590,
         "other": 3381,
-        "total": 128585
+        "total": 128587
       },
       "vbm_voted": {
-        "rep": 27419,
-        "dem": 51579,
+        "rep": 27420,
+        "dem": 51580,
         "npa": 23124,
         "other": 2562,
-        "total": 104684
+        "total": 104686
       },
       "early_voted": {
         "rep": 59911,
-        "dem": 107443,
+        "dem": 107442,
         "npa": 50229,
         "other": 6016,
-        "total": 223599
+        "total": 223598
       },
       "election_day": {
         "rep": 47443,
@@ -1560,18 +1560,18 @@
     },
     "Palm Beach": {
       "vbm_provided": {
-        "rep": 50527,
-        "dem": 100202,
+        "rep": 50528,
+        "dem": 100203,
         "npa": 41046,
         "other": 5695,
-        "total": 197470
+        "total": 197472
       },
       "vbm_voted": {
-        "rep": 40466,
-        "dem": 83117,
+        "rep": 40467,
+        "dem": 83118,
         "npa": 32774,
         "other": 4480,
-        "total": 160837
+        "total": 160839
       },
       "early_voted": {
         "rep": 77524,
@@ -1778,17 +1778,17 @@
     "Seminole": {
       "vbm_provided": {
         "rep": 16303,
-        "dem": 22210,
+        "dem": 22211,
         "npa": 11154,
         "other": 1349,
-        "total": 51016
+        "total": 51017
       },
       "vbm_voted": {
         "rep": 13992,
-        "dem": 18705,
+        "dem": 18706,
         "npa": 9137,
         "other": 1111,
-        "total": 42945
+        "total": 42946
       },
       "early_voted": {
         "rep": 34230,
