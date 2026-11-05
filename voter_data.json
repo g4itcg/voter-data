@@ -3,22 +3,22 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-11-05T00:40:49+00:00",
+  "fetched_at": "2026-11-05T00:50:49+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
-      "rep": 853843,
-      "dem": 1041385,
-      "npa": 510577,
+      "rep": 853844,
+      "dem": 1041391,
+      "npa": 510578,
       "other": 63773,
-      "total": 2469578
+      "total": 2469586
     },
     "vbm_voted": {
-      "rep": 724373,
-      "dem": 884443,
-      "npa": 416967,
+      "rep": 724374,
+      "dem": 884449,
+      "npa": 416968,
       "other": 51721,
-      "total": 2077504
+      "total": 2077512
     },
     "early_voted": {
       "rep": 1497767,
@@ -29,11 +29,11 @@
       "_source": "FLVoiceNews/2026-11-05"
     },
     "election_day": {
-      "rep": 1340491,
-      "dem": 740545,
-      "npa": 613466,
-      "other": 89921,
-      "total": 2784423
+      "rep": 1340492,
+      "dem": 740547,
+      "npa": 613468,
+      "other": 89915,
+      "total": 2784422
     },
     "vbm_outstanding": 392074,
     "vbm_return_rate": 84.1
@@ -506,18 +506,18 @@
     },
     "Escambia": {
       "vbm_provided": {
-        "rep": 11413,
-        "dem": 11157,
-        "npa": 4247,
+        "rep": 11414,
+        "dem": 11163,
+        "npa": 4248,
         "other": 641,
-        "total": 27458
+        "total": 27466
       },
       "vbm_voted": {
-        "rep": 9292,
-        "dem": 8968,
-        "npa": 3132,
+        "rep": 9293,
+        "dem": 8974,
+        "npa": 3133,
         "other": 472,
-        "total": 21864
+        "total": 21872
       },
       "early_voted": {
         "rep": 23538,
@@ -1674,11 +1674,11 @@
         "total": 86292
       },
       "election_day": {
-        "rep": 58651,
-        "dem": 30744,
-        "npa": 23937,
-        "other": 3824,
-        "total": 117156
+        "rep": 58652,
+        "dem": 30746,
+        "npa": 23939,
+        "other": 3818,
+        "total": 117155
       },
       "vbm_outstanding": 10983
     },
