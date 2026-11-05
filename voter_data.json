@@ -3,37 +3,37 @@
     "name": "2026 General Election",
     "id": 49894
   },
-  "fetched_at": "2026-11-05T17:10:56+00:00",
+  "fetched_at": "2026-11-05T17:20:56+00:00",
   "timezone": "America/New_York",
   "statewide": {
     "vbm_provided": {
-      "rep": 853619,
-      "dem": 1041037,
+      "rep": 853621,
+      "dem": 1041038,
       "npa": 510382,
       "other": 63753,
-      "total": 2468791
+      "total": 2468794
     },
     "vbm_voted": {
-      "rep": 724462,
-      "dem": 884562,
+      "rep": 724464,
+      "dem": 884563,
       "npa": 417065,
       "other": 51729,
-      "total": 2077818
+      "total": 2077821
     },
     "early_voted": {
-      "rep": 1497766,
+      "rep": 1497765,
       "dem": 1210806,
       "npa": 668219,
       "other": 91014,
-      "total": 3467805,
+      "total": 3467804,
       "_source": "FLVoiceNews/2026-11-05"
     },
     "election_day": {
       "rep": 1340746,
-      "dem": 740670,
+      "dem": 740671,
       "npa": 613572,
       "other": 89794,
-      "total": 2784782
+      "total": 2784783
     },
     "vbm_outstanding": 390973,
     "vbm_return_rate": 84.2
@@ -179,11 +179,11 @@
         "total": 63500
       },
       "early_voted": {
-        "rep": 59044,
+        "rep": 59043,
         "dem": 33788,
         "npa": 22292,
         "other": 3537,
-        "total": 118661
+        "total": 118660
       },
       "election_day": {
         "rep": 48493,
@@ -475,18 +475,18 @@
     },
     "Duval": {
       "vbm_provided": {
-        "rep": 16165,
+        "rep": 16164,
         "dem": 24236,
-        "npa": 8322,
+        "npa": 8321,
         "other": 1247,
-        "total": 49970
+        "total": 49968
       },
       "vbm_voted": {
-        "rep": 13568,
+        "rep": 13567,
         "dem": 19849,
-        "npa": 6555,
+        "npa": 6554,
         "other": 964,
-        "total": 40936
+        "total": 40934
       },
       "early_voted": {
         "rep": 70248,
@@ -621,10 +621,10 @@
       },
       "election_day": {
         "rep": 1789,
-        "dem": 4929,
+        "dem": 4930,
         "npa": 658,
         "other": 118,
-        "total": 7494
+        "total": 7495
       },
       "vbm_outstanding": 514
     },
@@ -878,18 +878,18 @@
     },
     "Hillsborough": {
       "vbm_provided": {
-        "rep": 55492,
-        "dem": 75368,
+        "rep": 55493,
+        "dem": 75369,
         "npa": 36445,
         "other": 4344,
-        "total": 171649
+        "total": 171651
       },
       "vbm_voted": {
-        "rep": 46613,
-        "dem": 63988,
+        "rep": 46614,
+        "dem": 63989,
         "npa": 29984,
         "other": 3491,
-        "total": 144076
+        "total": 144078
       },
       "early_voted": {
         "rep": 79817,
@@ -1343,18 +1343,18 @@
     },
     "Miami-Dade": {
       "vbm_provided": {
-        "rep": 74421,
+        "rep": 74422,
         "dem": 106270,
         "npa": 67586,
         "other": 5066,
-        "total": 253343
+        "total": 253344
       },
       "vbm_voted": {
-        "rep": 58547,
+        "rep": 58548,
         "dem": 83530,
         "npa": 50809,
         "other": 3761,
-        "total": 196647
+        "total": 196648
       },
       "early_voted": {
         "rep": 134180,
@@ -1500,16 +1500,16 @@
       "vbm_provided": {
         "rep": 32976,
         "dem": 62632,
-        "npa": 29585,
+        "npa": 29586,
         "other": 3381,
-        "total": 128574
+        "total": 128575
       },
       "vbm_voted": {
         "rep": 27416,
         "dem": 51576,
-        "npa": 23119,
+        "npa": 23120,
         "other": 2562,
-        "total": 104673
+        "total": 104674
       },
       "early_voted": {
         "rep": 59911,
@@ -1994,18 +1994,18 @@
     },
     "Volusia": {
       "vbm_provided": {
-        "rep": 28505,
+        "rep": 28506,
         "dem": 29863,
         "npa": 15970,
         "other": 2410,
-        "total": 76748
+        "total": 76749
       },
       "vbm_voted": {
-        "rep": 24036,
+        "rep": 24037,
         "dem": 25057,
         "npa": 12965,
         "other": 1963,
-        "total": 64021
+        "total": 64022
       },
       "early_voted": {
         "rep": 45973,
